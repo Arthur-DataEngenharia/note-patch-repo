@@ -18,6 +18,8 @@ app.use(cors({ origin: isProd ? false : true }));
 app.use(express.json({ limit: '10mb' }));
 
 // ─── Helpers ───
+function toDate(v: any) { return v ? new Date(v) : null; }
+
 function parsePatch(p: any) {
   return {
     ...p,
@@ -26,6 +28,9 @@ function parsePatch(p: any) {
     affectedClasses: JSON.parse(p.affectedClasses || '[]'),
     impactedSystems: JSON.parse(p.impactedSystems || '[]'),
     checklist: JSON.parse(p.checklist || '[]'),
+    createdAt: toDate(p.createdAt),
+    updatedAt: toDate(p.updatedAt),
+    deployedAt: toDate(p.deployedAt),
   };
 }
 
@@ -34,11 +39,22 @@ function parseDoc(d: any) {
     ...d,
     tags: JSON.parse(d.tags || '[]'),
     versions: JSON.parse(d.versions || '[]'),
+    createdAt: toDate(d.createdAt),
+    updatedAt: toDate(d.updatedAt),
   };
 }
 
 function parseAudit(a: any) {
-  return { ...a, details: JSON.parse(a.details || '{}') };
+  return { ...a, details: JSON.parse(a.details || '{}'), timestamp: toDate(a.timestamp) };
+}
+
+function parseHotfix(h: any) {
+  return {
+    ...h,
+    reportedAt: toDate(h.reportedAt),
+    closedAt: toDate(h.closedAt),
+    updatedAt: toDate(h.updatedAt),
+  };
 }
 
 // ─── Patches ───
@@ -119,7 +135,7 @@ app.delete('/api/patches/:id', async (req, res) => {
 // ─── Hotfixes ───
 app.get('/api/hotfixes', async (_req, res) => {
   const hotfixes = await prisma.hotfix.findMany({ orderBy: { reportedAt: 'desc' } });
-  res.json(hotfixes.map((h) => ({ ...h, reportedBy: h.reportedById })));
+  res.json(hotfixes.map((h) => ({ ...parseHotfix(h), reportedBy: h.reportedById })));
 });
 
 app.post('/api/hotfixes', async (req, res) => {
@@ -140,7 +156,7 @@ app.post('/api/hotfixes', async (req, res) => {
       patchId: b.patchId || null,
     },
   });
-  res.json({ ...hotfix, reportedBy: hotfix.reportedById });
+  res.json({ ...parseHotfix(hotfix), reportedBy: hotfix.reportedById });
 });
 
 app.patch('/api/hotfixes/:id', async (req, res) => {
@@ -155,7 +171,7 @@ app.patch('/api/hotfixes/:id', async (req, res) => {
   if (b.patchId !== undefined) data.patchId = b.patchId;
 
   const hotfix = await prisma.hotfix.update({ where: { id: req.params.id }, data });
-  res.json({ ...hotfix, reportedBy: hotfix.reportedById });
+  res.json({ ...parseHotfix(hotfix), reportedBy: hotfix.reportedById });
 });
 
 // ─── Documents ───
