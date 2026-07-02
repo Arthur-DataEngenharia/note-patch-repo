@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '@/components/layout/RootLayout';
+import { useAppStore } from '@/store/appStore';
 
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const PatchesPage = lazy(() => import('@/pages/PatchesPage'));
@@ -23,6 +24,10 @@ function PageLoader() {
 }
 
 export default function App() {
+  useEffect(() => {
+    useAppStore.getState().init();
+  }, []);
+
   return (
     <Routes>
       <Route element={<RootLayout />}>
