@@ -435,11 +435,22 @@ app.get('/api/github/repos/:owner/:repo/tree', async (req, res) => {
   try {
     const headers = await getGitHubHeaders(req);
     const { owner, repo } = req.params;
-    const branch = req.query.branch as string || 'main';
+    let branch = req.query.branch as string || 'main';
+
+    // Try to get default branch if specified branch fails
+    const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+    if (repoRes.ok) {
+      const repoData = await repoRes.json();
+      if (repoData.default_branch) branch = repoData.default_branch;
+    }
+
     const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`, { headers });
-    if (!treeRes.ok) throw new Error('Failed to fetch tree');
+    if (!treeRes.ok) {
+      const errText = await treeRes.text();
+      return res.status(400).json({ error: `GitHub tree error: ${treeRes.status} ${errText}` });
+    }
     const tree = await treeRes.json();
-    res.json({ tree: tree.tree || [] });
+    res.json({ tree: tree.tree || [], branch });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
@@ -469,12 +480,27 @@ app.get('/api/github/repos/:owner/:repo/commits', async (req, res) => {
   try {
     const headers = await getGitHubHeaders(req);
     const { owner, repo } = req.params;
-    const sha = req.query.sha as string || 'main';
+    let sha = req.query.sha as string || '';
     const path = req.query.path as string || '';
+
+    // Get default branch if not specified
+    if (!sha) {
+      const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+      if (repoRes.ok) {
+        const repoData = await repoRes.json();
+        sha = repoData.default_branch || 'main';
+      } else {
+        sha = 'main';
+      }
+    }
+
     let url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${sha}&per_page=30`;
-    if (path) url += `&path=${path}`;
+    if (path) url += `&path=${encodeURIComponent(path)}`;
     const commitsRes = await fetch(url, { headers });
-    if (!commitsRes.ok) throw new Error('Failed to fetch commits');
+    if (!commitsRes.ok) {
+      const errText = await commitsRes.text();
+      return res.status(400).json({ error: `GitHub commits error: ${commitsRes.status} ${errText}` });
+    }
     const commits = await commitsRes.json();
     res.json({ commits: commits.map((c: any) => ({
       sha: c.sha,
@@ -482,7 +508,7 @@ app.get('/api/github/repos/:owner/:repo/commits', async (req, res) => {
       author: c.commit?.author?.name,
       date: c.commit?.author?.date,
       url: c.html_url,
-    })) });
+    })), branch: sha });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }

@@ -92,22 +92,24 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
   const loadTree = async () => {
     setTreeLoading(true);
     try {
-      const data = await api.getRepoTree(owner, repo, branch);
+      const data = await api.getRepoTree(owner, repo);
       setTree(data.tree || []);
-    } catch {
-      toast.error('Erro ao carregar arvore do repo');
+      if (data.branch) setBranch(data.branch);
+    } catch (err: any) {
+      toast.error(err.message || 'Erro ao carregar arvore do repo');
     } finally {
       setTreeLoading(false);
     }
   };
 
-  const loadCommits = async (path?: string) => {
+  const loadCommits = async (filePath?: string) => {
     setCommitsLoading(true);
     try {
-      const data = await api.getRepoCommits(owner, repo, branch, path);
+      const data = await api.getRepoCommits(owner, repo, undefined, filePath);
       setCommits(data.commits || []);
-    } catch {
-      toast.error('Erro ao carregar commits');
+      if (data.branch) setBranch(data.branch);
+    } catch (err: any) {
+      toast.error(err.message || 'Erro ao carregar commits');
     } finally {
       setCommitsLoading(false);
     }
