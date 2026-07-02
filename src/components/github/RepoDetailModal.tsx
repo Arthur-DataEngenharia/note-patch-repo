@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   X, Folder, FileCode, GitBranch, GitCommit, ChevronRight, ChevronDown,
-  Copy, Check, Loader2, Plus, Link2, Eye, Flame, FileText, Search,
+  Copy, Check, Loader2, Plus, Link2, Eye, Flame, FileText, Search, Download,
+  ChevronUp,
 } from 'lucide-react';
 import { api } from '@/api/client';
 import { cn } from '@/lib/utils';
@@ -214,6 +215,46 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
   const [branch, setBranch] = useState('main');
   const [treeSearch, setTreeSearch] = useState('');
   const [codeSearch, setCodeSearch] = useState('');
+  const [searchMatchIndex, setSearchMatchIndex] = useState(0);
+  const treeSearchRef = useRef<HTMLInputElement>(null);
+  const codeSearchRef = useRef<HTMLInputElement>(null);
+  const codeContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-focus tree search on mount
+  useEffect(() => {
+    treeSearchRef.current?.focus();
+  }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.ctrlKey && e.key === 'f') {
+        e.preventDefault();
+        if (activeTab === 'code' && selectedFile) {
+          codeSearchRef.current?.focus();
+        } else {
+          treeSearchRef.current?.focus();
+        }
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose, activeTab, selectedFile]);
+
+  // Reset search match index when search changes
+  useEffect(() => {
+    setSearchMatchIndex(0);
+  }, [codeSearch]);
+
+  // Auto-scroll to search match
+  useEffect(() => {
+    if (!codeSearch || !codeContainerRef.current) return;
+    const matches = codeContainerRef.current.querySelectorAll('[data-search-match="true"]');
+    if (matches[searchMatchIndex]) {
+      matches[searchMatchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [searchMatchIndex, codeSearch]);
 
   useEffect(() => {
     loadTree();
@@ -304,6 +345,20 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
     if (onAddToHotfix) { onAddToHotfix(buildRef()); toast.success('Referencia adicionada ao hotfix'); }
   };
 
+  const downloadFile = () => {
+    if (!fileContent || !selectedFile) return;
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = selectedFile.split('/').pop() || 'download';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast.success('Arquivo baixado');
+  };
+
   const treeData = sortTree(buildFileTree(tree));
 
   function treeMatches(node: Record<string, any>, search: string, parentPath: string = ''): boolean {
@@ -366,6 +421,7 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
   };
 
   const lines = fileContent.split('\n');
+  const codeMatchCount = codeSearch ? lines.filter(l => l.toLowerCase().includes(codeSearch.toLowerCase())).length : 0;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 lg:p-4 animate-fade-in">
@@ -415,10 +471,11 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
               <div className="relative">
                 <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-white-dim" />
                 <input
+                  ref={treeSearchRef}
                   type="text"
                   value={treeSearch}
                   onChange={(e) => setTreeSearch(e.target.value)}
-                  placeholder="Buscar arquivo..."
+                  placeholder="Buscar arquivo... (Ctrl+F)"
                   className="w-full bg-black-surface-2 border border-black-border rounded-lg pl-7 pr-2 py-1 text-[11px] text-white placeholder-white-dim focus:border-red focus:outline-none"
                 />
               </div>
@@ -457,17 +514,39 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
                 <span className="flex items-center gap-1.5"><GitCommit className="w-3.5 h-3.5" /> Commits</span>
               </button>
               {activeTab === 'code' && selectedFile && (
-                <div className="ml-4 flex-1 max-w-xs">
-                  <div className="relative">
+                <div className="ml-4 flex-1 max-w-xs flex items-center gap-1.5">
+                  <div className="relative flex-1">
                     <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-white-dim" />
                     <input
+                      ref={codeSearchRef}
                       type="text"
                       value={codeSearch}
                       onChange={(e) => setCodeSearch(e.target.value)}
-                      placeholder="Buscar no codigo..."
+                      placeholder="Buscar no codigo... (Ctrl+F)"
                       className="w-full bg-black-surface-2 border border-black-border rounded-lg pl-7 pr-2 py-1 text-[11px] text-white placeholder-white-dim focus:border-red focus:outline-none"
                     />
                   </div>
+                  {codeSearch && (
+                    <>
+                      <span className="text-[10px] text-white-dim tabular-nums whitespace-nowrap">
+                        {Math.min(searchMatchIndex + 1, codeMatchCount)}/{codeMatchCount}
+                      </span>
+                      <button
+                        onClick={() => setSearchMatchIndex(i => Math.max(0, i - 1))}
+                        className="p-1 rounded bg-black-surface-2 border border-black-border hover:border-red-40 text-white-dim"
+                        title="Anterior"
+                      >
+                        <ChevronUp className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={() => setSearchMatchIndex(i => Math.min(codeMatchCount - 1, i + 1))}
+                        className="p-1 rounded bg-black-surface-2 border border-black-border hover:border-red-40 text-white-dim"
+                        title="Proximo"
+                      >
+                        <ChevronDown className="w-3 h-3" />
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
               {selectedFile && (
@@ -486,8 +565,15 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
                       <Loader2 className="w-6 h-6 animate-spin text-red" />
                     </div>
                   ) : selectedFile ? (
-                    <div className="relative">
-                      <div className="absolute top-2 right-2 z-10">
+                    <div className="relative" ref={codeContainerRef}>
+                      <div className="absolute top-2 right-2 z-10 flex gap-1.5">
+                        <button
+                          onClick={downloadFile}
+                          className="p-1.5 rounded bg-black-surface-2 border border-black-border hover:border-red-40 transition-colors"
+                          title="Baixar arquivo"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                        </button>
                         <button
                           onClick={() => {
                             navigator.clipboard.writeText(fileContent);
@@ -502,33 +588,38 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
                       </div>
                       <table className="w-full text-xs font-mono">
                         <tbody>
-                          {lines.map((line, i) => {
-                            const lineNum = i + 1;
-                            const isSelected = selectedLines && lineNum >= selectedLines.start && lineNum <= selectedLines.end;
-                            const lang = selectedFile ? getLangFromPath(selectedFile) : '';
-                            const searchMatch = codeSearch && line.toLowerCase().includes(codeSearch.toLowerCase());
-                            if (codeSearch && !searchMatch) return null;
-                            return (
-                              <tr
-                                key={lineNum}
-                                onClick={(e) => handleLineClick(lineNum, e.shiftKey)}
-                                className={cn(
-                                  'cursor-pointer select-none',
-                                  isSelected ? 'bg-red/10' : searchMatch ? 'bg-amber-500/10' : 'hover:bg-hover'
-                                )}
-                              >
-                                <td className="text-right pr-3 pl-4 py-0.5 text-white-muted select-none w-12 shrink-0 text-[10px] border-r border-black-border">
-                                  {lineNum}
-                                </td>
-                                <td className="pl-3 py-0.5 whitespace-pre-wrap break-all">
-                                  {codeSearch
-                                    ? highlightSearch(line, codeSearch)
-                                    : line ? highlightLine(line, lang) : <span className="text-gray-600"> </span>
-                                  }
-                                </td>
-                              </tr>
-                            );
-                          })}
+                          {(() => {
+                            let matchCounter = -1;
+                            return lines.map((line, i) => {
+                              const lineNum = i + 1;
+                              const isSelected = selectedLines && lineNum >= selectedLines.start && lineNum <= selectedLines.end;
+                              const lang = selectedFile ? getLangFromPath(selectedFile) : '';
+                              const searchMatch = codeSearch && line.toLowerCase().includes(codeSearch.toLowerCase());
+                              if (codeSearch && !searchMatch) return null;
+                              if (searchMatch) matchCounter++;
+                              return (
+                                <tr
+                                  key={lineNum}
+                                  data-search-match={searchMatch ? 'true' : undefined}
+                                  onClick={(e) => handleLineClick(lineNum, e.shiftKey)}
+                                  className={cn(
+                                    'cursor-pointer select-none',
+                                    isSelected ? 'bg-red/10' : searchMatch ? 'bg-amber-500/10' : 'hover:bg-hover'
+                                  )}
+                                >
+                                  <td className="text-right pr-3 pl-4 py-0.5 text-white-muted select-none w-12 shrink-0 text-[10px] border-r border-black-border">
+                                    {lineNum}
+                                  </td>
+                                  <td className="pl-3 py-0.5 whitespace-pre-wrap break-all">
+                                    {codeSearch
+                                      ? highlightSearch(line, codeSearch)
+                                      : line ? highlightLine(line, lang) : <span className="text-gray-600"> </span>
+                                    }
+                                  </td>
+                                </tr>
+                              );
+                            });
+                          })()}
                         </tbody>
                       </table>
                     </div>
