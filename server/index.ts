@@ -280,8 +280,24 @@ app.get('/api/classifications', async (_req, res) => {
     ...c,
     icon: '',
     patchCount: counts[c.id] || 0,
-    parentId: null,
   })));
+});
+
+app.post('/api/classifications', async (req, res) => {
+  const b = req.body;
+  const classification = await prisma.classification.create({
+    data: {
+      id: b.id || `c${Date.now()}`,
+      name: b.name,
+      color: b.color,
+      description: b.description,
+      sortOrder: b.sortOrder || 0,
+      isActive: b.isActive ?? true,
+      parentId: b.parentId || null,
+      versionPrefix: b.versionPrefix || null,
+    },
+  });
+  res.json({ ...classification, icon: '', patchCount: 0 });
 });
 
 // ─── Audit Logs ───

@@ -43,6 +43,7 @@ export const api = {
 
   // Classifications
   getClassifications: () => fetchJSON<any[]>('/classifications'),
+  createClassification: (data: any) => fetchJSON<any>('/classifications', { method: 'POST', body: JSON.stringify(data) }),
 
   // Audit Logs
   getAuditLogs: () => fetchJSON<any[]>('/audit-logs'),
