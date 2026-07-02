@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { RootLayout } from '@/components/layout/RootLayout';
+import AnimatedBackground from '@/components/layout/AnimatedBackground';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
 
@@ -56,8 +57,10 @@ export default function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/login" element={
+    <>
+      <AnimatedBackground />
+      <Routes>
+        <Route path="/login" element={
         <Suspense fallback={<PageLoader />}>
           <LoginPage />
         </Suspense>
@@ -168,5 +171,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>
+    </>
   );
 }
