@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id       String  @id
+  name     String
+  email    String  @unique
+  role     String
+  avatarUrl String?
+
+  patches       NotePatch[] @relation("PatchAuthor")
+  hotfixes      Hotfix[]    @relation("HotfixReporter")
+  documents     Document[]
+  auditLogs     AuditLog[]
+}
+
+model Classification {
+  id          String  @id
+  name        String
+  color       String
+  description String
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  patches NotePatch[]
+}
+
+model NotePatch {
+  id               String   @id
+  version          String
+  title            String
+  summary          String
+  technicalNotes   String
+  status           String
+  tags             String   // JSON array
+  authorId         String
+  reviewerId       String?
+  githubRepo       String?
+  githubBranch     String?
+  githubCommitSha  String?
+  githubPrUrl      String?
+  githubFiles      String   // JSON array
+  affectedClasses  String   // JSON array
+  impactedSystems  String   // JSON array
+  rollbackPlan     String?
+  checklist        String   // JSON array
+  deployedAt       DateTime
+  publishedAt      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  isHotfix         Boolean  @default(false)
+  favorite         Boolean  @default(false)
+  classificationId String
+
+  author         User           @relation("PatchAuthor", fields: [authorId], references: [id])
+  classification Classification @relation(fields: [classificationId], references: [id])
+  hotfixes       Hotfix[]
+  documents      Document[]
+}
+
+model Hotfix {
+  id                    String    @id
+  title                 String
+  severity              String
+  affectedSystem        String
+  description           String
+  commitSha             String?
+  status                String
+  reportedById          String
+  reportedAt            DateTime
+  deployedAt            DateTime?
+  resolvedAt            DateTime?
+  resolvedBy            String?
+  resolutionTimeMinutes Int?
+  postMortemNeeded      Boolean   @default(false)
+  postMortemDone        Boolean   @default(false)
+  patchId               String?
+
+  reporter User       @relation("HotfixReporter", fields: [reportedById], references: [id])
+  patch    NotePatch? @relation(fields: [patchId], references: [id])
+}
+
+model Document {
+  id               String   @id
+  title            String
+  type             String
+  fileUrl          String
+  fileSize         Int
+  tags             String   // JSON array
+  visibility       String
+  versions         String   // JSON array
+  patchId          String?
+  classificationId String?
+  uploadedById     String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  uploadedBy User       @relation(fields: [uploadedById], references: [id])
+  patch      NotePatch? @relation(fields: [patchId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  userName  String
+  action    String
+  entity    String
+  entityId  String
+  details   String   // JSON object
+  timestamp DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+}

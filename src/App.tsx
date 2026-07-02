@@ -1,0 +1,123 @@
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { RootLayout } from '@/components/layout/RootLayout';
+
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const PatchesPage = lazy(() => import('@/pages/PatchesPage'));
+const PatchDetailPage = lazy(() => import('@/pages/PatchDetailPage'));
+const PatchFormPage = lazy(() => import('@/pages/PatchFormPage'));
+const TimelinePage = lazy(() => import('@/pages/TimelinePage'));
+const HotfixPage = lazy(() => import('@/pages/HotfixPage'));
+const AuditPage = lazy(() => import('@/pages/AuditPage'));
+const DocumentsPage = lazy(() => import('@/pages/DocumentsPage'));
+const ClassificationsPage = lazy(() => import('@/pages/ClassificationsPage'));
+const GitHubPage = lazy(() => import('@/pages/GitHubPage'));
+const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center h-64">
+      <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <DashboardPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/patches"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PatchesPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/patches/new"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PatchFormPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/patches/:id"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PatchDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/timeline"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <TimelinePage />
+            </Suspense>
+          }
+        />
+        <Route path="/history" element={<Navigate to="/history/hotfix" replace />} />
+        <Route
+          path="/history/hotfix"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <HotfixPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/history/audit"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AuditPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/documents"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <DocumentsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/classifications"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ClassificationsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/github"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <GitHubPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <SettingsPage />
+            </Suspense>
+          }
+        />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Route>
+    </Routes>
+  );
+}
