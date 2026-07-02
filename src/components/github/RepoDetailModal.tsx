@@ -49,9 +49,16 @@ function buildFileTree(items: TreeItem[]) {
       const isLast = i === parts.length - 1;
       const key = part;
       if (!current[key]) {
-        current[key] = isLast ? { ...item, name: part, children: null } : { name: part, type: 'tree', children: {} };
+        current[key] = isLast
+          ? { ...item, name: part, children: null }
+          : { name: part, type: 'tree', children: {} };
+      } else if (!isLast && current[key].children === null) {
+        // Convert previously created leaf to folder
+        current[key] = { ...current[key], type: 'tree', children: {} };
       }
-      if (!isLast) current = current[key].children;
+      if (!isLast) {
+        current = current[key].children;
+      }
     });
   });
   return root;
