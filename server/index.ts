@@ -446,12 +446,11 @@ app.get('/api/github/repos/:owner/:repo/tree', async (req, res) => {
 });
 
 // Get file contents
-app.get('/api/github/repos/:owner/:repo/contents/*', async (req, res) => {
+app.get('/api/github/repos/:owner/:repo/file', async (req, res) => {
   try {
     const headers = await getGitHubHeaders(req);
     const { owner, repo } = req.params;
-    const params = req.params as any;
-    const path = params[0];
+    const path = req.query.path as string || '';
     const ref = req.query.ref as string || 'main';
     const contentRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${ref}`, { headers });
     if (!contentRes.ok) throw new Error('Failed to fetch content');

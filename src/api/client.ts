@@ -63,7 +63,7 @@ export const api = {
   getRepoTree: (owner: string, repo: string, branch?: string) =>
     fetchJSON<any>(`/github/repos/${owner}/${repo}/tree${branch ? `?branch=${branch}` : ''}`),
   getRepoContent: (owner: string, repo: string, path: string, ref?: string) =>
-    fetchJSON<any>(`/github/repos/${owner}/${repo}/contents/${path}${ref ? `?ref=${ref}` : ''}`),
+    fetchJSON<any>(`/github/repos/${owner}/${repo}/file?path=${encodeURIComponent(path)}${ref ? `&ref=${ref}` : ''}`),
   getRepoCommits: (owner: string, repo: string, sha?: string, path?: string) =>
     fetchJSON<any>(`/github/repos/${owner}/${repo}/commits?${sha ? `sha=${sha}` : ''}${path ? `&path=${path}` : ''}`),
 };
