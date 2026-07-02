@@ -28,6 +28,11 @@ export default function GitHubPage() {
   const [loading, setLoading] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
+  const [codeRefs, setCodeRefs] = useState<any[]>([]);
+
+  const addCodeRef = (ref: any) => {
+    setCodeRefs((prev) => [...prev, ref]);
+  };
 
   useEffect(() => {
     loadRepos();
@@ -183,6 +188,8 @@ export default function GitHubPage() {
           owner={selectedRepo.owner}
           repo={selectedRepo.name}
           onClose={() => setSelectedRepo(null)}
+          onAddToPatch={addCodeRef}
+          onAddToHotfix={addCodeRef}
         />
       )}
     </div>

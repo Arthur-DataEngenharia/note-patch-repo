@@ -77,6 +77,102 @@ function sortTree(tree: Record<string, any>): Record<string, any> {
   return sorted;
 }
 
+// Simple syntax highlighting for dark theme
+function highlightLine(line: string, lang: string): React.ReactNode[] {
+  const tokens: React.ReactNode[] = [];
+  let remaining = line;
+  let key = 0;
+
+  const addToken = (text: string, cls: string) => {
+    tokens.push(<span key={key++} className={cls}>{text}</span>);
+  };
+
+  // Comments first
+  if (lang === 'js' || lang === 'ts' || lang === 'java' || lang === 'jsx' || lang === 'tsx' || lang === 'go' || lang === 'rust' || lang === 'swift' || lang === 'kotlin') {
+    const commentMatch = remaining.match(/^(.*?)(\/\/.*)$/);
+    if (commentMatch) {
+      if (commentMatch[1]) remaining = commentMatch[1];
+      else remaining = '';
+      addToken(remaining, '');
+      addToken(commentMatch[2], 'text-gray-500 italic');
+      return tokens;
+    }
+  }
+  if (lang === 'py') {
+    const commentMatch = remaining.match(/^(.*?)(#.*)$/);
+    if (commentMatch) {
+      if (commentMatch[1]) remaining = commentMatch[1];
+      else remaining = '';
+      addToken(remaining, '');
+      addToken(commentMatch[2], 'text-gray-500 italic');
+      return tokens;
+    }
+  }
+  if (lang === 'sql') {
+    const commentMatch = remaining.match(/^(.*?)(--.*)$/);
+    if (commentMatch) {
+      if (commentMatch[1]) remaining = commentMatch[1];
+      else remaining = '';
+      addToken(remaining, '');
+      addToken(commentMatch[2], 'text-gray-500 italic');
+      return tokens;
+    }
+  }
+
+  // Strings
+  const stringRegex = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g;
+  const parts = remaining.split(stringRegex);
+  parts.forEach((part, i) => {
+    if (i % 2 === 1) {
+      addToken(part, 'text-emerald-400');
+    } else {
+      // Numbers
+      const numParts = part.split(/(\b\d+(?:\.\d+)?\b)/g);
+      numParts.forEach((np, j) => {
+        if (j % 2 === 1) addToken(np, 'text-orange-400');
+        else {
+          // Keywords
+          const kwRegex = /\b(import|export|from|const|let|var|function|class|interface|type|return|if|else|for|while|switch|case|break|continue|new|this|super|extends|implements|async|await|try|catch|finally|throw|typeof|instanceof|in|of|as|true|false|null|undefined|void|public|private|protected|static|readonly|get|set|package|module|require|def|print|len|range|with|yield|lambda|except|pass|raise|assert|del|global|nonlocal|and|or|not|is|SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP|ORDER|BY|HAVING|LIMIT|OFFSET|CREATE|TABLE|ALTER|DROP|INDEX|VALUES|AND|OR|NOT|NULL|LIKE|IN|BETWEEN|EXISTS|UNION|ALL|DISTINCT|COUNT|SUM|AVG|MIN|MAX|AS|CASE|WHEN|THEN|ELSE|END|IF)\b/g;
+          const kwParts = np.split(kwRegex);
+          kwParts.forEach((kp, k) => {
+            if (k % 2 === 1) addToken(kp, 'text-fuchsia-400 font-medium');
+            else {
+              // Functions / method calls
+              const fnParts = kp.split(/(\b[a-zA-Z_]\w*\s*\()/g);
+              fnParts.forEach((fp, m) => {
+                if (m % 2 === 1) addToken(fp, 'text-blue-400');
+                else {
+                  // Types / classes (Capitalized words)
+                  const typeParts = fp.split(/(\b[A-Z]\w*\b)/g);
+                  typeParts.forEach((tp, n) => {
+                    if (n % 2 === 1) addToken(tp, 'text-cyan-400');
+                    else addToken(tp, '');
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+
+  return tokens;
+}
+
+function getLangFromPath(path: string): string {
+  const ext = path.split('.').pop()?.toLowerCase() || '';
+  const map: Record<string, string> = {
+    js: 'js', jsx: 'jsx', ts: 'ts', tsx: 'tsx', java: 'java', kt: 'kotlin', swift: 'swift',
+    py: 'py', go: 'go', rs: 'rust', cpp: 'cpp', c: 'c', h: 'c', hpp: 'cpp',
+    sql: 'sql', json: 'json', xml: 'xml', yaml: 'yaml', yml: 'yaml', md: 'md',
+    sh: 'sh', bash: 'sh', dockerfile: 'docker', css: 'css', scss: 'css', html: 'html',
+    php: 'php', rb: 'rb', r: 'r', scala: 'scala', groovy: 'groovy', cs: 'cs',
+    fs: 'fs', vb: 'vb', pl: 'pl', lua: 'lua', dart: 'dart', m: 'objc', mm: 'objc',
+  };
+  return map[ext] || '';
+}
+
 export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, onAddToHotfix }: Props) {
   const [tree, setTree] = useState<TreeItem[]>([]);
   const [treeLoading, setTreeLoading] = useState(true);
@@ -338,6 +434,7 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
                           {lines.map((line, i) => {
                             const lineNum = i + 1;
                             const isSelected = selectedLines && lineNum >= selectedLines.start && lineNum <= selectedLines.end;
+                            const lang = selectedFile ? getLangFromPath(selectedFile) : '';
                             return (
                               <tr
                                 key={lineNum}
@@ -350,8 +447,8 @@ export default function RepoDetailModal({ owner, repo, onClose, onAddToPatch, on
                                 <td className="text-right pr-3 pl-4 py-0.5 text-white-muted select-none w-12 shrink-0 text-[10px] border-r border-black-border">
                                   {lineNum}
                                 </td>
-                                <td className="pl-3 py-0.5 whitespace-pre-wrap break-all text-white-dim">
-                                  {line || ' '}
+                                <td className="pl-3 py-0.5 whitespace-pre-wrap break-all">
+                                  {line ? highlightLine(line, lang) : <span className="text-gray-600"> </span>}
                                 </td>
                               </tr>
                             );
