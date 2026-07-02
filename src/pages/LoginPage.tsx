@@ -4,7 +4,7 @@ import { Layers, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 
-export function LoginPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [isRegister, setIsRegister] = useState(false);

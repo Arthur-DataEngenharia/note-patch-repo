@@ -13,7 +13,7 @@ const ROLES = [
   { value: 'viewer', label: 'Visualizador', color: 'text-white-dim' },
 ];
 
-export function UsersPage() {
+export default function UsersPage() {
   const navigate = useNavigate();
   const { users, currentUser } = useAppStore();
   const { user: authUser } = useAuthStore();
