@@ -1,50 +1,72 @@
-import { useState } from 'react';
-import { Github, CheckCircle2, XCircle, RefreshCw, GitBranch, Webhook, Eye, EyeOff } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Github, CheckCircle2, XCircle, RefreshCw, GitBranch, Star, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { cn, formatRelative } from '@/lib/utils';
+import { api } from '@/api/client';
+import { cn } from '@/lib/utils';
 
-interface MonitoredRepo {
+interface Repo {
+  id: number;
   name: string;
-  enabled: boolean;
-  lastSync: Date;
-  branch: string;
+  fullName: string;
+  description: string;
+  url: string;
+  stars: number;
+  forks: number;
+  language: string;
+  updatedAt: string;
+  isPrivate: boolean;
+  owner: string;
 }
 
-const INITIAL_REPOS: MonitoredRepo[] = [
-  { name: 'empresa/sankhya-fiscal', enabled: true, lastSync: new Date(Date.now() - 20 * 60000), branch: 'main' },
-  { name: 'empresa/sankhya-financeiro', enabled: true, lastSync: new Date(Date.now() - 45 * 60000), branch: 'main' },
-  { name: 'empresa/sankhya-comercial', enabled: true, lastSync: new Date(Date.now() - 3 * 3600000), branch: 'main' },
-  { name: 'empresa/portal-parceiro', enabled: false, lastSync: new Date(Date.now() - 26 * 3600000), branch: 'main' },
-  { name: 'empresa/sankhya-logistica', enabled: true, lastSync: new Date(Date.now() - 60 * 60000), branch: 'main' },
-];
-
 export default function GitHubPage() {
-  const [token, setToken] = useState('ghp_****************************');
+  const [token, setToken] = useState('');
   const [showToken, setShowToken] = useState(false);
-  const [connected, setConnected] = useState(true);
-  const [autoSync, setAutoSync] = useState(true);
-  const [repos, setRepos] = useState(INITIAL_REPOS);
+  const [connected, setConnected] = useState(false);
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
-  const toggleRepo = (name: string) => {
-    setRepos((prev) => prev.map((r) => (r.name === name ? { ...r, enabled: !r.enabled } : r)));
+  useEffect(() => {
+    loadRepos();
+  }, []);
+
+  const loadRepos = async () => {
+    setLoading(true);
+    try {
+      const data = await api.getGitHubRepos();
+      setRepos(data.repos || []);
+      setConnected(data.repos?.length > 0);
+    } catch {
+      setConnected(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const syncNow = () => {
-    setRepos((prev) => prev.map((r) => (r.enabled ? { ...r, lastSync: new Date() } : r)));
-    toast.success('Sincronização concluída', {
-      description: 'Todos os repositórios ativos foram sincronizados.',
-    });
+  const handleConnect = async () => {
+    if (!token.trim()) return;
+    setConnecting(true);
+    try {
+      await api.connectGitHub(token.trim());
+      toast.success('GitHub conectado com sucesso');
+      setConnected(true);
+      await loadRepos();
+    } catch (err: any) {
+      toast.error(err.message || 'Token invalido');
+    } finally {
+      setConnecting(false);
+    }
   };
 
   return (
     <div>
       <PageHeader
-        title="Integração GitHub"
-        description="Conecte patches diretamente ao código-fonte"
+        title="Integracao GitHub"
+        description="Conecte patches diretamente ao codigo-fonte"
         actions={
-          <button onClick={syncNow} className="btn-secondary flex items-center gap-2">
-            <RefreshCw className="w-4 h-4" /> Sincronizar agora
+          <button onClick={loadRepos} disabled={loading} className="btn-secondary flex items-center gap-2">
+            <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} /> Atualizar
           </button>
         }
       />
@@ -53,7 +75,7 @@ export default function GitHubPage() {
         {/* Connection config */}
         <div className="glass-card p-6">
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
-            <Github className="w-4 h-4 text-red" /> Conexão
+            <Github className="w-4 h-4 text-red" /> Conexao
           </h2>
 
           <div
@@ -65,7 +87,7 @@ export default function GitHubPage() {
             )}
           >
             {connected ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-            {connected ? 'Conectado à organização "empresa"' : 'Desconectado'}
+            {connected ? 'Conectado ao GitHub' : 'Desconectado'}
           </div>
 
           <label className="text-xs text-white-muted mb-1.5 block">Personal Access Token</label>
@@ -74,103 +96,71 @@ export default function GitHubPage() {
               type={showToken ? 'text' : 'password'}
               value={token}
               onChange={(e) => setToken(e.target.value)}
-              className="input-base pr-10 font-mono text-xs"
+              placeholder="ghp_xxxxxxxxxxxxxxxx"
+              className="w-full bg-black-surface-2 border border-black-border rounded-lg px-3 py-2 pr-10 font-mono text-xs text-white placeholder-white-dim focus:border-red focus:outline-none"
             />
             <button
               onClick={() => setShowToken(!showToken)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-white-dim hover:text-white"
-              aria-label={showToken ? 'Ocultar token' : 'Mostrar token'}
             >
               {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
           <p className="text-[10px] text-white-dim mb-4">
-            O token é armazenado criptografado no backend. Nunca exposto no cliente.
+            Crie um token em github.com/settings/tokens com permissao repo.
           </p>
 
           <button
-            onClick={() => {
-              setConnected(!connected);
-              toast.success(connected ? 'Desconectado' : 'Conectado com sucesso');
-            }}
-            className={connected ? 'btn-secondary w-full' : 'btn-primary w-full'}
+            onClick={handleConnect}
+            disabled={connecting || !token.trim()}
+            className={cn('w-full btn-primary flex items-center justify-center gap-2', (connecting || !token.trim()) && 'opacity-70')}
           >
-            {connected ? 'Desconectar' : 'Conectar'}
+            {connecting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Conectar'}
           </button>
-
-          <div className="mt-6 pt-4 border-t border-black-border">
-            <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-xs flex items-center gap-2">
-                <Webhook className="w-4 h-4 text-red" /> Sync automático de PRs
-              </span>
-              <input
-                type="checkbox"
-                checked={autoSync}
-                onChange={(e) => setAutoSync(e.target.checked)}
-                className="accent-red w-4 h-4"
-              />
-            </label>
-            <p className="text-[10px] text-white-dim mt-2">
-              Ao detectar PR mergeado em produção, um rascunho de note patch é criado automaticamente.
-            </p>
-          </div>
         </div>
 
-        {/* Monitored repos */}
+        {/* Repos */}
         <div className="lg:col-span-2 glass-card p-6">
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
-            <GitBranch className="w-4 h-4 text-red" /> Repositórios Monitorados
+            <GitBranch className="w-4 h-4 text-red" /> Repositorios ({repos.length})
           </h2>
-          <div className="space-y-2">
-            {repos.map((repo) => (
-              <div
-                key={repo.name}
-                className={cn(
-                  'flex items-center gap-4 p-4 rounded-lg border transition-all',
-                  repo.enabled
-                    ? 'bg-surface-2-60 border-black-border'
-                    : 'bg-surface-2-20 border-border-50 opacity-60'
-                )}
-              >
-                <Github className="w-4 h-4 text-white-muted shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-mono text-xs font-semibold truncate">{repo.name}</p>
-                  <p className="text-[10px] text-white-dim">
-                    branch: {repo.branch} · última sync {formatRelative(repo.lastSync)}
-                  </p>
-                </div>
-                <span
-                  className={cn(
-                    'text-[10px] px-2 py-0.5 rounded-full font-medium',
-                    repo.enabled ? 'text-green-500 bg-green-500/10' : 'text-white-dim bg-white/5'
-                  )}
+
+          {loading ? (
+            <div className="flex items-center justify-center h-32">
+              <Loader2 className="w-6 h-6 animate-spin text-red" />
+            </div>
+          ) : repos.length === 0 ? (
+            <div className="text-center py-12">
+              <Github className="w-10 h-10 text-white-dim mx-auto mb-3" />
+              <p className="text-sm text-white-dim">Nenhum repositorio carregado</p>
+              <p className="text-xs text-white-muted mt-1">Conecte seu token do GitHub para ver seus repos</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {repos.map((repo) => (
+                <a
+                  key={repo.id}
+                  href={repo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group p-4 rounded-lg border border-black-border hover:border-red-40 bg-surface-2-20 hover:bg-hover transition-all"
                 >
-                  {repo.enabled ? 'Ativo' : 'Inativo'}
-                </span>
-                <button
-                  onClick={() => toggleRepo(repo.name)}
-                  className={cn(
-                    'relative w-10 h-5 rounded-full transition-colors',
-                    repo.enabled ? 'bg-red' : 'bg-black-surface-2 border border-black-border'
-                  )}
-                  role="switch"
-                  aria-checked={repo.enabled}
-                  aria-label={`Alternar monitoramento de ${repo.name}`}
-                >
-                  <span
-                    className={cn(
-                      'absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all',
-                      repo.enabled ? 'left-5' : 'left-0.5'
+                  <div className="flex items-start justify-between mb-2">
+                    <p className="font-mono text-xs font-semibold truncate">{repo.fullName}</p>
+                    {repo.isPrivate && (
+                      <span className="text-[10px] bg-black-surface border border-black-border rounded px-1.5 py-0.5">Private</span>
                     )}
-                  />
-                </button>
-              </div>
-            ))}
-          </div>
-          <p className="text-[11px] text-white-dim mt-4">
-            Em produção, esta lista é carregada via Octokit (GitHub API) com paginação e webhooks configurados
-            para eventos de push/PR.
-          </p>
+                  </div>
+                  <p className="text-xs text-white-dim line-clamp-2 mb-3 min-h-[2.5em]">{repo.description || 'Sem descricao'}</p>
+                  <div className="flex items-center gap-4 text-[10px] text-white-muted">
+                    {repo.language && <span>{repo.language}</span>}
+                    <span className="flex items-center gap-1"><Star className="w-3 h-3" /> {repo.stars}</span>
+                    <span className="flex items-center gap-1"><GitBranch className="w-3 h-3" /> {repo.forks}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

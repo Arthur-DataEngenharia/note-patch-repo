@@ -332,6 +332,71 @@ app.get('/api/users', async (_req, res) => {
   res.json(users.map((u) => ({ ...u, avatarUrl: null, githubUsername: null })));
 });
 
+// ─── GitHub Integration ───
+app.post('/api/github/connect', async (req, res) => {
+  const auth = req.headers.authorization;
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7) : null;
+  const payload = token ? verifyToken(token) : null;
+  if (!payload) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { githubToken } = req.body;
+  if (!githubToken) return res.status(400).json({ error: 'githubToken required' });
+
+  // Validate token by fetching user
+  const ghRes = await fetch('https://api.github.com/user', {
+    headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json' },
+  });
+  if (!ghRes.ok) return res.status(400).json({ error: 'Invalid GitHub token' });
+
+  const ghUser = await ghRes.json();
+  await prisma.user.update({
+    where: { id: payload.id },
+    data: { githubToken },
+  });
+
+  res.json({ login: ghUser.login, avatarUrl: ghUser.avatar_url });
+});
+
+app.get('/api/github/repos', async (req, res) => {
+  const auth = req.headers.authorization;
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7) : null;
+  const payload = token ? verifyToken(token) : null;
+  if (!payload) return res.status(401).json({ error: 'Unauthorized' });
+
+  const user = await prisma.user.findUnique({ where: { id: payload.id } });
+  const ghToken = user?.githubToken || process.env.GITHUB_TOKEN;
+  if (!ghToken) return res.status(400).json({ error: 'GitHub token not configured' });
+
+  const headers: any = {
+    Authorization: `token ${ghToken}`,
+    Accept: 'application/vnd.github.v3+json',
+  };
+
+  const [reposRes, orgsRes] = await Promise.all([
+    fetch('https://api.github.com/user/repos?sort=updated&per_page=50', { headers }),
+    fetch('https://api.github.com/user/orgs', { headers }),
+  ]);
+
+  const repos = reposRes.ok ? await reposRes.json() : [];
+  const orgs = orgsRes.ok ? await orgsRes.json() : [];
+
+  const mappedRepos = repos.map((r: any) => ({
+    id: r.id,
+    name: r.name,
+    fullName: r.full_name,
+    description: r.description,
+    url: r.html_url,
+    stars: r.stargazers_count,
+    forks: r.forks_count,
+    language: r.language,
+    updatedAt: r.updated_at,
+    isPrivate: r.private,
+    owner: r.owner?.login,
+  }));
+
+  res.json({ repos: mappedRepos, orgs: orgs.map((o: any) => ({ login: o.login, avatarUrl: o.avatar_url })) });
+});
+
 // ─── Health ───
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 

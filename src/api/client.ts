@@ -55,4 +55,8 @@ export const api = {
 
   // Users
   getUsers: () => fetchJSON<any[]>('/users'),
+
+  // GitHub
+  connectGitHub: (githubToken: string) => fetchJSON<any>('/github/connect', { method: 'POST', body: JSON.stringify({ githubToken }) }),
+  getGitHubRepos: () => fetchJSON<any>('/github/repos'),
 };
