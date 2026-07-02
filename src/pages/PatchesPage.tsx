@@ -10,6 +10,7 @@ import {
   Star,
   ClipboardList,
   X,
+  Loader2,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -24,7 +25,7 @@ type ViewMode = 'grid' | 'list';
 
 export default function PatchesPage() {
   const navigate = useNavigate();
-  const { patches, classifications, toggleFavorite } = useAppStore();
+  const { patches, classifications, toggleFavorite, loading } = useAppStore();
   const [query, setQuery] = useState('');
   const [classFilter, setClassFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
@@ -126,7 +127,11 @@ export default function PatchesPage() {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="w-8 h-8 animate-spin text-red" />
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState
           icon={ClipboardList}
           title="Nenhum patch encontrado"

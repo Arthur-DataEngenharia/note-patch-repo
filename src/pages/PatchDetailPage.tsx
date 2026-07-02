@@ -70,9 +70,9 @@ export default function PatchDetailPage() {
   };
 
   const handleArchive = () => {
+    if (!window.confirm('Tem certeza que deseja arquivar este patch?')) return;
     archivePatch(patch.id);
     addAuditLog({ userId: currentUser.id, userName: currentUser.name, action: 'archive', entity: 'patch', entityId: patch.id, details: {} });
-    toast.success('Patch arquivado');
     navigate('/patches');
   };
 

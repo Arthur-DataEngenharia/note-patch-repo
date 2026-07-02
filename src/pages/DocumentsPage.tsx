@@ -12,6 +12,7 @@ import {
   Search,
   History,
   Files,
+  Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppStore } from '@/store/appStore';
@@ -43,7 +44,7 @@ function inferType(name: string): DocumentItem['type'] {
 }
 
 export default function DocumentsPage() {
-  const { documents, addDocument, addAuditLog, currentUser, patches } = useAppStore();
+  const { documents, addDocument, addAuditLog, currentUser, patches, loading } = useAppStore();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
   const [dragging, setDragging] = useState(false);
@@ -178,7 +179,11 @@ export default function DocumentsPage() {
         <p className="text-[11px] text-white-dim mt-1">PDF, DOCX, MD, imagens, XLSX</p>
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="w-8 h-8 animate-spin text-red" />
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState icon={Files} title="Nenhum documento" description="Faça upload do primeiro documento." />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 animate-stagger">

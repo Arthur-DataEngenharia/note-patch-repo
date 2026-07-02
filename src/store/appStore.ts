@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { toast } from 'sonner';
 import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User } from '@/types';
 import { api } from '@/api/client';
 
@@ -83,25 +84,25 @@ export const useAppStore = create<AppState>((set, get) => ({
         currentUser: (users as User[])[0] || get().currentUser,
         loading: false,
       });
-    } catch (e) {
-      console.error('Failed to load from API:', e);
+    } catch (e: any) {
+      toast.error('Erro ao carregar dados: ' + (e.message || 'verifique a conexao'));
       set({ loading: false });
     }
   },
 
   addPatch: async (patch) => {
     set((s) => ({ patches: [patch, ...s.patches] }));
-    try { await api.createPatch(patch); } catch (e) { console.error('Failed to persist patch:', e); }
+    try { await api.createPatch(patch); toast.success('Patch criado'); } catch (e: any) { toast.error('Erro ao criar patch: ' + e.message); }
   },
 
   updatePatch: async (id, data) => {
     set((s) => ({ patches: s.patches.map((p) => (p.id === id ? { ...p, ...data, updatedAt: new Date() } : p)) }));
-    try { await api.updatePatch(id, data); } catch (e) { console.error('Failed to persist patch update:', e); }
+    try { await api.updatePatch(id, data); toast.success('Patch atualizado'); } catch (e: any) { toast.error('Erro ao atualizar patch: ' + e.message); }
   },
 
   archivePatch: async (id) => {
     set((s) => ({ patches: s.patches.map((p) => (p.id === id ? { ...p, status: 'archived' as const } : p)) }));
-    try { await api.updatePatch(id, { status: 'archived' }); } catch (e) { console.error('Failed to persist archive:', e); }
+    try { await api.updatePatch(id, { status: 'archived' }); toast.success('Patch arquivado'); } catch (e: any) { toast.error('Erro ao arquivar patch: ' + e.message); }
   },
 
   toggleFavorite: (id) =>
@@ -109,17 +110,17 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   addHotfix: async (hotfix) => {
     set((s) => ({ hotfixes: [hotfix, ...s.hotfixes] }));
-    try { await api.createHotfix(hotfix); } catch (e) { console.error('Failed to persist hotfix:', e); }
+    try { await api.createHotfix(hotfix); toast.success('Hotfix criado'); } catch (e: any) { toast.error('Erro ao criar hotfix: ' + e.message); }
   },
 
   updateHotfix: async (id, data) => {
     set((s) => ({ hotfixes: s.hotfixes.map((h) => (h.id === id ? { ...h, ...data } : h)) }));
-    try { await api.updateHotfix(id, data); } catch (e) { console.error('Failed to persist hotfix update:', e); }
+    try { await api.updateHotfix(id, data); toast.success('Hotfix atualizado'); } catch (e: any) { toast.error('Erro ao atualizar hotfix: ' + e.message); }
   },
 
   addDocument: async (doc) => {
     set((s) => ({ documents: [doc, ...s.documents] }));
-    try { await api.createDocument(doc); } catch (e) { console.error('Failed to persist document:', e); }
+    try { await api.createDocument(doc); toast.success('Documento criado'); } catch (e: any) { toast.error('Erro ao criar documento: ' + e.message); }
   },
 
   markNotificationRead: (id) => {

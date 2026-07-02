@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Flame, Plus, X, Timer, TrendingDown, Activity, ArrowRight, FileWarning } from 'lucide-react';
+import { Flame, Plus, X, Timer, TrendingDown, Activity, ArrowRight, FileWarning, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -13,7 +13,7 @@ import type { Hotfix } from '@/types';
 
 export default function HotfixPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { hotfixes, addHotfix, updateHotfix, addAuditLog, currentUser } = useAppStore();
+  const { hotfixes, addHotfix, updateHotfix, addAuditLog, currentUser, loading } = useAppStore();
   const [formOpen, setFormOpen] = useState(false);
   const [severityFilter, setSeverityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -131,7 +131,11 @@ export default function HotfixPage() {
       </div>
 
       {/* List */}
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="w-8 h-8 animate-spin text-red" />
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState icon={Flame} title="Nenhum hotfix encontrado" description="Sem hotfixes com os filtros atuais." />
       ) : (
         <div className="space-y-4 animate-stagger">
