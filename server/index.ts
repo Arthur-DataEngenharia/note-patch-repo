@@ -251,7 +251,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 // ─── Static files (production) ───
 if (isProd) {
   app.use(express.static(path.join(__dirname, '../dist')));
-  app.get('*', (_req, res) => {
+  app.get('{*path}', (_req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
