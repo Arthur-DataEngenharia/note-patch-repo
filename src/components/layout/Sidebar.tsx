@@ -12,6 +12,7 @@ import {
   Settings,
   ChevronLeft,
   Layers,
+  X,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { cn, getInitials } from '@/lib/utils';
@@ -36,18 +37,29 @@ const NAV_ITEMS = [
 ];
 
 export function Sidebar() {
-  const { sidebarCollapsed, toggleSidebar, currentUser, hotfixes } = useAppStore();
+  const { sidebarCollapsed, toggleSidebar, currentUser, hotfixes, mobileMenuOpen, setMobileMenuOpen } = useAppStore();
   const location = useLocation();
   const activeHotfixes = hotfixes.filter((h) => !['closed', 'validated'].includes(h.status)).length;
 
   return (
-    <aside
-      className={cn(
-        'fixed left-0 top-0 h-screen backdrop-blur-xl border-r border-black-border z-40 flex flex-col transition-all duration-300',
-        sidebarCollapsed ? 'w-[68px]' : 'w-60'
+    <>
+      {/* Mobile backdrop */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
       )}
-      style={{ background: 'var(--color-surface)' }}
-    >
+      <aside
+        className={cn(
+          'fixed left-0 top-0 h-screen backdrop-blur-xl border-r border-black-border z-50 flex flex-col transition-all duration-300',
+          sidebarCollapsed ? 'md:w-[68px]' : 'md:w-60',
+          'w-60',
+          '-translate-x-full md:translate-x-0',
+          mobileMenuOpen && 'translate-x-0'
+        )}
+        style={{ background: 'var(--color-surface)' }}
+      >
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-black-border shrink-0">
         <div className="w-9 h-9 rounded-lg bg-red-gradient flex items-center justify-center shadow-red-glow shrink-0">
@@ -58,6 +70,13 @@ export function Sidebar() {
             Note <span className="text-red">Patch</span>
           </span>
         )}
+        <button
+          className="ml-auto md:hidden p-1.5 rounded-lg text-white-muted hover:text-white hover:bg-hover"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Fechar menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Nav */}
@@ -141,5 +160,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

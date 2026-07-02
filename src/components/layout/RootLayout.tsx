@@ -19,10 +19,11 @@ export function RootLayout() {
       <main
         className={cn(
           'pt-16 min-h-screen transition-all duration-300',
-          sidebarCollapsed ? 'pl-[68px]' : 'pl-60'
+          'pl-0',
+          sidebarCollapsed ? 'md:pl-[68px]' : 'md:pl-60'
         )}
       >
-        <div className="p-6 lg:p-8 max-w-[1600px] mx-auto">
+        <div className="p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
           <Outlet />
         </div>
       </main>

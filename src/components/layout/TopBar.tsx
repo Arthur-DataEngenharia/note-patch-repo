@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Bell, Plus, Flame, Check, Sun, Moon } from 'lucide-react';
+import { Search, Bell, Plus, Flame, Check, Sun, Moon, Menu } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useThemeStore } from '@/store/themeStore';
 import { cn, formatRelative } from '@/lib/utils';
 
 export function TopBar() {
   const navigate = useNavigate();
-  const { notifications, markNotificationRead, markAllNotificationsRead, setCommandPaletteOpen, sidebarCollapsed } =
+  const { notifications, markNotificationRead, markAllNotificationsRead, setCommandPaletteOpen, sidebarCollapsed, setMobileMenuOpen } =
     useAppStore();
   const { theme, toggleTheme } = useThemeStore();
   const [notifOpen, setNotifOpen] = useState(false);
@@ -27,22 +27,33 @@ export function TopBar() {
   return (
     <header
       className={cn(
-        'fixed top-0 right-0 h-16 backdrop-blur-xl border-b border-black-border z-30 flex items-center justify-between px-6 transition-all duration-300',
-        sidebarCollapsed ? 'left-[68px]' : 'left-60'
+        'fixed top-0 right-0 h-16 backdrop-blur-xl border-b border-black-border z-30 flex items-center justify-between px-4 md:px-6 transition-all duration-300',
+        'left-0',
+        sidebarCollapsed ? 'md:left-[68px]' : 'md:left-60'
       )}
       style={{ background: 'var(--color-surface)' }}
     >
-      {/* Search trigger */}
-      <button
-        onClick={() => setCommandPaletteOpen(true)}
-        className="flex items-center gap-3 bg-black-surface-2 border border-black-border rounded-lg px-3 py-2 text-sm text-white-dim hover:border-red-40 transition-all w-72"
-      >
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="md:hidden p-2 rounded-lg text-white-muted hover:text-white hover:bg-hover transition-all"
+          aria-label="Abrir menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        {/* Search trigger */}
+        <button
+          onClick={() => setCommandPaletteOpen(true)}
+          className="flex items-center gap-3 bg-black-surface-2 border border-black-border rounded-lg px-3 py-2 text-sm text-white-dim hover:border-red-40 transition-all flex-1 md:w-72 md:flex-none max-w-md"
+        >
         <Search className="w-4 h-4" />
         <span>Buscar patches, docs...</span>
-        <kbd className="ml-auto text-[10px] bg-black-surface border border-black-border rounded px-1.5 py-0.5 font-mono">
+        <kbd className="hidden md:inline ml-auto text-[10px] bg-black-surface border border-black-border rounded px-1.5 py-0.5 font-mono">
           Ctrl K
         </kbd>
       </button>
+      </div>
 
       <div className="flex items-center gap-2">
         <button

@@ -27,6 +27,7 @@ interface AppState {
   currentUser: User;
   sidebarCollapsed: boolean;
   commandPaletteOpen: boolean;
+  mobileMenuOpen: boolean;
   loading: boolean;
 
   init: () => Promise<void>;
@@ -42,6 +43,7 @@ interface AppState {
   addAuditLog: (log: Omit<AuditLog, 'id' | 'timestamp'>) => void;
   toggleSidebar: () => void;
   setCommandPaletteOpen: (open: boolean) => void;
+  setMobileMenuOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -55,6 +57,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentUser: { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'admin' },
   sidebarCollapsed: false,
   commandPaletteOpen: false,
+  mobileMenuOpen: false,
   loading: true,
 
   init: async () => {
@@ -136,4 +139,5 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
   setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
+  setMobileMenuOpen: (open) => set({ mobileMenuOpen: open }),
 }));
