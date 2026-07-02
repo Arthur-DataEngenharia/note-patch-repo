@@ -22,7 +22,6 @@ interface ShootingStar {
 
 export default function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -9999, y: -9999 });
   const starsRef = useRef<Star[]>([]);
   const shootingRef = useRef<ShootingStar[]>([]);
   const timeRef = useRef(0);
@@ -90,15 +89,6 @@ export default function AnimatedBackground() {
     resize();
     window.addEventListener('resize', resize);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -9999, y: -9999 };
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
-
     // Spawn shooting stars periodically
     const shootingInterval = setInterval(() => {
       if (Math.random() < 0.4) {
@@ -142,42 +132,18 @@ export default function AnimatedBackground() {
       ctx.fillRect(0, 0, width, height);
 
       // ─── Stars ───
-      const mouse = mouseRef.current;
       const stars = starsRef.current;
 
       for (const s of stars) {
         // Rotate around center (galactic rotation)
         s.angle += s.speed * 0.003;
 
-        const x = cx + Math.cos(s.angle) * s.radius;
-        const y = cy + Math.sin(s.angle) * s.radius;
-
-        // Mouse parallax / warp
-        let drawX = x;
-        let drawY = y;
-        if (mouse.x > -1000) {
-          const mdx = mouse.x - cx;
-          const mdy = mouse.y - cy;
-          const parallax = (s.layer + 1) * 0.02;
-          drawX -= mdx * parallax;
-          drawY -= mdy * parallax;
-
-          // Subtle gravitational lens near mouse
-          const starMouseDx = mouse.x - drawX;
-          const starMouseDy = mouse.y - drawY;
-          const starMouseDist = Math.sqrt(starMouseDx * starMouseDx + starMouseDy * starMouseDy);
-          if (starMouseDist < 200) {
-            const lens = (1 - starMouseDist / 200) * 3;
-            drawX -= (starMouseDx / starMouseDist) * lens;
-            drawY -= (starMouseDy / starMouseDist) * lens;
-          }
-        }
+        const drawX = cx + Math.cos(s.angle) * s.radius;
+        const drawY = cy + Math.sin(s.angle) * s.radius;
 
         // Wrap around screen
-        if (drawX < -50) drawX += width + 100;
-        if (drawX > width + 50) drawX -= width + 100;
-        if (drawY < -50) drawY += height + 100;
-        if (drawY > height + 50) drawY -= height + 100;
+        const wrapX = drawX < -50 ? drawX + width + 100 : drawX > width + 50 ? drawX - width - 100 : drawX;
+        const wrapY = drawY < -50 ? drawY + height + 100 : drawY > height + 50 ? drawY - height - 100 : drawY;
 
         // Twinkle
         s.twinklePhase += s.twinkleSpeed;
@@ -192,8 +158,8 @@ export default function AnimatedBackground() {
         // Glow for bright stars
         if (s.size > 1.5 && alpha > 0.5) {
           ctx.beginPath();
-          ctx.arc(drawX, drawY, s.size * 3, 0, Math.PI * 2);
-          const glow = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, s.size * 3);
+          ctx.arc(wrapX, wrapY, s.size * 3, 0, Math.PI * 2);
+          const glow = ctx.createRadialGradient(wrapX, wrapY, 0, wrapX, wrapY, s.size * 3);
           glow.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.4})`);
           glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
           ctx.fillStyle = glow;
@@ -201,7 +167,7 @@ export default function AnimatedBackground() {
         }
 
         ctx.beginPath();
-        ctx.arc(drawX, drawY, s.size, 0, Math.PI * 2);
+        ctx.arc(wrapX, wrapY, s.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
         ctx.fill();
       }
@@ -249,8 +215,6 @@ export default function AnimatedBackground() {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseleave', handleMouseLeave);
       clearInterval(shootingInterval);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
