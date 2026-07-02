@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, X, Github, Clock } from 'lucide-react';
+import { Flame, X, Github, Clock, Filter } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ClassificationBadge } from '@/components/shared/ClassificationBadge';
@@ -10,18 +10,50 @@ import { cn, formatDate, formatDateTime, truncate } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
 import type { NotePatch } from '@/types';
 
+function parseVersionParts(version: string) {
+  const parts = version.split('.');
+  return { major: parts[0] || '', minor: parts[1] || '', patch: parts[2] || '' };
+}
+
 export default function TimelinePage() {
   const { patches, classifications } = useAppStore();
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [versionFilter, setVersionFilter] = useState({ major: '', minor: '', patch: '' });
   const [selectedPatch, setSelectedPatch] = useState<NotePatch | null>(null);
+
+  const versionOptions = useMemo(() => {
+    const majors = new Set<string>();
+    const minors = new Set<string>();
+    const patchs = new Set<string>();
+    patches.forEach((p) => {
+      const v = parseVersionParts(p.version);
+      if (v.major) majors.add(v.major);
+      if (v.minor) minors.add(v.minor);
+      if (v.patch) patchs.add(v.patch);
+    });
+    return {
+      majors: Array.from(majors).sort((a, b) => Number(a) - Number(b)),
+      minors: Array.from(minors).sort((a, b) => Number(a) - Number(b)),
+      patchs: Array.from(patchs).sort((a, b) => Number(a) - Number(b)),
+    };
+  }, [patches]);
 
   const sorted = useMemo(() => {
     let list = patches.filter((p) => p.status === 'published' || p.status === 'archived');
     if (activeFilters.length > 0) {
       list = list.filter((p) => activeFilters.includes(p.classificationId));
     }
+    if (versionFilter.major || versionFilter.minor || versionFilter.patch) {
+      list = list.filter((p) => {
+        const v = parseVersionParts(p.version);
+        if (versionFilter.major && v.major !== versionFilter.major) return false;
+        if (versionFilter.minor && v.minor !== versionFilter.minor) return false;
+        if (versionFilter.patch && v.patch !== versionFilter.patch) return false;
+        return true;
+      });
+    }
     return [...list].sort((a, b) => b.deployedAt.getTime() - a.deployedAt.getTime());
-  }, [patches, activeFilters]);
+  }, [patches, activeFilters, versionFilter]);
 
   const usedClassifications = useMemo(() => {
     const ids = new Set(patches.map((p) => p.classificationId));
@@ -34,6 +66,8 @@ export default function TimelinePage() {
     );
   };
 
+  const hasAnyFilter = activeFilters.length > 0 || versionFilter.major || versionFilter.minor || versionFilter.patch;
+
   return (
     <div>
       <PageHeader
@@ -41,33 +75,69 @@ export default function TimelinePage() {
         description="Histórico cronológico dos deploys em produção"
       />
 
-      {/* Classification chips */}
-      <div className="flex flex-wrap gap-2 mb-10">
-        {usedClassifications.map((c) => {
-          const active = activeFilters.includes(c.id);
-          return (
+      {/* Filters */}
+      <div className="mb-6">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex items-center gap-1.5 text-xs text-white-dim">
+            <Filter className="w-3.5 h-3.5" />
+            <span>Versao:</span>
+          </div>
+          <select
+            value={versionFilter.major}
+            onChange={(e) => setVersionFilter({ ...versionFilter, major: e.target.value })}
+            className="bg-black-surface-2 border border-black-border rounded-lg px-3 py-1.5 text-xs text-white focus:border-red focus:outline-none"
+          >
+            <option value="">Major (todas)</option>
+            {versionOptions.majors.map((v) => (<option key={v} value={v}>{v}</option>))}
+          </select>
+          <select
+            value={versionFilter.minor}
+            onChange={(e) => setVersionFilter({ ...versionFilter, minor: e.target.value })}
+            className="bg-black-surface-2 border border-black-border rounded-lg px-3 py-1.5 text-xs text-white focus:border-red focus:outline-none"
+          >
+            <option value="">Minor (todas)</option>
+            {versionOptions.minors.map((v) => (<option key={v} value={v}>{v}</option>))}
+          </select>
+          <select
+            value={versionFilter.patch}
+            onChange={(e) => setVersionFilter({ ...versionFilter, patch: e.target.value })}
+            className="bg-black-surface-2 border border-black-border rounded-lg px-3 py-1.5 text-xs text-white focus:border-red focus:outline-none"
+          >
+            <option value="">Patch (todas)</option>
+            {versionOptions.patchs.map((v) => (<option key={v} value={v}>{v}</option>))}
+          </select>
+          {hasAnyFilter && (
             <button
-              key={c.id}
-              onClick={() => toggleFilter(c.id)}
-              className={cn(
-                'px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200',
-                active ? 'text-white' : 'text-white-muted hover:text-white'
-              )}
-              style={{
-                borderColor: active ? c.color : 'var(--color-border)',
-                backgroundColor: active ? `${c.color}30` : 'transparent',
-              }}
+              onClick={() => { setActiveFilters([]); setVersionFilter({ major: '', minor: '', patch: '' }); }}
+              className="btn-ghost text-xs flex items-center gap-1"
             >
-              <span className="inline-block w-2 h-2 rounded-full mr-1.5" style={{ backgroundColor: c.color }} />
-              {c.name}
+              <X className="w-3 h-3" /> Limpar
             </button>
-          );
-        })}
-        {activeFilters.length > 0 && (
-          <button onClick={() => setActiveFilters([])} className="btn-ghost text-xs flex items-center gap-1">
-            <X className="w-3 h-3" /> Limpar filtros
-          </button>
-        )}
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {usedClassifications.map((c) => {
+            const active = activeFilters.includes(c.id);
+            return (
+              <button
+                key={c.id}
+                onClick={() => toggleFilter(c.id)}
+                className={cn(
+                  'px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200',
+                  active ? 'text-white' : 'text-white-muted hover:text-white'
+                )}
+                style={{
+                  borderColor: active ? c.color : 'var(--color-border)',
+                  backgroundColor: active ? `${c.color}30` : 'transparent',
+                }}
+              >
+                <span className="inline-block w-2 h-2 rounded-full mr-1.5" style={{ backgroundColor: c.color }} />
+                {c.name}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {sorted.length === 0 ? (
