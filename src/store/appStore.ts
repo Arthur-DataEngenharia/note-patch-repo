@@ -2,6 +2,20 @@ import { create } from 'zustand';
 import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User } from '@/types';
 import { api } from '@/api/client';
 
+function toDate(v: any) { return v ? new Date(v) : null; }
+function parsePatchDates(p: any): NotePatch {
+  return { ...p, createdAt: toDate(p.createdAt), updatedAt: toDate(p.updatedAt), deployedAt: toDate(p.deployedAt) };
+}
+function parseHotfixDates(h: any): Hotfix {
+  return { ...h, reportedAt: toDate(h.reportedAt), closedAt: toDate(h.closedAt), updatedAt: toDate(h.updatedAt) };
+}
+function parseDocDates(d: any): DocumentItem {
+  return { ...d, createdAt: toDate(d.createdAt), updatedAt: toDate(d.updatedAt) };
+}
+function parseAuditDates(a: any): AuditLog {
+  return { ...a, timestamp: toDate(a.timestamp) };
+}
+
 interface AppState {
   patches: NotePatch[];
   hotfixes: Hotfix[];
@@ -55,12 +69,12 @@ export const useAppStore = create<AppState>((set, get) => ({
         api.getUsers(),
       ]);
       set({
-        patches: patches as NotePatch[],
-        hotfixes: hotfixes as Hotfix[],
-        documents: documents as DocumentItem[],
-        notifications: notifications as Notification[],
+        patches: (patches as any[]).map(parsePatchDates),
+        hotfixes: (hotfixes as any[]).map(parseHotfixDates),
+        documents: (documents as any[]).map(parseDocDates),
+        notifications: (notifications as any[]).map((n: any) => ({ ...n, createdAt: toDate(n.createdAt) })),
         classifications: classifications as Classification[],
-        auditLogs: auditLogs as AuditLog[],
+        auditLogs: (auditLogs as any[]).map(parseAuditDates),
         users: users as User[],
         currentUser: (users as User[])[0] || get().currentUser,
         loading: false,
