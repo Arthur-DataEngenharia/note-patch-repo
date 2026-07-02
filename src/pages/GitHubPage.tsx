@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Github, CheckCircle2, XCircle, RefreshCw, GitBranch, Star, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Github, CheckCircle2, XCircle, RefreshCw, GitBranch, Star, Eye, EyeOff, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { api } from '@/api/client';
 import { cn } from '@/lib/utils';
+import RepoDetailModal from '@/components/github/RepoDetailModal';
 
 interface Repo {
   id: number;
@@ -26,6 +27,7 @@ export default function GitHubPage() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(false);
   const [connecting, setConnecting] = useState(false);
+  const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
 
   useEffect(() => {
     loadRepos();
@@ -138,31 +140,51 @@ export default function GitHubPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {repos.map((repo) => (
-                <a
+                <div
                   key={repo.id}
-                  href={repo.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group p-4 rounded-lg border border-black-border hover:border-red-40 bg-surface-2-20 hover:bg-hover transition-all"
+                  className="group p-4 rounded-lg border border-black-border hover:border-red-40 bg-surface-2-20 hover:bg-hover transition-all cursor-pointer"
+                  onClick={() => setSelectedRepo(repo)}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <p className="font-mono text-xs font-semibold truncate">{repo.fullName}</p>
-                    {repo.isPrivate && (
-                      <span className="text-[10px] bg-black-surface border border-black-border rounded px-1.5 py-0.5">Private</span>
-                    )}
+                    <div className="flex items-center gap-1.5">
+                      {repo.isPrivate && (
+                        <span className="text-[10px] bg-black-surface border border-black-border rounded px-1.5 py-0.5">Private</span>
+                      )}
+                      <a
+                        href={repo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-1 rounded hover:bg-black-surface-2 text-white-dim hover:text-white transition-colors"
+                        title="Abrir no GitHub"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
                   </div>
                   <p className="text-xs text-white-dim line-clamp-2 mb-3 min-h-[2.5em]">{repo.description || 'Sem descricao'}</p>
                   <div className="flex items-center gap-4 text-[10px] text-white-muted">
                     {repo.language && <span>{repo.language}</span>}
                     <span className="flex items-center gap-1"><Star className="w-3 h-3" /> {repo.stars}</span>
                     <span className="flex items-center gap-1"><GitBranch className="w-3 h-3" /> {repo.forks}</span>
+                    <span className="ml-auto text-red opacity-0 group-hover:opacity-100 transition-opacity">Explorar &rarr;</span>
                   </div>
-                </a>
+                </div>
               ))}
             </div>
           )}
+
         </div>
       </div>
+
+      {selectedRepo && (
+        <RepoDetailModal
+          owner={selectedRepo.owner}
+          repo={selectedRepo.name}
+          onClose={() => setSelectedRepo(null)}
+        />
+      )}
     </div>
   );
 }

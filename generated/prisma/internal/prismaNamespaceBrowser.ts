@@ -119,6 +119,7 @@ export const NotePatchScalarFieldEnum = {
   impactedSystems: 'impactedSystems',
   rollbackPlan: 'rollbackPlan',
   checklist: 'checklist',
+  codeReferences: 'codeReferences',
   deployedAt: 'deployedAt',
   publishedAt: 'publishedAt',
   createdAt: 'createdAt',
@@ -147,6 +148,7 @@ export const HotfixScalarFieldEnum = {
   resolutionTimeMinutes: 'resolutionTimeMinutes',
   postMortemNeeded: 'postMortemNeeded',
   postMortemDone: 'postMortemDone',
+  codeReferences: 'codeReferences',
   patchId: 'patchId'
 } as const
 

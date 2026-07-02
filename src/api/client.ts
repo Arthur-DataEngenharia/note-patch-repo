@@ -60,4 +60,10 @@ export const api = {
   // GitHub
   connectGitHub: (githubToken: string) => fetchJSON<any>('/github/connect', { method: 'POST', body: JSON.stringify({ githubToken }) }),
   getGitHubRepos: () => fetchJSON<any>('/github/repos'),
+  getRepoTree: (owner: string, repo: string, branch?: string) =>
+    fetchJSON<any>(`/github/repos/${owner}/${repo}/tree${branch ? `?branch=${branch}` : ''}`),
+  getRepoContent: (owner: string, repo: string, path: string, ref?: string) =>
+    fetchJSON<any>(`/github/repos/${owner}/${repo}/contents/${path}${ref ? `?ref=${ref}` : ''}`),
+  getRepoCommits: (owner: string, repo: string, sha?: string, path?: string) =>
+    fetchJSON<any>(`/github/repos/${owner}/${repo}/commits?${sha ? `sha=${sha}` : ''}${path ? `&path=${path}` : ''}`),
 };

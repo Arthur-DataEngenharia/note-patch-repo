@@ -56,6 +56,7 @@ function parsePatch(p: any) {
     affectedClasses: JSON.parse(p.affectedClasses || '[]'),
     impactedSystems: JSON.parse(p.impactedSystems || '[]'),
     checklist: JSON.parse(p.checklist || '[]'),
+    codeReferences: p.codeReferences ? JSON.parse(p.codeReferences) : [],
     createdAt: toDate(p.createdAt),
     updatedAt: toDate(p.updatedAt),
     deployedAt: toDate(p.deployedAt),
@@ -79,6 +80,7 @@ function parseAudit(a: any) {
 function parseHotfix(h: any) {
   return {
     ...h,
+    codeReferences: h.codeReferences ? JSON.parse(h.codeReferences) : [],
     reportedAt: toDate(h.reportedAt),
     closedAt: toDate(h.closedAt),
     updatedAt: toDate(h.updatedAt),
@@ -163,6 +165,7 @@ app.post('/api/patches', async (req, res) => {
       impactedSystems: JSON.stringify(b.impactedSystems || []),
       rollbackPlan: b.rollbackPlan || null,
       checklist: JSON.stringify(b.checklist || []),
+      codeReferences: b.codeReferences ? JSON.stringify(b.codeReferences) : null,
       deployedAt: b.deployedAt || new Date(),
       publishedAt: b.publishedAt || null,
       isHotfix: b.isHotfix || false,
@@ -191,6 +194,7 @@ app.patch('/api/patches/:id', async (req, res) => {
   if (b.impactedSystems !== undefined) data.impactedSystems = JSON.stringify(b.impactedSystems);
   if (b.rollbackPlan !== undefined) data.rollbackPlan = b.rollbackPlan;
   if (b.checklist !== undefined) data.checklist = JSON.stringify(b.checklist);
+  if (b.codeReferences !== undefined) data.codeReferences = JSON.stringify(b.codeReferences);
   if (b.favorite !== undefined) data.favorite = b.favorite;
   if (b.publishedAt !== undefined) data.publishedAt = b.publishedAt;
 
@@ -224,6 +228,7 @@ app.post('/api/hotfixes', async (req, res) => {
       reportedAt: b.reportedAt || new Date(),
       postMortemNeeded: b.postMortemNeeded ?? false,
       postMortemDone: b.postMortemDone ?? false,
+      codeReferences: b.codeReferences ? JSON.stringify(b.codeReferences) : null,
       patchId: b.patchId || null,
     },
   });
@@ -239,6 +244,7 @@ app.patch('/api/hotfixes/:id', async (req, res) => {
   if (b.resolvedBy !== undefined) data.resolvedBy = b.resolvedBy;
   if (b.resolutionTimeMinutes !== undefined) data.resolutionTimeMinutes = b.resolutionTimeMinutes;
   if (b.postMortemDone !== undefined) data.postMortemDone = b.postMortemDone;
+  if (b.codeReferences !== undefined) data.codeReferences = JSON.stringify(b.codeReferences);
   if (b.patchId !== undefined) data.patchId = b.patchId;
 
   const hotfix = await prisma.hotfix.update({ where: { id: req.params.id }, data });
@@ -411,6 +417,76 @@ app.get('/api/github/repos', async (req, res) => {
   }));
 
   res.json({ repos: mappedRepos, orgs: orgs.map((o: any) => ({ login: o.login, avatarUrl: o.avatar_url })) });
+});
+
+async function getGitHubHeaders(req: express.Request) {
+  const auth = req.headers.authorization;
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7) : null;
+  const payload = token ? verifyToken(token) : null;
+  if (!payload) throw new Error('Unauthorized');
+  const user = await prisma.user.findUnique({ where: { id: payload.id } });
+  const ghToken = user?.githubToken || process.env.GITHUB_TOKEN;
+  if (!ghToken) throw new Error('GitHub token not configured');
+  return { Authorization: `token ${ghToken}`, Accept: 'application/vnd.github.v3+json' };
+}
+
+// Get repo tree (branches & root tree)
+app.get('/api/github/repos/:owner/:repo/tree', async (req, res) => {
+  try {
+    const headers = await getGitHubHeaders(req);
+    const { owner, repo } = req.params;
+    const branch = req.query.branch as string || 'main';
+    const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`, { headers });
+    if (!treeRes.ok) throw new Error('Failed to fetch tree');
+    const tree = await treeRes.json();
+    res.json({ tree: tree.tree || [] });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Get file contents
+app.get('/api/github/repos/:owner/:repo/contents/*', async (req, res) => {
+  try {
+    const headers = await getGitHubHeaders(req);
+    const { owner, repo } = req.params;
+    const params = req.params as any;
+    const path = params[0];
+    const ref = req.query.ref as string || 'main';
+    const contentRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${ref}`, { headers });
+    if (!contentRes.ok) throw new Error('Failed to fetch content');
+    const content = await contentRes.json();
+    if (content.content) {
+      content.decoded = Buffer.from(content.content, 'base64').toString('utf-8');
+    }
+    res.json(content);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Get commits
+app.get('/api/github/repos/:owner/:repo/commits', async (req, res) => {
+  try {
+    const headers = await getGitHubHeaders(req);
+    const { owner, repo } = req.params;
+    const sha = req.query.sha as string || 'main';
+    const path = req.query.path as string || '';
+    let url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${sha}&per_page=30`;
+    if (path) url += `&path=${path}`;
+    const commitsRes = await fetch(url, { headers });
+    if (!commitsRes.ok) throw new Error('Failed to fetch commits');
+    const commits = await commitsRes.json();
+    res.json({ commits: commits.map((c: any) => ({
+      sha: c.sha,
+      message: c.commit?.message,
+      author: c.commit?.author?.name,
+      date: c.commit?.author?.date,
+      url: c.html_url,
+    })) });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 // ─── Health ───

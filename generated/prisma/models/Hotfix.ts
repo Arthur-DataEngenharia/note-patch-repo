@@ -50,6 +50,7 @@ export type HotfixMinAggregateOutputType = {
   resolutionTimeMinutes: number | null
   postMortemNeeded: boolean | null
   postMortemDone: boolean | null
+  codeReferences: string | null
   patchId: string | null
 }
 
@@ -69,6 +70,7 @@ export type HotfixMaxAggregateOutputType = {
   resolutionTimeMinutes: number | null
   postMortemNeeded: boolean | null
   postMortemDone: boolean | null
+  codeReferences: string | null
   patchId: string | null
 }
 
@@ -88,6 +90,7 @@ export type HotfixCountAggregateOutputType = {
   resolutionTimeMinutes: number
   postMortemNeeded: number
   postMortemDone: number
+  codeReferences: number
   patchId: number
   _all: number
 }
@@ -117,6 +120,7 @@ export type HotfixMinAggregateInputType = {
   resolutionTimeMinutes?: true
   postMortemNeeded?: true
   postMortemDone?: true
+  codeReferences?: true
   patchId?: true
 }
 
@@ -136,6 +140,7 @@ export type HotfixMaxAggregateInputType = {
   resolutionTimeMinutes?: true
   postMortemNeeded?: true
   postMortemDone?: true
+  codeReferences?: true
   patchId?: true
 }
 
@@ -155,6 +160,7 @@ export type HotfixCountAggregateInputType = {
   resolutionTimeMinutes?: true
   postMortemNeeded?: true
   postMortemDone?: true
+  codeReferences?: true
   patchId?: true
   _all?: true
 }
@@ -261,6 +267,7 @@ export type HotfixGroupByOutputType = {
   resolutionTimeMinutes: number | null
   postMortemNeeded: boolean
   postMortemDone: boolean
+  codeReferences: string | null
   patchId: string | null
   _count: HotfixCountAggregateOutputType | null
   _avg: HotfixAvgAggregateOutputType | null
@@ -303,6 +310,7 @@ export type HotfixWhereInput = {
   resolutionTimeMinutes?: Prisma.IntNullableFilter<"Hotfix"> | number | null
   postMortemNeeded?: Prisma.BoolFilter<"Hotfix"> | boolean
   postMortemDone?: Prisma.BoolFilter<"Hotfix"> | boolean
+  codeReferences?: Prisma.StringNullableFilter<"Hotfix"> | string | null
   patchId?: Prisma.StringNullableFilter<"Hotfix"> | string | null
   reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patch?: Prisma.XOR<Prisma.NotePatchNullableScalarRelationFilter, Prisma.NotePatchWhereInput> | null
@@ -324,6 +332,7 @@ export type HotfixOrderByWithRelationInput = {
   resolutionTimeMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   postMortemNeeded?: Prisma.SortOrder
   postMortemDone?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   patchId?: Prisma.SortOrderInput | Prisma.SortOrder
   reporter?: Prisma.UserOrderByWithRelationInput
   patch?: Prisma.NotePatchOrderByWithRelationInput
@@ -348,6 +357,7 @@ export type HotfixWhereUniqueInput = Prisma.AtLeast<{
   resolutionTimeMinutes?: Prisma.IntNullableFilter<"Hotfix"> | number | null
   postMortemNeeded?: Prisma.BoolFilter<"Hotfix"> | boolean
   postMortemDone?: Prisma.BoolFilter<"Hotfix"> | boolean
+  codeReferences?: Prisma.StringNullableFilter<"Hotfix"> | string | null
   patchId?: Prisma.StringNullableFilter<"Hotfix"> | string | null
   reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patch?: Prisma.XOR<Prisma.NotePatchNullableScalarRelationFilter, Prisma.NotePatchWhereInput> | null
@@ -369,6 +379,7 @@ export type HotfixOrderByWithAggregationInput = {
   resolutionTimeMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   postMortemNeeded?: Prisma.SortOrder
   postMortemDone?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   patchId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.HotfixCountOrderByAggregateInput
   _avg?: Prisma.HotfixAvgOrderByAggregateInput
@@ -396,6 +407,7 @@ export type HotfixScalarWhereWithAggregatesInput = {
   resolutionTimeMinutes?: Prisma.IntNullableWithAggregatesFilter<"Hotfix"> | number | null
   postMortemNeeded?: Prisma.BoolWithAggregatesFilter<"Hotfix"> | boolean
   postMortemDone?: Prisma.BoolWithAggregatesFilter<"Hotfix"> | boolean
+  codeReferences?: Prisma.StringNullableWithAggregatesFilter<"Hotfix"> | string | null
   patchId?: Prisma.StringNullableWithAggregatesFilter<"Hotfix"> | string | null
 }
 
@@ -414,6 +426,7 @@ export type HotfixCreateInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   reporter: Prisma.UserCreateNestedOneWithoutHotfixesInput
   patch?: Prisma.NotePatchCreateNestedOneWithoutHotfixesInput
 }
@@ -434,6 +447,7 @@ export type HotfixUncheckedCreateInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   patchId?: string | null
 }
 
@@ -452,6 +466,7 @@ export type HotfixUpdateInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reporter?: Prisma.UserUpdateOneRequiredWithoutHotfixesNestedInput
   patch?: Prisma.NotePatchUpdateOneWithoutHotfixesNestedInput
 }
@@ -472,6 +487,7 @@ export type HotfixUncheckedUpdateInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -491,6 +507,7 @@ export type HotfixCreateManyInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   patchId?: string | null
 }
 
@@ -509,6 +526,7 @@ export type HotfixUpdateManyMutationInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type HotfixUncheckedUpdateManyInput = {
@@ -527,6 +545,7 @@ export type HotfixUncheckedUpdateManyInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -556,6 +575,7 @@ export type HotfixCountOrderByAggregateInput = {
   resolutionTimeMinutes?: Prisma.SortOrder
   postMortemNeeded?: Prisma.SortOrder
   postMortemDone?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
 }
 
@@ -579,6 +599,7 @@ export type HotfixMaxOrderByAggregateInput = {
   resolutionTimeMinutes?: Prisma.SortOrder
   postMortemNeeded?: Prisma.SortOrder
   postMortemDone?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
 }
 
@@ -598,6 +619,7 @@ export type HotfixMinOrderByAggregateInput = {
   resolutionTimeMinutes?: Prisma.SortOrder
   postMortemNeeded?: Prisma.SortOrder
   postMortemDone?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
 }
 
@@ -712,6 +734,7 @@ export type HotfixCreateWithoutReporterInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   patch?: Prisma.NotePatchCreateNestedOneWithoutHotfixesInput
 }
 
@@ -730,6 +753,7 @@ export type HotfixUncheckedCreateWithoutReporterInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   patchId?: string | null
 }
 
@@ -777,6 +801,7 @@ export type HotfixScalarWhereInput = {
   resolutionTimeMinutes?: Prisma.IntNullableFilter<"Hotfix"> | number | null
   postMortemNeeded?: Prisma.BoolFilter<"Hotfix"> | boolean
   postMortemDone?: Prisma.BoolFilter<"Hotfix"> | boolean
+  codeReferences?: Prisma.StringNullableFilter<"Hotfix"> | string | null
   patchId?: Prisma.StringNullableFilter<"Hotfix"> | string | null
 }
 
@@ -795,6 +820,7 @@ export type HotfixCreateWithoutPatchInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   reporter: Prisma.UserCreateNestedOneWithoutHotfixesInput
 }
 
@@ -814,6 +840,7 @@ export type HotfixUncheckedCreateWithoutPatchInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
 }
 
 export type HotfixCreateOrConnectWithoutPatchInput = {
@@ -856,6 +883,7 @@ export type HotfixCreateManyReporterInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
   patchId?: string | null
 }
 
@@ -874,6 +902,7 @@ export type HotfixUpdateWithoutReporterInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patch?: Prisma.NotePatchUpdateOneWithoutHotfixesNestedInput
 }
 
@@ -892,6 +921,7 @@ export type HotfixUncheckedUpdateWithoutReporterInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -910,6 +940,7 @@ export type HotfixUncheckedUpdateManyWithoutReporterInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -929,6 +960,7 @@ export type HotfixCreateManyPatchInput = {
   resolutionTimeMinutes?: number | null
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: string | null
 }
 
 export type HotfixUpdateWithoutPatchInput = {
@@ -946,6 +978,7 @@ export type HotfixUpdateWithoutPatchInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reporter?: Prisma.UserUpdateOneRequiredWithoutHotfixesNestedInput
 }
 
@@ -965,6 +998,7 @@ export type HotfixUncheckedUpdateWithoutPatchInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type HotfixUncheckedUpdateManyWithoutPatchInput = {
@@ -983,6 +1017,7 @@ export type HotfixUncheckedUpdateManyWithoutPatchInput = {
   resolutionTimeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   postMortemNeeded?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postMortemDone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1003,6 +1038,7 @@ export type HotfixSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   resolutionTimeMinutes?: boolean
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: boolean
   patchId?: boolean
   reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Hotfix$patchArgs<ExtArgs>
@@ -1024,6 +1060,7 @@ export type HotfixSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   resolutionTimeMinutes?: boolean
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: boolean
   patchId?: boolean
   reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Hotfix$patchArgs<ExtArgs>
@@ -1045,6 +1082,7 @@ export type HotfixSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   resolutionTimeMinutes?: boolean
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: boolean
   patchId?: boolean
   reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Hotfix$patchArgs<ExtArgs>
@@ -1066,10 +1104,11 @@ export type HotfixSelectScalar = {
   resolutionTimeMinutes?: boolean
   postMortemNeeded?: boolean
   postMortemDone?: boolean
+  codeReferences?: boolean
   patchId?: boolean
 }
 
-export type HotfixOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "severity" | "affectedSystem" | "description" | "commitSha" | "status" | "reportedById" | "reportedAt" | "deployedAt" | "resolvedAt" | "resolvedBy" | "resolutionTimeMinutes" | "postMortemNeeded" | "postMortemDone" | "patchId", ExtArgs["result"]["hotfix"]>
+export type HotfixOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "severity" | "affectedSystem" | "description" | "commitSha" | "status" | "reportedById" | "reportedAt" | "deployedAt" | "resolvedAt" | "resolvedBy" | "resolutionTimeMinutes" | "postMortemNeeded" | "postMortemDone" | "codeReferences" | "patchId", ExtArgs["result"]["hotfix"]>
 export type HotfixInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Hotfix$patchArgs<ExtArgs>
@@ -1105,6 +1144,7 @@ export type $HotfixPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     resolutionTimeMinutes: number | null
     postMortemNeeded: boolean
     postMortemDone: boolean
+    codeReferences: string | null
     patchId: string | null
   }, ExtArgs["result"]["hotfix"]>
   composites: {}
@@ -1546,6 +1586,7 @@ export interface HotfixFieldRefs {
   readonly resolutionTimeMinutes: Prisma.FieldRef<"Hotfix", 'Int'>
   readonly postMortemNeeded: Prisma.FieldRef<"Hotfix", 'Boolean'>
   readonly postMortemDone: Prisma.FieldRef<"Hotfix", 'Boolean'>
+  readonly codeReferences: Prisma.FieldRef<"Hotfix", 'String'>
   readonly patchId: Prisma.FieldRef<"Hotfix", 'String'>
 }
     

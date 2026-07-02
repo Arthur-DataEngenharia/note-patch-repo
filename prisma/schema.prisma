@@ -56,6 +56,7 @@ model NotePatch {
   impactedSystems  String   // JSON array
   rollbackPlan     String?
   checklist        String   // JSON array
+  codeReferences   String?  // JSON array of {repo, path, sha, lines, content}
   deployedAt       DateTime
   publishedAt      DateTime?
   createdAt        DateTime @default(now())
@@ -86,6 +87,7 @@ model Hotfix {
   resolutionTimeMinutes Int?
   postMortemNeeded      Boolean   @default(false)
   postMortemDone        Boolean   @default(false)
+  codeReferences        String?   // JSON array of {repo, path, sha, lines, content}
   patchId               String?
 
   reporter User       @relation("HotfixReporter", fields: [reportedById], references: [id])

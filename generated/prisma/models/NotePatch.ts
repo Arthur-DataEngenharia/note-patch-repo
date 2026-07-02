@@ -43,6 +43,7 @@ export type NotePatchMinAggregateOutputType = {
   impactedSystems: string | null
   rollbackPlan: string | null
   checklist: string | null
+  codeReferences: string | null
   deployedAt: Date | null
   publishedAt: Date | null
   createdAt: Date | null
@@ -71,6 +72,7 @@ export type NotePatchMaxAggregateOutputType = {
   impactedSystems: string | null
   rollbackPlan: string | null
   checklist: string | null
+  codeReferences: string | null
   deployedAt: Date | null
   publishedAt: Date | null
   createdAt: Date | null
@@ -99,6 +101,7 @@ export type NotePatchCountAggregateOutputType = {
   impactedSystems: number
   rollbackPlan: number
   checklist: number
+  codeReferences: number
   deployedAt: number
   publishedAt: number
   createdAt: number
@@ -129,6 +132,7 @@ export type NotePatchMinAggregateInputType = {
   impactedSystems?: true
   rollbackPlan?: true
   checklist?: true
+  codeReferences?: true
   deployedAt?: true
   publishedAt?: true
   createdAt?: true
@@ -157,6 +161,7 @@ export type NotePatchMaxAggregateInputType = {
   impactedSystems?: true
   rollbackPlan?: true
   checklist?: true
+  codeReferences?: true
   deployedAt?: true
   publishedAt?: true
   createdAt?: true
@@ -185,6 +190,7 @@ export type NotePatchCountAggregateInputType = {
   impactedSystems?: true
   rollbackPlan?: true
   checklist?: true
+  codeReferences?: true
   deployedAt?: true
   publishedAt?: true
   createdAt?: true
@@ -286,6 +292,7 @@ export type NotePatchGroupByOutputType = {
   impactedSystems: string
   rollbackPlan: string | null
   checklist: string
+  codeReferences: string | null
   deployedAt: Date
   publishedAt: Date | null
   createdAt: Date
@@ -335,6 +342,7 @@ export type NotePatchWhereInput = {
   impactedSystems?: Prisma.StringFilter<"NotePatch"> | string
   rollbackPlan?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   checklist?: Prisma.StringFilter<"NotePatch"> | string
+  codeReferences?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   deployedAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
   publishedAt?: Prisma.DateTimeNullableFilter<"NotePatch"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
@@ -367,6 +375,7 @@ export type NotePatchOrderByWithRelationInput = {
   impactedSystems?: Prisma.SortOrder
   rollbackPlan?: Prisma.SortOrderInput | Prisma.SortOrder
   checklist?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   deployedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -402,6 +411,7 @@ export type NotePatchWhereUniqueInput = Prisma.AtLeast<{
   impactedSystems?: Prisma.StringFilter<"NotePatch"> | string
   rollbackPlan?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   checklist?: Prisma.StringFilter<"NotePatch"> | string
+  codeReferences?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   deployedAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
   publishedAt?: Prisma.DateTimeNullableFilter<"NotePatch"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
@@ -434,6 +444,7 @@ export type NotePatchOrderByWithAggregationInput = {
   impactedSystems?: Prisma.SortOrder
   rollbackPlan?: Prisma.SortOrderInput | Prisma.SortOrder
   checklist?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrderInput | Prisma.SortOrder
   deployedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -468,6 +479,7 @@ export type NotePatchScalarWhereWithAggregatesInput = {
   impactedSystems?: Prisma.StringWithAggregatesFilter<"NotePatch"> | string
   rollbackPlan?: Prisma.StringNullableWithAggregatesFilter<"NotePatch"> | string | null
   checklist?: Prisma.StringWithAggregatesFilter<"NotePatch"> | string
+  codeReferences?: Prisma.StringNullableWithAggregatesFilter<"NotePatch"> | string | null
   deployedAt?: Prisma.DateTimeWithAggregatesFilter<"NotePatch"> | Date | string
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"NotePatch"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotePatch"> | Date | string
@@ -495,6 +507,7 @@ export type NotePatchCreateInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -526,6 +539,7 @@ export type NotePatchUncheckedCreateInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -555,6 +569,7 @@ export type NotePatchUpdateInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -586,6 +601,7 @@ export type NotePatchUncheckedUpdateInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -616,6 +632,7 @@ export type NotePatchCreateManyInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -643,6 +660,7 @@ export type NotePatchUpdateManyMutationInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -670,6 +688,7 @@ export type NotePatchUncheckedUpdateManyInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,6 +727,7 @@ export type NotePatchCountOrderByAggregateInput = {
   impactedSystems?: Prisma.SortOrder
   rollbackPlan?: Prisma.SortOrder
   checklist?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   deployedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -736,6 +756,7 @@ export type NotePatchMaxOrderByAggregateInput = {
   impactedSystems?: Prisma.SortOrder
   rollbackPlan?: Prisma.SortOrder
   checklist?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   deployedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -764,6 +785,7 @@ export type NotePatchMinOrderByAggregateInput = {
   impactedSystems?: Prisma.SortOrder
   rollbackPlan?: Prisma.SortOrder
   checklist?: Prisma.SortOrder
+  codeReferences?: Prisma.SortOrder
   deployedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -920,6 +942,7 @@ export type NotePatchCreateWithoutAuthorInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -949,6 +972,7 @@ export type NotePatchUncheckedCreateWithoutAuthorInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1007,6 +1031,7 @@ export type NotePatchScalarWhereInput = {
   impactedSystems?: Prisma.StringFilter<"NotePatch"> | string
   rollbackPlan?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   checklist?: Prisma.StringFilter<"NotePatch"> | string
+  codeReferences?: Prisma.StringNullableFilter<"NotePatch"> | string | null
   deployedAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
   publishedAt?: Prisma.DateTimeNullableFilter<"NotePatch"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"NotePatch"> | Date | string
@@ -1034,6 +1059,7 @@ export type NotePatchCreateWithoutClassificationInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1064,6 +1090,7 @@ export type NotePatchUncheckedCreateWithoutClassificationInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1117,6 +1144,7 @@ export type NotePatchCreateWithoutHotfixesInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1147,6 +1175,7 @@ export type NotePatchUncheckedCreateWithoutHotfixesInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1191,6 +1220,7 @@ export type NotePatchUpdateWithoutHotfixesInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1221,6 +1251,7 @@ export type NotePatchUncheckedUpdateWithoutHotfixesInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1249,6 +1280,7 @@ export type NotePatchCreateWithoutDocumentsInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1279,6 +1311,7 @@ export type NotePatchUncheckedCreateWithoutDocumentsInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1323,6 +1356,7 @@ export type NotePatchUpdateWithoutDocumentsInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1353,6 +1387,7 @@ export type NotePatchUncheckedUpdateWithoutDocumentsInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1381,6 +1416,7 @@ export type NotePatchCreateManyAuthorInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1408,6 +1444,7 @@ export type NotePatchUpdateWithoutAuthorInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1437,6 +1474,7 @@ export type NotePatchUncheckedUpdateWithoutAuthorInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1466,6 +1504,7 @@ export type NotePatchUncheckedUpdateManyWithoutAuthorInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1494,6 +1533,7 @@ export type NotePatchCreateManyClassificationInput = {
   impactedSystems: string
   rollbackPlan?: string | null
   checklist: string
+  codeReferences?: string | null
   deployedAt: Date | string
   publishedAt?: Date | string | null
   createdAt?: Date | string
@@ -1520,6 +1560,7 @@ export type NotePatchUpdateWithoutClassificationInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1550,6 +1591,7 @@ export type NotePatchUncheckedUpdateWithoutClassificationInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1579,6 +1621,7 @@ export type NotePatchUncheckedUpdateManyWithoutClassificationInput = {
   impactedSystems?: Prisma.StringFieldUpdateOperationsInput | string
   rollbackPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   checklist?: Prisma.StringFieldUpdateOperationsInput | string
+  codeReferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deployedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1646,6 +1689,7 @@ export type NotePatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   impactedSystems?: boolean
   rollbackPlan?: boolean
   checklist?: boolean
+  codeReferences?: boolean
   deployedAt?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -1679,6 +1723,7 @@ export type NotePatchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   impactedSystems?: boolean
   rollbackPlan?: boolean
   checklist?: boolean
+  codeReferences?: boolean
   deployedAt?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -1709,6 +1754,7 @@ export type NotePatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   impactedSystems?: boolean
   rollbackPlan?: boolean
   checklist?: boolean
+  codeReferences?: boolean
   deployedAt?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -1739,6 +1785,7 @@ export type NotePatchSelectScalar = {
   impactedSystems?: boolean
   rollbackPlan?: boolean
   checklist?: boolean
+  codeReferences?: boolean
   deployedAt?: boolean
   publishedAt?: boolean
   createdAt?: boolean
@@ -1748,7 +1795,7 @@ export type NotePatchSelectScalar = {
   classificationId?: boolean
 }
 
-export type NotePatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "version" | "title" | "summary" | "technicalNotes" | "status" | "tags" | "authorId" | "reviewerId" | "githubRepo" | "githubBranch" | "githubCommitSha" | "githubPrUrl" | "githubFiles" | "affectedClasses" | "impactedSystems" | "rollbackPlan" | "checklist" | "deployedAt" | "publishedAt" | "createdAt" | "updatedAt" | "isHotfix" | "favorite" | "classificationId", ExtArgs["result"]["notePatch"]>
+export type NotePatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "version" | "title" | "summary" | "technicalNotes" | "status" | "tags" | "authorId" | "reviewerId" | "githubRepo" | "githubBranch" | "githubCommitSha" | "githubPrUrl" | "githubFiles" | "affectedClasses" | "impactedSystems" | "rollbackPlan" | "checklist" | "codeReferences" | "deployedAt" | "publishedAt" | "createdAt" | "updatedAt" | "isHotfix" | "favorite" | "classificationId", ExtArgs["result"]["notePatch"]>
 export type NotePatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   classification?: boolean | Prisma.ClassificationDefaultArgs<ExtArgs>
@@ -1792,6 +1839,7 @@ export type $NotePatchPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     impactedSystems: string
     rollbackPlan: string | null
     checklist: string
+    codeReferences: string | null
     deployedAt: Date
     publishedAt: Date | null
     createdAt: Date
@@ -2244,6 +2292,7 @@ export interface NotePatchFieldRefs {
   readonly impactedSystems: Prisma.FieldRef<"NotePatch", 'String'>
   readonly rollbackPlan: Prisma.FieldRef<"NotePatch", 'String'>
   readonly checklist: Prisma.FieldRef<"NotePatch", 'String'>
+  readonly codeReferences: Prisma.FieldRef<"NotePatch", 'String'>
   readonly deployedAt: Prisma.FieldRef<"NotePatch", 'DateTime'>
   readonly publishedAt: Prisma.FieldRef<"NotePatch", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"NotePatch", 'DateTime'>
