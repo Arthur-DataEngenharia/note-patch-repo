@@ -10,13 +10,15 @@ import {
   Star,
   ClipboardList,
   X,
-  Loader2,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ClassificationBadge } from '@/components/shared/ClassificationBadge';
 import { StatusPill } from '@/components/shared/StatusPill';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SkeletonGrid, SkeletonList } from '@/components/shared/Skeleton';
+import { Tooltip } from '@/components/shared/Tooltip';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { cn, formatDate, truncate } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
 import type { NotePatch } from '@/types';
@@ -110,27 +112,31 @@ export default function PatchesPage() {
           </button>
         )}
         <div className="flex rounded-lg border border-black-border overflow-hidden shrink-0">
-          <button
-            onClick={() => setView('grid')}
-            className={cn('p-2.5 transition-all', view === 'grid' ? 'bg-red text-[#FFFFFF]' : 'text-white-muted hover:text-white')}
-            aria-label="Visualização em grid"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setView('list')}
-            className={cn('p-2.5 transition-all', view === 'list' ? 'bg-red text-[#FFFFFF]' : 'text-white-muted hover:text-white')}
-            aria-label="Visualização em lista"
-          >
-            <List className="w-4 h-4" />
-          </button>
+          <Tooltip text="Visualização em cards">
+            <button
+              onClick={() => setView('grid')}
+              className={cn('p-2.5 transition-all', view === 'grid' ? 'bg-red text-[#FFFFFF]' : 'text-white-muted hover:text-white')}
+              aria-label="Visualização em grid"
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+          </Tooltip>
+          <Tooltip text="Visualização em lista">
+            <button
+              onClick={() => setView('list')}
+              className={cn('p-2.5 transition-all', view === 'list' ? 'bg-red text-[#FFFFFF]' : 'text-white-muted hover:text-white')}
+              aria-label="Visualização em lista"
+            >
+              <List className="w-4 h-4" />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
+      <Breadcrumb items={[{ label: 'Patches' }]} />
+
       {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-red" />
-        </div>
+        view === 'grid' ? <SkeletonGrid count={6} /> : <SkeletonList count={5} />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={ClipboardList}

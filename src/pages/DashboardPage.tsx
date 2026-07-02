@@ -94,7 +94,7 @@ export default function DashboardPage() {
           { label: 'Hotfixes Ativos', value: activeHotfixes, icon: Flame, color: '#FF1744', glow: activeHotfixes > 0, trend: `${criticalHotfixes.length} criticos` },
           { label: 'Pendentes', value: pendingDocs, icon: AlertTriangle, color: '#F59E0B', trend: 'em revisao' },
         ].map((kpi) => (
-          <div key={kpi.label} className={cn('glass-card p-5 red-accent-left', kpi.glow && 'shadow-red-glow')}>
+          <div key={kpi.label} className={cn('glass-card p-5 red-accent-left animate-fade-in-up', kpi.glow && 'shadow-red-glow')}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] text-white-muted uppercase tracking-wide font-semibold">{kpi.label}</span>
               <kpi.icon className="w-4 h-4" style={{ color: kpi.color }} />
@@ -126,7 +126,7 @@ export default function DashboardPage() {
         </div>
 
         {/* System Health */}
-        <div className={cn('glass-card p-6 border', systemHealth.bg)}>
+        <div className={cn('glass-card p-6 border animate-fade-in-up', systemHealth.bg)}>
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
             <Shield className="w-4 h-4 text-red" /> Saude do Sistema
           </h2>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Classification Chart */}
-        <div className="lg:col-span-2 glass-card p-6">
+        <div className="lg:col-span-2 glass-card p-6 animate-fade-in-up">
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-red" /> Distribuicao por Classificacao
           </h2>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Hotfixes Summary */}
-        <div className="glass-card p-6">
+        <div className="glass-card p-6 animate-fade-in-up">
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
             <Zap className="w-4 h-4 text-red" /> Hotfixes
           </h2>
@@ -196,7 +196,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent deploys */}
-        <div className="lg:col-span-2 glass-card p-6">
+        <div className="lg:col-span-2 glass-card p-6 animate-fade-in-up">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold flex items-center gap-2">
               <GitBranch className="w-4 h-4 text-red" /> Ultimos Deploys
@@ -218,7 +218,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Activity */}
-        <div className="glass-card p-6">
+        <div className="glass-card p-6 animate-fade-in-up">
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-red" /> Atividade
           </h2>

@@ -1,11 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Flame, Plus, X, Timer, TrendingDown, Activity, ArrowRight, FileWarning, Loader2 } from 'lucide-react';
+import { Flame, Plus, X, Timer, TrendingDown, Activity, ArrowRight, FileWarning } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusPill } from '@/components/shared/StatusPill';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SkeletonList } from '@/components/shared/Skeleton';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
+import { Tooltip } from '@/components/shared/Tooltip';
 import { HOTFIX_WORKFLOW_STEPS, HOTFIX_STATUS_CONFIG } from '@/lib/constants';
 import { cn, formatRelative, formatDuration, getResolutionMinutes } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
@@ -130,11 +133,11 @@ export default function HotfixPage() {
         </select>
       </div>
 
+      <Breadcrumb items={[{ label: 'Hotfixes' }]} />
+
       {/* List */}
       {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-red" />
-        </div>
+        <SkeletonList count={5} />
       ) : filtered.length === 0 ? (
         <EmptyState icon={Flame} title="Nenhum hotfix encontrado" description="Sem hotfixes com os filtros atuais." />
       ) : (

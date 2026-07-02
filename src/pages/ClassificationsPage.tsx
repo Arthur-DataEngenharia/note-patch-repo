@@ -3,6 +3,7 @@ import { Tags, Plus, X, Loader2 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { api } from '@/api/client';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { cn } from '@/lib/utils';
 
 const PRESET_COLORS = [
@@ -52,6 +53,8 @@ export default function ClassificationsPage() {
           </button>
         }
       />
+
+      <Breadcrumb items={[{ label: 'Classificacoes' }]} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-stagger">
         {withCounts.map((c) => (

@@ -12,13 +12,13 @@ import {
   Search,
   History,
   Files,
-  Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { ClassificationBadge } from '@/components/shared/ClassificationBadge';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { VISIBILITY_CONFIG } from '@/lib/constants';
 import { cn, formatDate, formatFileSize } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
@@ -138,6 +138,8 @@ export default function DocumentsPage() {
           </>
         }
       />
+
+      <Breadcrumb items={[{ label: 'Documentos' }]} />
 
       {/* Search */}
       <div className="relative mb-6">

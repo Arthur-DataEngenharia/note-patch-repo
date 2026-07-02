@@ -26,6 +26,9 @@ import { toast } from 'sonner';
 import { useAppStore } from '@/store/appStore';
 import { ClassificationBadge } from '@/components/shared/ClassificationBadge';
 import { StatusPill } from '@/components/shared/StatusPill';
+import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
+import { Tooltip } from '@/components/shared/Tooltip';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { formatDate, formatDateTime, cn } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
 import { exportPatchToPdf, exportPatchToMarkdown } from '@/lib/export';
@@ -42,6 +45,7 @@ export default function PatchDetailPage() {
   const { patches, archivePatch, addAuditLog, currentUser } = useAppStore();
   const patch = patches.find((p) => p.id === id);
   const [filesOpen, setFilesOpen] = useState(true);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   if (!patch) {
     return (
@@ -70,35 +74,59 @@ export default function PatchDetailPage() {
   };
 
   const handleArchive = () => {
-    if (!window.confirm('Tem certeza que deseja arquivar este patch?')) return;
+    setConfirmOpen(true);
+  };
+
+  const confirmArchive = () => {
     archivePatch(patch.id);
     addAuditLog({ userId: currentUser.id, userName: currentUser.name, action: 'archive', entity: 'patch', entityId: patch.id, details: {} });
+    setConfirmOpen(false);
     navigate('/patches');
   };
 
   return (
     <div className="animate-fade-in">
+      <Breadcrumb items={[{ label: 'Patches', to: '/patches' }, { label: patch.title }]} />
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Arquivar Patch"
+        message={`Tem certeza que deseja arquivar "${patch.title}"? Ele será movido para o status arquivado.`}
+        confirmLabel="Arquivar"
+        variant="warning"
+        onConfirm={confirmArchive}
+        onCancel={() => setConfirmOpen(false)}
+      />
+
       {/* Back + actions */}
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <button onClick={() => navigate('/patches')} className="btn-ghost flex items-center gap-2">
           <ArrowLeft className="w-4 h-4" /> Patches
         </button>
         <div className="flex items-center gap-2 flex-wrap">
-          <button onClick={handleExportPdf} className="btn-secondary flex items-center gap-2">
-            <Download className="w-4 h-4" /> PDF
-          </button>
-          <button onClick={handleExportMd} className="btn-secondary flex items-center gap-2">
-            <Download className="w-4 h-4" /> Markdown
-          </button>
-          {patch.status !== 'published' && (
-            <button className="btn-secondary flex items-center gap-2">
-              <Pencil className="w-4 h-4" /> Editar
+          <Tooltip text="Exportar como PDF">
+            <button onClick={handleExportPdf} className="btn-secondary flex items-center gap-2">
+              <Download className="w-4 h-4" /> PDF
             </button>
+          </Tooltip>
+          <Tooltip text="Exportar como Markdown">
+            <button onClick={handleExportMd} className="btn-secondary flex items-center gap-2">
+              <Download className="w-4 h-4" /> Markdown
+            </button>
+          </Tooltip>
+          {patch.status !== 'published' && (
+            <Tooltip text="Editar patch">
+              <button className="btn-secondary flex items-center gap-2">
+                <Pencil className="w-4 h-4" /> Editar
+              </button>
+            </Tooltip>
           )}
           {patch.status !== 'archived' && (
-            <button onClick={handleArchive} className="btn-ghost flex items-center gap-2 text-red">
-              <Archive className="w-4 h-4" /> Arquivar
-            </button>
+            <Tooltip text="Mover para arquivados">
+              <button onClick={handleArchive} className="btn-ghost flex items-center gap-2 text-red">
+                <Archive className="w-4 h-4" /> Arquivar
+              </button>
+            </Tooltip>
           )}
         </div>
       </div>

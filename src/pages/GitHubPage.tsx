@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Github, CheckCircle2, XCircle, RefreshCw, GitBranch, Star, Eye, EyeOff, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/shared/PageHeader';
+import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { api } from '@/api/client';
 import { cn } from '@/lib/utils';
 import RepoDetailModal from '@/components/github/RepoDetailModal';
@@ -77,6 +78,8 @@ export default function GitHubPage() {
           </button>
         }
       />
+
+      <Breadcrumb items={[{ label: 'GitHub' }]} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Connection config */}
