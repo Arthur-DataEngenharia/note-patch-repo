@@ -41,6 +41,8 @@ export type ClassificationMinAggregateOutputType = {
   description: string | null
   sortOrder: number | null
   isActive: boolean | null
+  parentId: string | null
+  versionPrefix: string | null
 }
 
 export type ClassificationMaxAggregateOutputType = {
@@ -50,6 +52,8 @@ export type ClassificationMaxAggregateOutputType = {
   description: string | null
   sortOrder: number | null
   isActive: boolean | null
+  parentId: string | null
+  versionPrefix: string | null
 }
 
 export type ClassificationCountAggregateOutputType = {
@@ -59,6 +63,8 @@ export type ClassificationCountAggregateOutputType = {
   description: number
   sortOrder: number
   isActive: number
+  parentId: number
+  versionPrefix: number
   _all: number
 }
 
@@ -78,6 +84,8 @@ export type ClassificationMinAggregateInputType = {
   description?: true
   sortOrder?: true
   isActive?: true
+  parentId?: true
+  versionPrefix?: true
 }
 
 export type ClassificationMaxAggregateInputType = {
@@ -87,6 +95,8 @@ export type ClassificationMaxAggregateInputType = {
   description?: true
   sortOrder?: true
   isActive?: true
+  parentId?: true
+  versionPrefix?: true
 }
 
 export type ClassificationCountAggregateInputType = {
@@ -96,6 +106,8 @@ export type ClassificationCountAggregateInputType = {
   description?: true
   sortOrder?: true
   isActive?: true
+  parentId?: true
+  versionPrefix?: true
   _all?: true
 }
 
@@ -192,6 +204,8 @@ export type ClassificationGroupByOutputType = {
   description: string
   sortOrder: number
   isActive: boolean
+  parentId: string | null
+  versionPrefix: string | null
   _count: ClassificationCountAggregateOutputType | null
   _avg: ClassificationAvgAggregateOutputType | null
   _sum: ClassificationSumAggregateOutputType | null
@@ -224,7 +238,11 @@ export type ClassificationWhereInput = {
   description?: Prisma.StringFilter<"Classification"> | string
   sortOrder?: Prisma.IntFilter<"Classification"> | number
   isActive?: Prisma.BoolFilter<"Classification"> | boolean
+  parentId?: Prisma.StringNullableFilter<"Classification"> | string | null
+  versionPrefix?: Prisma.StringNullableFilter<"Classification"> | string | null
   patches?: Prisma.NotePatchListRelationFilter
+  children?: Prisma.ClassificationListRelationFilter
+  parent?: Prisma.XOR<Prisma.ClassificationNullableScalarRelationFilter, Prisma.ClassificationWhereInput> | null
 }
 
 export type ClassificationOrderByWithRelationInput = {
@@ -234,7 +252,11 @@ export type ClassificationOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionPrefix?: Prisma.SortOrderInput | Prisma.SortOrder
   patches?: Prisma.NotePatchOrderByRelationAggregateInput
+  children?: Prisma.ClassificationOrderByRelationAggregateInput
+  parent?: Prisma.ClassificationOrderByWithRelationInput
 }
 
 export type ClassificationWhereUniqueInput = Prisma.AtLeast<{
@@ -247,7 +269,11 @@ export type ClassificationWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Classification"> | string
   sortOrder?: Prisma.IntFilter<"Classification"> | number
   isActive?: Prisma.BoolFilter<"Classification"> | boolean
+  parentId?: Prisma.StringNullableFilter<"Classification"> | string | null
+  versionPrefix?: Prisma.StringNullableFilter<"Classification"> | string | null
   patches?: Prisma.NotePatchListRelationFilter
+  children?: Prisma.ClassificationListRelationFilter
+  parent?: Prisma.XOR<Prisma.ClassificationNullableScalarRelationFilter, Prisma.ClassificationWhereInput> | null
 }, "id">
 
 export type ClassificationOrderByWithAggregationInput = {
@@ -257,6 +283,8 @@ export type ClassificationOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  versionPrefix?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ClassificationCountOrderByAggregateInput
   _avg?: Prisma.ClassificationAvgOrderByAggregateInput
   _max?: Prisma.ClassificationMaxOrderByAggregateInput
@@ -274,6 +302,8 @@ export type ClassificationScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Classification"> | string
   sortOrder?: Prisma.IntWithAggregatesFilter<"Classification"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Classification"> | boolean
+  parentId?: Prisma.StringNullableWithAggregatesFilter<"Classification"> | string | null
+  versionPrefix?: Prisma.StringNullableWithAggregatesFilter<"Classification"> | string | null
 }
 
 export type ClassificationCreateInput = {
@@ -283,7 +313,10 @@ export type ClassificationCreateInput = {
   description: string
   sortOrder?: number
   isActive?: boolean
+  versionPrefix?: string | null
   patches?: Prisma.NotePatchCreateNestedManyWithoutClassificationInput
+  children?: Prisma.ClassificationCreateNestedManyWithoutParentInput
+  parent?: Prisma.ClassificationCreateNestedOneWithoutChildrenInput
 }
 
 export type ClassificationUncheckedCreateInput = {
@@ -293,7 +326,10 @@ export type ClassificationUncheckedCreateInput = {
   description: string
   sortOrder?: number
   isActive?: boolean
+  parentId?: string | null
+  versionPrefix?: string | null
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutClassificationInput
+  children?: Prisma.ClassificationUncheckedCreateNestedManyWithoutParentInput
 }
 
 export type ClassificationUpdateInput = {
@@ -303,7 +339,10 @@ export type ClassificationUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUpdateManyWithoutClassificationNestedInput
+  children?: Prisma.ClassificationUpdateManyWithoutParentNestedInput
+  parent?: Prisma.ClassificationUpdateOneWithoutChildrenNestedInput
 }
 
 export type ClassificationUncheckedUpdateInput = {
@@ -313,7 +352,10 @@ export type ClassificationUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutClassificationNestedInput
+  children?: Prisma.ClassificationUncheckedUpdateManyWithoutParentNestedInput
 }
 
 export type ClassificationCreateManyInput = {
@@ -323,6 +365,8 @@ export type ClassificationCreateManyInput = {
   description: string
   sortOrder?: number
   isActive?: boolean
+  parentId?: string | null
+  versionPrefix?: string | null
 }
 
 export type ClassificationUpdateManyMutationInput = {
@@ -332,6 +376,7 @@ export type ClassificationUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ClassificationUncheckedUpdateManyInput = {
@@ -341,6 +386,23 @@ export type ClassificationUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ClassificationListRelationFilter = {
+  every?: Prisma.ClassificationWhereInput
+  some?: Prisma.ClassificationWhereInput
+  none?: Prisma.ClassificationWhereInput
+}
+
+export type ClassificationNullableScalarRelationFilter = {
+  is?: Prisma.ClassificationWhereInput | null
+  isNot?: Prisma.ClassificationWhereInput | null
+}
+
+export type ClassificationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ClassificationCountOrderByAggregateInput = {
@@ -350,6 +412,8 @@ export type ClassificationCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  versionPrefix?: Prisma.SortOrder
 }
 
 export type ClassificationAvgOrderByAggregateInput = {
@@ -363,6 +427,8 @@ export type ClassificationMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  versionPrefix?: Prisma.SortOrder
 }
 
 export type ClassificationMinOrderByAggregateInput = {
@@ -372,6 +438,8 @@ export type ClassificationMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
+  versionPrefix?: Prisma.SortOrder
 }
 
 export type ClassificationSumOrderByAggregateInput = {
@@ -381,6 +449,26 @@ export type ClassificationSumOrderByAggregateInput = {
 export type ClassificationScalarRelationFilter = {
   is?: Prisma.ClassificationWhereInput
   isNot?: Prisma.ClassificationWhereInput
+}
+
+export type ClassificationCreateNestedManyWithoutParentInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput> | Prisma.ClassificationCreateWithoutParentInput[] | Prisma.ClassificationUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutParentInput | Prisma.ClassificationCreateOrConnectWithoutParentInput[]
+  createMany?: Prisma.ClassificationCreateManyParentInputEnvelope
+  connect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+}
+
+export type ClassificationCreateNestedOneWithoutChildrenInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutChildrenInput, Prisma.ClassificationUncheckedCreateWithoutChildrenInput>
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutChildrenInput
+  connect?: Prisma.ClassificationWhereUniqueInput
+}
+
+export type ClassificationUncheckedCreateNestedManyWithoutParentInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput> | Prisma.ClassificationCreateWithoutParentInput[] | Prisma.ClassificationUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutParentInput | Prisma.ClassificationCreateOrConnectWithoutParentInput[]
+  createMany?: Prisma.ClassificationCreateManyParentInputEnvelope
+  connect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -393,6 +481,44 @@ export type IntFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type ClassificationUpdateManyWithoutParentNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput> | Prisma.ClassificationCreateWithoutParentInput[] | Prisma.ClassificationUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutParentInput | Prisma.ClassificationCreateOrConnectWithoutParentInput[]
+  upsert?: Prisma.ClassificationUpsertWithWhereUniqueWithoutParentInput | Prisma.ClassificationUpsertWithWhereUniqueWithoutParentInput[]
+  createMany?: Prisma.ClassificationCreateManyParentInputEnvelope
+  set?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  disconnect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  delete?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  connect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  update?: Prisma.ClassificationUpdateWithWhereUniqueWithoutParentInput | Prisma.ClassificationUpdateWithWhereUniqueWithoutParentInput[]
+  updateMany?: Prisma.ClassificationUpdateManyWithWhereWithoutParentInput | Prisma.ClassificationUpdateManyWithWhereWithoutParentInput[]
+  deleteMany?: Prisma.ClassificationScalarWhereInput | Prisma.ClassificationScalarWhereInput[]
+}
+
+export type ClassificationUpdateOneWithoutChildrenNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutChildrenInput, Prisma.ClassificationUncheckedCreateWithoutChildrenInput>
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutChildrenInput
+  upsert?: Prisma.ClassificationUpsertWithoutChildrenInput
+  disconnect?: Prisma.ClassificationWhereInput | boolean
+  delete?: Prisma.ClassificationWhereInput | boolean
+  connect?: Prisma.ClassificationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassificationUpdateToOneWithWhereWithoutChildrenInput, Prisma.ClassificationUpdateWithoutChildrenInput>, Prisma.ClassificationUncheckedUpdateWithoutChildrenInput>
+}
+
+export type ClassificationUncheckedUpdateManyWithoutParentNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput> | Prisma.ClassificationCreateWithoutParentInput[] | Prisma.ClassificationUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.ClassificationCreateOrConnectWithoutParentInput | Prisma.ClassificationCreateOrConnectWithoutParentInput[]
+  upsert?: Prisma.ClassificationUpsertWithWhereUniqueWithoutParentInput | Prisma.ClassificationUpsertWithWhereUniqueWithoutParentInput[]
+  createMany?: Prisma.ClassificationCreateManyParentInputEnvelope
+  set?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  disconnect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  delete?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  connect?: Prisma.ClassificationWhereUniqueInput | Prisma.ClassificationWhereUniqueInput[]
+  update?: Prisma.ClassificationUpdateWithWhereUniqueWithoutParentInput | Prisma.ClassificationUpdateWithWhereUniqueWithoutParentInput[]
+  updateMany?: Prisma.ClassificationUpdateManyWithWhereWithoutParentInput | Prisma.ClassificationUpdateManyWithWhereWithoutParentInput[]
+  deleteMany?: Prisma.ClassificationScalarWhereInput | Prisma.ClassificationScalarWhereInput[]
 }
 
 export type ClassificationCreateNestedOneWithoutPatchesInput = {
@@ -409,6 +535,133 @@ export type ClassificationUpdateOneRequiredWithoutPatchesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassificationUpdateToOneWithWhereWithoutPatchesInput, Prisma.ClassificationUpdateWithoutPatchesInput>, Prisma.ClassificationUncheckedUpdateWithoutPatchesInput>
 }
 
+export type ClassificationCreateWithoutParentInput = {
+  id: string
+  name: string
+  color: string
+  description: string
+  sortOrder?: number
+  isActive?: boolean
+  versionPrefix?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutClassificationInput
+  children?: Prisma.ClassificationCreateNestedManyWithoutParentInput
+}
+
+export type ClassificationUncheckedCreateWithoutParentInput = {
+  id: string
+  name: string
+  color: string
+  description: string
+  sortOrder?: number
+  isActive?: boolean
+  versionPrefix?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutClassificationInput
+  children?: Prisma.ClassificationUncheckedCreateNestedManyWithoutParentInput
+}
+
+export type ClassificationCreateOrConnectWithoutParentInput = {
+  where: Prisma.ClassificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput>
+}
+
+export type ClassificationCreateManyParentInputEnvelope = {
+  data: Prisma.ClassificationCreateManyParentInput | Prisma.ClassificationCreateManyParentInput[]
+}
+
+export type ClassificationCreateWithoutChildrenInput = {
+  id: string
+  name: string
+  color: string
+  description: string
+  sortOrder?: number
+  isActive?: boolean
+  versionPrefix?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutClassificationInput
+  parent?: Prisma.ClassificationCreateNestedOneWithoutChildrenInput
+}
+
+export type ClassificationUncheckedCreateWithoutChildrenInput = {
+  id: string
+  name: string
+  color: string
+  description: string
+  sortOrder?: number
+  isActive?: boolean
+  parentId?: string | null
+  versionPrefix?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutClassificationInput
+}
+
+export type ClassificationCreateOrConnectWithoutChildrenInput = {
+  where: Prisma.ClassificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClassificationCreateWithoutChildrenInput, Prisma.ClassificationUncheckedCreateWithoutChildrenInput>
+}
+
+export type ClassificationUpsertWithWhereUniqueWithoutParentInput = {
+  where: Prisma.ClassificationWhereUniqueInput
+  update: Prisma.XOR<Prisma.ClassificationUpdateWithoutParentInput, Prisma.ClassificationUncheckedUpdateWithoutParentInput>
+  create: Prisma.XOR<Prisma.ClassificationCreateWithoutParentInput, Prisma.ClassificationUncheckedCreateWithoutParentInput>
+}
+
+export type ClassificationUpdateWithWhereUniqueWithoutParentInput = {
+  where: Prisma.ClassificationWhereUniqueInput
+  data: Prisma.XOR<Prisma.ClassificationUpdateWithoutParentInput, Prisma.ClassificationUncheckedUpdateWithoutParentInput>
+}
+
+export type ClassificationUpdateManyWithWhereWithoutParentInput = {
+  where: Prisma.ClassificationScalarWhereInput
+  data: Prisma.XOR<Prisma.ClassificationUpdateManyMutationInput, Prisma.ClassificationUncheckedUpdateManyWithoutParentInput>
+}
+
+export type ClassificationScalarWhereInput = {
+  AND?: Prisma.ClassificationScalarWhereInput | Prisma.ClassificationScalarWhereInput[]
+  OR?: Prisma.ClassificationScalarWhereInput[]
+  NOT?: Prisma.ClassificationScalarWhereInput | Prisma.ClassificationScalarWhereInput[]
+  id?: Prisma.StringFilter<"Classification"> | string
+  name?: Prisma.StringFilter<"Classification"> | string
+  color?: Prisma.StringFilter<"Classification"> | string
+  description?: Prisma.StringFilter<"Classification"> | string
+  sortOrder?: Prisma.IntFilter<"Classification"> | number
+  isActive?: Prisma.BoolFilter<"Classification"> | boolean
+  parentId?: Prisma.StringNullableFilter<"Classification"> | string | null
+  versionPrefix?: Prisma.StringNullableFilter<"Classification"> | string | null
+}
+
+export type ClassificationUpsertWithoutChildrenInput = {
+  update: Prisma.XOR<Prisma.ClassificationUpdateWithoutChildrenInput, Prisma.ClassificationUncheckedUpdateWithoutChildrenInput>
+  create: Prisma.XOR<Prisma.ClassificationCreateWithoutChildrenInput, Prisma.ClassificationUncheckedCreateWithoutChildrenInput>
+  where?: Prisma.ClassificationWhereInput
+}
+
+export type ClassificationUpdateToOneWithWhereWithoutChildrenInput = {
+  where?: Prisma.ClassificationWhereInput
+  data: Prisma.XOR<Prisma.ClassificationUpdateWithoutChildrenInput, Prisma.ClassificationUncheckedUpdateWithoutChildrenInput>
+}
+
+export type ClassificationUpdateWithoutChildrenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutClassificationNestedInput
+  parent?: Prisma.ClassificationUpdateOneWithoutChildrenNestedInput
+}
+
+export type ClassificationUncheckedUpdateWithoutChildrenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutClassificationNestedInput
+}
+
 export type ClassificationCreateWithoutPatchesInput = {
   id: string
   name: string
@@ -416,6 +669,9 @@ export type ClassificationCreateWithoutPatchesInput = {
   description: string
   sortOrder?: number
   isActive?: boolean
+  versionPrefix?: string | null
+  children?: Prisma.ClassificationCreateNestedManyWithoutParentInput
+  parent?: Prisma.ClassificationCreateNestedOneWithoutChildrenInput
 }
 
 export type ClassificationUncheckedCreateWithoutPatchesInput = {
@@ -425,6 +681,9 @@ export type ClassificationUncheckedCreateWithoutPatchesInput = {
   description: string
   sortOrder?: number
   isActive?: boolean
+  parentId?: string | null
+  versionPrefix?: string | null
+  children?: Prisma.ClassificationUncheckedCreateNestedManyWithoutParentInput
 }
 
 export type ClassificationCreateOrConnectWithoutPatchesInput = {
@@ -450,6 +709,9 @@ export type ClassificationUpdateWithoutPatchesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  children?: Prisma.ClassificationUpdateManyWithoutParentNestedInput
+  parent?: Prisma.ClassificationUpdateOneWithoutChildrenNestedInput
 }
 
 export type ClassificationUncheckedUpdateWithoutPatchesInput = {
@@ -459,6 +721,53 @@ export type ClassificationUncheckedUpdateWithoutPatchesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  children?: Prisma.ClassificationUncheckedUpdateManyWithoutParentNestedInput
+}
+
+export type ClassificationCreateManyParentInput = {
+  id: string
+  name: string
+  color: string
+  description: string
+  sortOrder?: number
+  isActive?: boolean
+  versionPrefix?: string | null
+}
+
+export type ClassificationUpdateWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutClassificationNestedInput
+  children?: Prisma.ClassificationUpdateManyWithoutParentNestedInput
+}
+
+export type ClassificationUncheckedUpdateWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutClassificationNestedInput
+  children?: Prisma.ClassificationUncheckedUpdateManyWithoutParentNestedInput
+}
+
+export type ClassificationUncheckedUpdateManyWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionPrefix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -468,10 +777,12 @@ export type ClassificationUncheckedUpdateWithoutPatchesInput = {
 
 export type ClassificationCountOutputType = {
   patches: number
+  children: number
 }
 
 export type ClassificationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patches?: boolean | ClassificationCountOutputTypeCountPatchesArgs
+  children?: boolean | ClassificationCountOutputTypeCountChildrenArgs
 }
 
 /**
@@ -491,6 +802,13 @@ export type ClassificationCountOutputTypeCountPatchesArgs<ExtArgs extends runtim
   where?: Prisma.NotePatchWhereInput
 }
 
+/**
+ * ClassificationCountOutputType without action
+ */
+export type ClassificationCountOutputTypeCountChildrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassificationWhereInput
+}
+
 
 export type ClassificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -499,7 +817,11 @@ export type ClassificationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   description?: boolean
   sortOrder?: boolean
   isActive?: boolean
+  parentId?: boolean
+  versionPrefix?: boolean
   patches?: boolean | Prisma.Classification$patchesArgs<ExtArgs>
+  children?: boolean | Prisma.Classification$childrenArgs<ExtArgs>
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
   _count?: boolean | Prisma.ClassificationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classification"]>
 
@@ -510,6 +832,9 @@ export type ClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   description?: boolean
   sortOrder?: boolean
   isActive?: boolean
+  parentId?: boolean
+  versionPrefix?: boolean
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
 }, ExtArgs["result"]["classification"]>
 
 export type ClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -519,6 +844,9 @@ export type ClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   description?: boolean
   sortOrder?: boolean
   isActive?: boolean
+  parentId?: boolean
+  versionPrefix?: boolean
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
 }, ExtArgs["result"]["classification"]>
 
 export type ClassificationSelectScalar = {
@@ -528,20 +856,30 @@ export type ClassificationSelectScalar = {
   description?: boolean
   sortOrder?: boolean
   isActive?: boolean
+  parentId?: boolean
+  versionPrefix?: boolean
 }
 
-export type ClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "color" | "description" | "sortOrder" | "isActive", ExtArgs["result"]["classification"]>
+export type ClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "color" | "description" | "sortOrder" | "isActive" | "parentId" | "versionPrefix", ExtArgs["result"]["classification"]>
 export type ClassificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patches?: boolean | Prisma.Classification$patchesArgs<ExtArgs>
+  children?: boolean | Prisma.Classification$childrenArgs<ExtArgs>
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
   _count?: boolean | Prisma.ClassificationCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ClassificationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ClassificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ClassificationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
+}
+export type ClassificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  parent?: boolean | Prisma.Classification$parentArgs<ExtArgs>
+}
 
 export type $ClassificationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Classification"
   objects: {
     patches: Prisma.$NotePatchPayload<ExtArgs>[]
+    children: Prisma.$ClassificationPayload<ExtArgs>[]
+    parent: Prisma.$ClassificationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -550,6 +888,8 @@ export type $ClassificationPayload<ExtArgs extends runtime.Types.Extensions.Inte
     description: string
     sortOrder: number
     isActive: boolean
+    parentId: string | null
+    versionPrefix: string | null
   }, ExtArgs["result"]["classification"]>
   composites: {}
 }
@@ -945,6 +1285,8 @@ readonly fields: ClassificationFieldRefs;
 export interface Prisma__ClassificationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   patches<T extends Prisma.Classification$patchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Classification$patchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  children<T extends Prisma.Classification$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Classification$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  parent<T extends Prisma.Classification$parentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Classification$parentArgs<ExtArgs>>): Prisma.Prisma__ClassificationClient<runtime.Types.Result.GetResult<Prisma.$ClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -980,6 +1322,8 @@ export interface ClassificationFieldRefs {
   readonly description: Prisma.FieldRef<"Classification", 'String'>
   readonly sortOrder: Prisma.FieldRef<"Classification", 'Int'>
   readonly isActive: Prisma.FieldRef<"Classification", 'Boolean'>
+  readonly parentId: Prisma.FieldRef<"Classification", 'String'>
+  readonly versionPrefix: Prisma.FieldRef<"Classification", 'String'>
 }
     
 
@@ -1232,6 +1576,10 @@ export type ClassificationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many Classifications.
    */
   data: Prisma.ClassificationCreateManyInput | Prisma.ClassificationCreateManyInput[]
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassificationIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1302,6 +1650,10 @@ export type ClassificationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * Limit how many Classifications to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassificationIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1392,6 +1744,49 @@ export type Classification$patchesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.NotePatchScalarFieldEnum | Prisma.NotePatchScalarFieldEnum[]
+}
+
+/**
+ * Classification.children
+ */
+export type Classification$childrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Classification
+   */
+  select?: Prisma.ClassificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Classification
+   */
+  omit?: Prisma.ClassificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassificationInclude<ExtArgs> | null
+  where?: Prisma.ClassificationWhereInput
+  orderBy?: Prisma.ClassificationOrderByWithRelationInput | Prisma.ClassificationOrderByWithRelationInput[]
+  cursor?: Prisma.ClassificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassificationScalarFieldEnum | Prisma.ClassificationScalarFieldEnum[]
+}
+
+/**
+ * Classification.parent
+ */
+export type Classification$parentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Classification
+   */
+  select?: Prisma.ClassificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Classification
+   */
+  omit?: Prisma.ClassificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassificationInclude<ExtArgs> | null
+  where?: Prisma.ClassificationWhereInput
 }
 
 /**

@@ -30,6 +30,8 @@ export type UserMinAggregateOutputType = {
   email: string | null
   role: string | null
   avatarUrl: string | null
+  passwordHash: string | null
+  githubToken: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -38,6 +40,8 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   role: string | null
   avatarUrl: string | null
+  passwordHash: string | null
+  githubToken: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -46,6 +50,8 @@ export type UserCountAggregateOutputType = {
   email: number
   role: number
   avatarUrl: number
+  passwordHash: number
+  githubToken: number
   _all: number
 }
 
@@ -56,6 +62,8 @@ export type UserMinAggregateInputType = {
   email?: true
   role?: true
   avatarUrl?: true
+  passwordHash?: true
+  githubToken?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -64,6 +72,8 @@ export type UserMaxAggregateInputType = {
   email?: true
   role?: true
   avatarUrl?: true
+  passwordHash?: true
+  githubToken?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -72,6 +82,8 @@ export type UserCountAggregateInputType = {
   email?: true
   role?: true
   avatarUrl?: true
+  passwordHash?: true
+  githubToken?: true
   _all?: true
 }
 
@@ -153,6 +165,8 @@ export type UserGroupByOutputType = {
   email: string
   role: string
   avatarUrl: string | null
+  passwordHash: string | null
+  githubToken: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -182,6 +196,8 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
+  githubToken?: Prisma.StringNullableFilter<"User"> | string | null
   patches?: Prisma.NotePatchListRelationFilter
   hotfixes?: Prisma.HotfixListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
@@ -194,6 +210,8 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubToken?: Prisma.SortOrderInput | Prisma.SortOrder
   patches?: Prisma.NotePatchOrderByRelationAggregateInput
   hotfixes?: Prisma.HotfixOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
@@ -209,6 +227,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
+  githubToken?: Prisma.StringNullableFilter<"User"> | string | null
   patches?: Prisma.NotePatchListRelationFilter
   hotfixes?: Prisma.HotfixListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
@@ -221,6 +241,8 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubToken?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -235,6 +257,8 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  githubToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -243,6 +267,8 @@ export type UserCreateInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
@@ -255,6 +281,8 @@ export type UserUncheckedCreateInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -267,6 +295,8 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
@@ -279,6 +309,8 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -291,6 +323,8 @@ export type UserCreateManyInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -299,6 +333,8 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -307,6 +343,8 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -315,6 +353,8 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  passwordHash?: Prisma.SortOrder
+  githubToken?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -323,6 +363,8 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  passwordHash?: Prisma.SortOrder
+  githubToken?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -331,6 +373,8 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  passwordHash?: Prisma.SortOrder
+  githubToken?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -408,6 +452,8 @@ export type UserCreateWithoutPatchesInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -419,6 +465,8 @@ export type UserUncheckedCreateWithoutPatchesInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -446,6 +494,8 @@ export type UserUpdateWithoutPatchesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -457,6 +507,8 @@ export type UserUncheckedUpdateWithoutPatchesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -468,6 +520,8 @@ export type UserCreateWithoutHotfixesInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -479,6 +533,8 @@ export type UserUncheckedCreateWithoutHotfixesInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -506,6 +562,8 @@ export type UserUpdateWithoutHotfixesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -517,6 +575,8 @@ export type UserUncheckedUpdateWithoutHotfixesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -528,6 +588,8 @@ export type UserCreateWithoutDocumentsInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
@@ -539,6 +601,8 @@ export type UserUncheckedCreateWithoutDocumentsInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -566,6 +630,8 @@ export type UserUpdateWithoutDocumentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
@@ -577,6 +643,8 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -588,6 +656,8 @@ export type UserCreateWithoutAuditLogsInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
@@ -599,6 +669,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   email: string
   role: string
   avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -626,6 +698,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
@@ -637,6 +711,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -706,6 +782,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   role?: boolean
   avatarUrl?: boolean
+  passwordHash?: boolean
+  githubToken?: boolean
   patches?: boolean | Prisma.User$patchesArgs<ExtArgs>
   hotfixes?: boolean | Prisma.User$hotfixesArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
@@ -719,6 +797,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   role?: boolean
   avatarUrl?: boolean
+  passwordHash?: boolean
+  githubToken?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -727,6 +807,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   role?: boolean
   avatarUrl?: boolean
+  passwordHash?: boolean
+  githubToken?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -735,9 +817,11 @@ export type UserSelectScalar = {
   email?: boolean
   role?: boolean
   avatarUrl?: boolean
+  passwordHash?: boolean
+  githubToken?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "avatarUrl", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "avatarUrl" | "passwordHash" | "githubToken", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patches?: boolean | Prisma.User$patchesArgs<ExtArgs>
   hotfixes?: boolean | Prisma.User$hotfixesArgs<ExtArgs>
@@ -762,6 +846,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     role: string
     avatarUrl: string | null
+    passwordHash: string | null
+    githubToken: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1194,6 +1280,8 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly passwordHash: Prisma.FieldRef<"User", 'String'>
+  readonly githubToken: Prisma.FieldRef<"User", 'String'>
 }
     
 

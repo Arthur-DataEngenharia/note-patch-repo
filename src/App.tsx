@@ -1,7 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { RootLayout } from '@/components/layout/RootLayout';
 import { useAppStore } from '@/store/appStore';
+import { useAuthStore } from '@/store/authStore';
 
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const PatchesPage = lazy(() => import('@/pages/PatchesPage'));
@@ -14,6 +15,8 @@ const DocumentsPage = lazy(() => import('@/pages/DocumentsPage'));
 const ClassificationsPage = lazy(() => import('@/pages/ClassificationsPage'));
 const GitHubPage = lazy(() => import('@/pages/GitHubPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+const UsersPage = lazy(() => import('@/pages/UsersPage'));
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
 
 function PageLoader() {
   return (
@@ -23,6 +26,30 @@ function PageLoader() {
   );
 }
 
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading, checkAuth } = useAuthStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth().then(() => {
+      if (!useAuthStore.getState().isAuthenticated) {
+        navigate('/login', { replace: true });
+      }
+    });
+  }, [checkAuth, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) return null;
+  return <>{children}</>;
+}
+
 export default function App() {
   useEffect(() => {
     useAppStore.getState().init();
@@ -30,7 +57,16 @@ export default function App() {
 
   return (
     <Routes>
-      <Route element={<RootLayout />}>
+      <Route path="/login" element={
+        <Suspense fallback={<PageLoader />}>
+          <LoginPage />
+        </Suspense>
+      } />
+      <Route element={
+        <AuthGuard>
+          <RootLayout />
+        </AuthGuard>
+      }>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route
           path="/dashboard"
@@ -118,6 +154,14 @@ export default function App() {
           element={
             <Suspense fallback={<PageLoader />}>
               <SettingsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <UsersPage />
             </Suspense>
           }
         />

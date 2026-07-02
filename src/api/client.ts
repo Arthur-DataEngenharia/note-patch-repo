@@ -1,8 +1,16 @@
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
+function getToken() {
+  return localStorage.getItem('token');
+}
+
 async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
+  const token = getToken();
   const res = await fetch(`${API_BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     ...options,
   });
   if (!res.ok) throw new Error(`API ${res.status}: ${await res.text()}`);
@@ -10,6 +18,13 @@ async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  // Auth
+  login: (email: string, password: string) =>
+    fetchJSON<{ token: string; user: any }>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  register: (name: string, email: string, password: string, role?: string) =>
+    fetchJSON<{ token: string; user: any }>('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password, role }) }),
+  me: () => fetchJSON<any>('/auth/me'),
+
   // Patches
   getPatches: () => fetchJSON<any[]>('/patches'),
   getPatch: (id: string) => fetchJSON<any>(`/patches/${id}`),

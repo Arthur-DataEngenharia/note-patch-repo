@@ -44,6 +44,7 @@ interface AppState {
   toggleSidebar: () => void;
   setCommandPaletteOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
+  setCurrentUser: (user: User) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -140,4 +141,5 @@ export const useAppStore = create<AppState>((set, get) => ({
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
   setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
   setMobileMenuOpen: (open) => set({ mobileMenuOpen: open }),
+  setCurrentUser: (user) => set({ currentUser: user }),
 }));

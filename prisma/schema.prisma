@@ -8,11 +8,13 @@ datasource db {
 }
 
 model User {
-  id       String  @id
-  name     String
-  email    String  @unique
-  role     String
-  avatarUrl String?
+  id          String  @id
+  name        String
+  email       String  @unique
+  role        String
+  avatarUrl   String?
+  passwordHash String?
+  githubToken String?
 
   patches       NotePatch[] @relation("PatchAuthor")
   hotfixes      Hotfix[]    @relation("HotfixReporter")
@@ -27,8 +29,12 @@ model Classification {
   description String
   sortOrder   Int     @default(0)
   isActive    Boolean @default(true)
+  parentId    String?
+  versionPrefix String?
 
-  patches NotePatch[]
+  patches     NotePatch[]
+  children    Classification[] @relation("ClassificationHierarchy")
+  parent      Classification?  @relation("ClassificationHierarchy", fields: [parentId], references: [id])
 }
 
 model NotePatch {

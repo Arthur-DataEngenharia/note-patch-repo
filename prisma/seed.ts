@@ -1,8 +1,11 @@
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient } from '../generated/prisma/client';
+import bcrypt from 'bcryptjs';
 
 const adapter = new PrismaBetterSqlite3({ url: 'file:./prisma/dev.db' });
 const prisma = new PrismaClient({ adapter });
+
+const SALT_ROUNDS = 10;
 
 const daysAgo = (n: number) => new Date(Date.now() - n * 24 * 60 * 60 * 1000);
 const hoursAgo = (n: number) => new Date(Date.now() - n * 60 * 60 * 1000);
@@ -22,12 +25,13 @@ async function main() {
   console.log('Seeding database...');
 
   // --- Users ---
+  const defaultPassword = await bcrypt.hash('admin123', SALT_ROUNDS);
   await prisma.user.createMany({
     data: [
-      { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'admin' },
-      { id: 'u2', name: 'Maria Silva', email: 'maria@empresa.com', role: 'editor' },
-      { id: 'u3', name: 'João Santos', email: 'joao@empresa.com', role: 'reviewer' },
-      { id: 'u4', name: 'Ana Costa', email: 'ana@empresa.com', role: 'editor' },
+      { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'admin', passwordHash: defaultPassword },
+      { id: 'u2', name: 'Maria Silva', email: 'maria@empresa.com', role: 'editor', passwordHash: await bcrypt.hash('editor123', SALT_ROUNDS) },
+      { id: 'u3', name: 'João Santos', email: 'joao@empresa.com', role: 'reviewer', passwordHash: await bcrypt.hash('reviewer123', SALT_ROUNDS) },
+      { id: 'u4', name: 'Ana Costa', email: 'ana@empresa.com', role: 'editor', passwordHash: await bcrypt.hash('editor123', SALT_ROUNDS) },
     ],
   });
 

@@ -13,8 +13,11 @@ import {
   ChevronLeft,
   Layers,
   X,
+  LogOut,
+  Users,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
+import { useAuthStore } from '@/store/authStore';
 import { cn, getInitials } from '@/lib/utils';
 
 const NAV_ITEMS = [
@@ -33,13 +36,17 @@ const NAV_ITEMS = [
   { to: '/documents', label: 'Documentos', icon: Files },
   { to: '/classifications', label: 'Classificações', icon: Tags },
   { to: '/github', label: 'GitHub', icon: Github },
-  { to: '/settings', label: 'Configurações', icon: Settings },
+  { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
+  { to: '/settings', label: 'Configuracoes', icon: Settings },
 ];
 
 export function Sidebar() {
   const { sidebarCollapsed, toggleSidebar, currentUser, hotfixes, mobileMenuOpen, setMobileMenuOpen } = useAppStore();
+  const { logout, user: authUser } = useAuthStore();
   const location = useLocation();
   const activeHotfixes = hotfixes.filter((h) => !['closed', 'validated'].includes(h.status)).length;
+  const isAdmin = (authUser?.role || currentUser.role) === 'admin';
+  const visibleNav = NAV_ITEMS.filter((item: any) => !item.adminOnly || isAdmin);
 
   return (
     <>
@@ -81,7 +88,7 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto scrollbar-custom py-4 px-2 space-y-1">
-        {NAV_ITEMS.map((item) => {
+        {visibleNav.map((item: any) => {
           const isParentActive = location.pathname.startsWith(item.to);
           return (
             <div key={item.to}>
@@ -148,16 +155,27 @@ export function Sidebar() {
             </div>
           )}
         </div>
-        <button
-          onClick={toggleSidebar}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-white-muted hover:text-white hover:bg-hover transition-all text-xs"
-          aria-label={sidebarCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
-        >
-          <ChevronLeft
-            className={cn('w-4 h-4 transition-transform duration-300', sidebarCollapsed && 'rotate-180')}
-          />
-          {!sidebarCollapsed && 'Colapsar'}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleSidebar}
+            className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-white-muted hover:text-white hover:bg-hover transition-all text-xs"
+            aria-label={sidebarCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+          >
+            <ChevronLeft
+              className={cn('w-4 h-4 transition-transform duration-300', sidebarCollapsed && 'rotate-180')}
+            />
+            {!sidebarCollapsed && 'Colapsar'}
+          </button>
+          <button
+            onClick={logout}
+            className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-white-muted hover:text-red hover:bg-red-soft transition-all text-xs"
+            aria-label="Sair"
+            title="Sair"
+          >
+            <LogOut className="w-4 h-4" />
+            {!sidebarCollapsed && 'Sair'}
+          </button>
+        </div>
       </div>
     </aside>
     </>

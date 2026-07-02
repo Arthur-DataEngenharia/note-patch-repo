@@ -78,7 +78,9 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   role: 'role',
-  avatarUrl: 'avatarUrl'
+  avatarUrl: 'avatarUrl',
+  passwordHash: 'passwordHash',
+  githubToken: 'githubToken'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -90,7 +92,9 @@ export const ClassificationScalarFieldEnum = {
   color: 'color',
   description: 'description',
   sortOrder: 'sortOrder',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  parentId: 'parentId',
+  versionPrefix: 'versionPrefix'
 } as const
 
 export type ClassificationScalarFieldEnum = (typeof ClassificationScalarFieldEnum)[keyof typeof ClassificationScalarFieldEnum]
