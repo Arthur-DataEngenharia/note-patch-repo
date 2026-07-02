@@ -1,34 +1,79 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-interface Particle {
+interface Star {
+  angle: number;
+  radius: number;
+  speed: number;
+  size: number;
+  opacity: number;
+  twinkleSpeed: number;
+  twinklePhase: number;
+  layer: number;
+}
+
+interface ShootingStar {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  size: number;
-  opacity: number;
+  life: number;
+  maxLife: number;
 }
 
 export default function AnimatedBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
-  const particlesRef = useRef<Particle[]>([]);
+  const mouseRef = useRef({ x: -9999, y: -9999 });
+  const starsRef = useRef<Star[]>([]);
+  const shootingRef = useRef<ShootingStar[]>([]);
+  const timeRef = useRef(0);
   const rafRef = useRef<number>();
 
-  const initParticles = useCallback((width: number, height: number) => {
-    const count = Math.floor((width * height) / 25000);
-    const particles: Particle[] = [];
+  const initStars = useCallback((width: number, height: number) => {
+    const cx = width / 2;
+    const cy = height / 2;
+    const maxR = Math.sqrt(cx * cx + cy * cy);
+    const count = 2500;
+    const stars: Star[] = [];
+
     for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.4 + 0.1,
+      // Spiral arm distribution
+      const armCount = 4;
+      const arm = Math.floor(Math.random() * armCount);
+      const armAngle = (arm * Math.PI * 2) / armCount;
+      const armTightness = 0.15;
+      const radius = Math.pow(Math.random(), 0.7) * maxR * 1.2;
+      const spread = (Math.random() - 0.5) * 0.5;
+      const angle = armAngle + armTightness * (radius / 200) + spread + Math.random() * Math.PI * 2;
+
+      const layer = radius < maxR * 0.3 ? 0 : radius < maxR * 0.6 ? 1 : 2;
+
+      stars.push({
+        angle,
+        radius,
+        speed: (0.05 + Math.random() * 0.15) / (layer + 1),
+        size: layer === 0 ? Math.random() * 2.2 + 0.8 : layer === 1 ? Math.random() * 1.4 + 0.4 : Math.random() * 1 + 0.2,
+        opacity: Math.random() * 0.7 + 0.3,
+        twinkleSpeed: Math.random() * 0.03 + 0.005,
+        twinklePhase: Math.random() * Math.PI * 2,
+        layer,
       });
     }
-    particlesRef.current = particles;
+    starsRef.current = stars;
+  }, []);
+
+  const spawnShootingStar = useCallback((width: number, height: number) => {
+    const startX = Math.random() * width;
+    const startY = Math.random() * height * 0.3;
+    const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.6;
+    const speed = 4 + Math.random() * 5;
+    shootingRef.current.push({
+      x: startX,
+      y: startY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 0,
+      maxLife: 40 + Math.random() * 30,
+    });
   }, []);
 
   useEffect(() => {
@@ -40,7 +85,7 @@ export default function AnimatedBackground() {
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      initParticles(canvas.width, canvas.height);
+      initStars(canvas.width, canvas.height);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -49,101 +94,152 @@ export default function AnimatedBackground() {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
+      mouseRef.current = { x: -9999, y: -9999 };
     };
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
+    // Spawn shooting stars periodically
+    const shootingInterval = setInterval(() => {
+      if (Math.random() < 0.4) {
+        spawnShootingStar(canvas.width, canvas.height);
+      }
+    }, 1500);
+
     const animate = () => {
       if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
       const { width, height } = canvas;
-      const mouse = mouseRef.current;
+      const cx = width / 2;
+      const cy = height / 2;
+      timeRef.current += 0.002;
+      const time = timeRef.current;
 
-      // Draw subtle grid dots
-      const gridSpacing = 60;
-      for (let x = 0; x < width; x += gridSpacing) {
-        for (let y = 0; y < height; y += gridSpacing) {
-          const dx = mouse.x - x;
-          const dy = mouse.y - y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const maxDist = 200;
-          const intensity = dist < maxDist ? 1 - dist / maxDist : 0;
+      ctx.clearRect(0, 0, width, height);
 
-          ctx.beginPath();
-          ctx.arc(x, y, 1 + intensity * 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(225, 29, 72, ${0.03 + intensity * 0.15})`;
-          ctx.fill();
-
-          // Connect nearby dots when mouse is close
-          if (intensity > 0.3) {
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            const nx = x + gridSpacing;
-            if (nx < width) {
-              ctx.lineTo(nx, y);
-              ctx.strokeStyle = `rgba(225, 29, 72, ${intensity * 0.08})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            const ny = y + gridSpacing;
-            if (ny < height) {
-              ctx.lineTo(x, ny);
-              ctx.strokeStyle = `rgba(225, 29, 72, ${intensity * 0.08})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
-          }
-        }
+      // ─── Nebulae ───
+      // Deep red nebula clouds
+      const nebulaColors = [
+        { x: cx * 0.6, y: cy * 0.5, r: Math.max(width, height) * 0.5, r255: 80, g: 10, b: 30, a: 0.025 },
+        { x: cx * 1.3, y: cy * 0.7, r: Math.max(width, height) * 0.4, r255: 100, g: 20, b: 40, a: 0.02 },
+        { x: cx * 0.8, y: cy * 1.3, r: Math.max(width, height) * 0.35, r255: 120, g: 15, b: 50, a: 0.018 },
+      ];
+      for (const n of nebulaColors) {
+        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+        grad.addColorStop(0, `rgba(${n.r255},${n.g},${n.b},${n.a})`);
+        grad.addColorStop(0.5, `rgba(${n.r255},${n.g},${n.b},${n.a * 0.5})`);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
       }
 
-      // Draw floating particles
-      const particles = particlesRef.current;
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
+      // ─── Central Galaxy Core ───
+      const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 250);
+      coreGrad.addColorStop(0, 'rgba(255,100,120,0.15)');
+      coreGrad.addColorStop(0.15, 'rgba(225,50,70,0.08)');
+      coreGrad.addColorStop(0.4, 'rgba(180,30,50,0.03)');
+      coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = coreGrad;
+      ctx.fillRect(0, 0, width, height);
 
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
+      // ─── Stars ───
+      const mouse = mouseRef.current;
+      const stars = starsRef.current;
 
-        // Mouse attraction
-        const mdx = mouse.x - p.x;
-        const mdy = mouse.y - p.y;
-        const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-        if (mDist < 150) {
-          p.vx += mdx * 0.0001;
-          p.vy += mdy * 0.0001;
+      for (const s of stars) {
+        // Rotate around center (galactic rotation)
+        s.angle += s.speed * 0.003;
+
+        const x = cx + Math.cos(s.angle) * s.radius;
+        const y = cy + Math.sin(s.angle) * s.radius;
+
+        // Mouse parallax / warp
+        let drawX = x;
+        let drawY = y;
+        if (mouse.x > -1000) {
+          const mdx = mouse.x - cx;
+          const mdy = mouse.y - cy;
+          const parallax = (s.layer + 1) * 0.02;
+          drawX -= mdx * parallax;
+          drawY -= mdy * parallax;
+
+          // Subtle gravitational lens near mouse
+          const starMouseDx = mouse.x - drawX;
+          const starMouseDy = mouse.y - drawY;
+          const starMouseDist = Math.sqrt(starMouseDx * starMouseDx + starMouseDy * starMouseDy);
+          if (starMouseDist < 200) {
+            const lens = (1 - starMouseDist / 200) * 3;
+            drawX -= (starMouseDx / starMouseDist) * lens;
+            drawY -= (starMouseDy / starMouseDist) * lens;
+          }
         }
 
-        // Dampen velocity
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+        // Wrap around screen
+        if (drawX < -50) drawX += width + 100;
+        if (drawX > width + 50) drawX -= width + 100;
+        if (drawY < -50) drawY += height + 100;
+        if (drawY > height + 50) drawY -= height + 100;
+
+        // Twinkle
+        s.twinklePhase += s.twinkleSpeed;
+        const twinkle = 0.6 + 0.4 * Math.sin(s.twinklePhase);
+        const alpha = s.opacity * twinkle;
+
+        // Color by layer
+        const r = s.layer === 0 ? 255 : s.layer === 1 ? 230 : 200;
+        const g = s.layer === 0 ? 180 : s.layer === 1 ? 140 : 100;
+        const b = s.layer === 0 ? 150 : s.layer === 1 ? 130 : 120;
+
+        // Glow for bright stars
+        if (s.size > 1.5 && alpha > 0.5) {
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, s.size * 3, 0, Math.PI * 2);
+          const glow = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, s.size * 3);
+          glow.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.4})`);
+          glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
+          ctx.fillStyle = glow;
+          ctx.fill();
+        }
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(225, 29, 72, ${p.opacity})`;
+        ctx.arc(drawX, drawY, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
         ctx.fill();
       }
 
-      // Connect nearby particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(225, 29, 72, ${0.04 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
+      // ─── Shooting Stars ───
+      const shooting = shootingRef.current;
+      for (let i = shooting.length - 1; i >= 0; i--) {
+        const s = shooting[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life++;
+
+        const progress = s.life / s.maxLife;
+        const alpha = progress < 0.15 ? progress / 0.15 : 1 - ((progress - 0.15) / 0.85);
+
+        if (progress >= 1) {
+          shooting.splice(i, 1);
+          continue;
         }
+
+        // Draw tail
+        const tailLen = 30 + s.vx * 3;
+        const grad = ctx.createLinearGradient(s.x, s.y, s.x - tailLen, s.y - tailLen * 0.4);
+        grad.addColorStop(0, `rgba(255,220,220,${alpha})`);
+        grad.addColorStop(0.3, `rgba(255,150,150,${alpha * 0.6})`);
+        grad.addColorStop(1, `rgba(225,29,72,0)`);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - tailLen, s.y - tailLen * 0.4);
+        ctx.stroke();
+
+        // Head
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,240,240,${alpha})`;
+        ctx.fill();
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -155,9 +251,10 @@ export default function AnimatedBackground() {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      clearInterval(shootingInterval);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [initParticles]);
+  }, [initStars, spawnShootingStar]);
 
   return (
     <canvas
