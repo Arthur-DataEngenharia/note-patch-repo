@@ -12,6 +12,7 @@ model User {
   name        String
   email       String  @unique
   role        String
+  permissions String?   // JSON string of screen access overrides
   avatarUrl   String?
   passwordHash String?
   githubToken String?

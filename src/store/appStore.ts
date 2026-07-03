@@ -63,6 +63,7 @@ interface AppState {
   publishProjectStage: (projectId: string, stage: ProjectStage['stage'], description: string) => Promise<void>;
   getProjectsForUser: () => Project[];
   getProjectById: (id: string) => Project | undefined;
+  updateUser: (id: string, data: Partial<User>) => Promise<void>;
   toggleSidebar: () => void;
   setCommandPaletteOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
@@ -256,6 +257,19 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   getProjectById: (id) => {
     return get().projects.find((p) => p.id === id);
+  },
+
+  updateUser: async (id, data) => {
+    set((s) => ({
+      users: s.users.map((u) => (u.id === id ? { ...u, ...data } : u)),
+      currentUser: s.currentUser.id === id ? { ...s.currentUser, ...data } : s.currentUser,
+    }));
+    try {
+      await api.updateUser(id, data);
+      toast.success('Usuario atualizado');
+    } catch (e: any) {
+      toast.error('Erro ao atualizar usuario: ' + e.message);
+    }
   },
 
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),

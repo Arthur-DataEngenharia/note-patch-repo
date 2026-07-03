@@ -1194,6 +1194,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   role: 'role',
+  permissions: 'permissions',
   avatarUrl: 'avatarUrl',
   passwordHash: 'passwordHash',
   githubToken: 'githubToken'

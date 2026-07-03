@@ -69,13 +69,14 @@ function savePerms(perms: Record<string, UserPermissions>) {
 }
 
 export default function PermissionsPage() {
-  const { users, currentUser } = useAppStore();
+  const { users, currentUser, updateUser } = useAppStore();
   const isManager = currentUser.role === 'gerente' || currentUser.role === 'supervisor' || currentUser.role === 'admin';
 
   const [search, setSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [perms, setPerms] = useState<Record<string, UserPermissions>>(loadPerms());
   const [savedId, setSavedId] = useState<string | null>(null);
+  const [savingRoleId, setSavingRoleId] = useState<string | null>(null);
 
   const filteredUsers = users.filter((u) =>
     u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -95,7 +96,9 @@ export default function PermissionsPage() {
 
   const selectedUser = users.find((u) => u.id === selectedUserId);
 
-  const updateUserRole = (userId: string, newRole: string) => {
+  const updateUserRole = async (userId: string, newRole: string) => {
+    setSavingRoleId(userId);
+    // Update local cache
     setPerms((prev) => {
       const updated = {
         ...prev,
@@ -108,6 +111,9 @@ export default function PermissionsPage() {
       savePerms(updated);
       return updated;
     });
+    // Persist to backend
+    await updateUser(userId, { role: newRole });
+    setSavingRoleId(null);
   };
 
   const toggleScreen = (userId: string, screen: string) => {
@@ -136,8 +142,11 @@ export default function PermissionsPage() {
     });
   };
 
-  const handleSave = (userId: string) => {
+  const handleSave = async (userId: string) => {
     savePerms(perms);
+    // Also save screen overrides to backend as JSON string
+    const screens = perms[userId]?.screens || {};
+    await updateUser(userId, { permissions: JSON.stringify(screens) });
     setSavedId(userId);
     setTimeout(() => setSavedId(null), 1500);
   };

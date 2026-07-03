@@ -56,6 +56,7 @@ export const api = {
 
   // Users
   getUsers: () => fetchJSON<any[]>('/users'),
+  updateUser: (id: string, data: any) => fetchJSON<any>(`/users/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 
   // Time Entries
   getTimeEntries: (params?: { entityType?: string; entityId?: string }) => {

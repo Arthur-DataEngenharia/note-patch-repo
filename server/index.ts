@@ -354,6 +354,20 @@ app.get('/api/users', async (_req, res) => {
   res.json(users.map((u) => ({ ...u, avatarUrl: null, githubUsername: null })));
 });
 
+app.patch('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { role, permissions } = req.body;
+  try {
+    const data: any = {};
+    if (role) data.role = role;
+    if (permissions) data.permissions = permissions;
+    const user = await prisma.user.update({ where: { id }, data });
+    res.json(user);
+  } catch (e) {
+    res.status(400).json({ error: 'Failed to update user' });
+  }
+});
+
 // ─── GitHub Integration ───
 app.post('/api/github/connect', async (req, res) => {
   const auth = req.headers.authorization;
