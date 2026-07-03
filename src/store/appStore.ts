@@ -280,32 +280,83 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   generateDemoTimeEntries: () => {
     const state = get();
-    const users = state.users.length > 0 ? state.users : [state.currentUser];
-    const entities = [
-      ...state.projects.map((p) => ({ id: p.id, name: p.title, type: 'project' as const })),
-      ...state.patches.slice(0, 5).map((p) => ({ id: p.id, name: p.title, type: 'patch' as const })),
-      ...state.hotfixes.slice(0, 5).map((h) => ({ id: h.id, name: h.title, type: 'hotfix' as const })),
-    ];
-    if (entities.length === 0) {
-      toast.error('Nenhum projeto, patch ou hotfix encontrado para gerar dados');
-      return;
+    let users = state.users.length > 0 ? state.users : [];
+    let projects = state.projects;
+    let patches = state.patches;
+    let hotfixes = state.hotfixes;
+
+    // Generate demo users if none exist
+    if (users.length === 0) {
+      const demoUsers: User[] = [
+        { id: 'demo-u1', name: 'João Santos', email: 'joao@empresa.com', role: 'desenvolvedor' },
+        { id: 'demo-u2', name: 'Maria Silva', email: 'maria@empresa.com', role: 'processo' },
+        { id: 'demo-u3', name: 'Ana Costa', email: 'ana@empresa.com', role: 'qa' },
+        { id: 'demo-u4', name: 'Carlos Lima', email: 'carlos@empresa.com', role: 'desenvolvedor' },
+        { id: 'demo-u5', name: 'Fernanda Oliveira', email: 'fernanda@empresa.com', role: 'supervisor' },
+      ];
+      users = demoUsers;
+      set((s) => ({ users: [...s.users, ...demoUsers] }));
+      toast.success(`${demoUsers.length} usuários de exemplo criados`);
     }
+
+    // Generate demo projects if none exist
+    if (projects.length === 0) {
+      const demoProjects: Project[] = [
+        { id: 'demo-p1', title: 'Atualização Sistema ERP', type: 'patch_note', description: 'Migração de versão do ERP corporativo', status: 'publicado', currentStage: 'publicado', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+        { id: 'demo-p2', title: 'Hotfix Login Mobile', type: 'hotfix_emergencial', description: 'Correção urgente de autenticação no app', status: 'concluido', currentStage: 'concluido', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+        { id: 'demo-p3', title: 'Nova API de Pagamentos', type: 'patch_note', description: 'Integração com gateway de pagamentos', status: 'qa', currentStage: 'qa', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+        { id: 'demo-p4', title: 'Refatoração Módulo Fiscal', type: 'patch_note', description: 'Reestruturação do módulo de notas fiscais', status: 'desenvolvimento', currentStage: 'desenvolvimento', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+        { id: 'demo-p5', title: 'Correção Relatório Mensal', type: 'hotfix_emergencial', description: 'Ajuste nos totais do relatório gerencial', status: 'em_processo', currentStage: 'em_processo', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+      ];
+      projects = demoProjects;
+      set((s) => ({ projects: [...s.projects, ...demoProjects] }));
+      toast.success(`${demoProjects.length} projetos de exemplo criados`);
+    }
+
+    // Generate demo patches if none exist
+    if (patches.length === 0) {
+      const demoPatches: NotePatch[] = [
+        { id: 'demo-pt1', version: 'v2.1.0', title: 'Melhorias Performance Query', summary: 'Otimização de consultas SQL', technicalNotes: '', status: 'published', classificationId: '1', tags: ['performance', 'sql'], authorId: 'demo-u1', githubFiles: [], affectedClasses: [], impactedSystems: ['backend'], checklist: [], deployedAt: new Date(), createdAt: new Date(), updatedAt: new Date() },
+        { id: 'demo-pt2', version: 'v2.1.1', title: 'Novo Layout Dashboard', summary: 'Redesign da tela principal', technicalNotes: '', status: 'published', classificationId: '1', tags: ['ui', 'ux'], authorId: 'demo-u4', githubFiles: [], affectedClasses: [], impactedSystems: ['frontend'], checklist: [], deployedAt: new Date(), createdAt: new Date(), updatedAt: new Date() },
+        { id: 'demo-pt3', version: 'v2.2.0', title: 'Autenticação OAuth2', summary: 'Login com Google e Microsoft', technicalNotes: '', status: 'approved', classificationId: '1', tags: ['auth', 'security'], authorId: 'demo-u1', githubFiles: [], affectedClasses: [], impactedSystems: ['auth'], checklist: [], deployedAt: new Date(), createdAt: new Date(), updatedAt: new Date() },
+      ];
+      patches = demoPatches;
+      set((s) => ({ patches: [...s.patches, ...demoPatches] }));
+      toast.success(`${demoPatches.length} patches de exemplo criados`);
+    }
+
+    // Generate demo hotfixes if none exist
+    if (hotfixes.length === 0) {
+      const demoHotfixes: Hotfix[] = [
+        { id: 'demo-hf1', title: 'Crash ao gerar PDF', description: 'Erro 500 na geração de relatórios PDF', status: 'closed', severity: 'high', reportedById: 'demo-u2', reportedByName: 'Maria Silva', reportedAt: new Date(), updatedAt: new Date(), codeReferences: '', documents: [] },
+        { id: 'demo-hf2', title: 'Timeout Exportação Excel', description: 'Exportação de grande volume estoura timeout', status: 'closed', severity: 'medium', reportedById: 'demo-u3', reportedByName: 'Ana Costa', reportedAt: new Date(), updatedAt: new Date(), codeReferences: '', documents: [] },
+        { id: 'demo-hf3', title: 'Email não enviado', description: 'Notificações pararam de ser enviadas', status: 'open', severity: 'high', reportedById: 'demo-u2', reportedByName: 'Maria Silva', reportedAt: new Date(), updatedAt: new Date(), codeReferences: '', documents: [] },
+      ];
+      hotfixes = demoHotfixes;
+      set((s) => ({ hotfixes: [...s.hotfixes, ...demoHotfixes] }));
+      toast.success(`${demoHotfixes.length} hotfixes de exemplo criados`);
+    }
+
+    // Now generate time entries for all entities
+    const entities = [
+      ...projects.map((p) => ({ id: p.id, name: p.title, type: 'project' as const })),
+      ...patches.slice(0, 5).map((p) => ({ id: p.id, name: p.title, type: 'patch' as const })),
+      ...hotfixes.slice(0, 5).map((h) => ({ id: h.id, name: h.title, type: 'hotfix' as const })),
+    ];
 
     const demoEntries: TimeEntry[] = [];
     const now = new Date();
-    // Generate entries for last 3 months
     for (let m = 0; m < 3; m++) {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - m, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - m + 1, 0);
       const daysInMonth = monthEnd.getDate();
 
       for (const u of users) {
-        // Each user works ~15-20 days per month
         const workDays = 15 + Math.floor(Math.random() * 6);
         for (let d = 0; d < workDays; d++) {
           const day = 1 + Math.floor(Math.random() * daysInMonth);
           const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
-          if (date.getDay() === 0 || date.getDay() === 6) continue; // Skip weekends
+          if (date.getDay() === 0 || date.getDay() === 6) continue;
 
           const entity = entities[Math.floor(Math.random() * entities.length)];
           const hours = [1, 2, 3, 4, 5, 6, 8][Math.floor(Math.random() * 7)];
