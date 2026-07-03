@@ -50,6 +50,16 @@ export function CreateProjectModal({ onClose }: Props) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          <style>{`
+            input[type="date"]::-webkit-calendar-picker-indicator {
+              filter: invert(1);
+              opacity: 0.6;
+              cursor: pointer;
+            }
+            input[type="date"]::-webkit-calendar-picker-indicator:hover {
+              opacity: 1;
+            }
+          `}</style>
           <div>
             <label className="text-[10px] text-white-dim uppercase mb-1.5 block">Tipo</label>
             <div className="flex gap-2">
@@ -103,6 +113,7 @@ export function CreateProjectModal({ onClose }: Props) {
                 onChange={(e) => setTargetDate(e.target.value)}
                 required
                 className="input-base w-full text-sm pl-10"
+                style={{ colorScheme: 'dark' }}
               />
             </div>
           </div>
