@@ -18,6 +18,11 @@ const GitHubPage = lazy(() => import('@/pages/GitHubPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
 const UsersPage = lazy(() => import('@/pages/UsersPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
+const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
+const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
+const HistoryPage = lazy(() => import('@/pages/HistoryPage'));
+const PermissionsPage = lazy(() => import('@/pages/PermissionsPage'));
 
 function PageLoader() {
   return (
@@ -111,9 +116,8 @@ export default function App() {
             </Suspense>
           }
         />
-        <Route path="/history" element={<Navigate to="/history/hotfix" replace />} />
         <Route
-          path="/history/hotfix"
+          path="/hotfixes"
           element={
             <Suspense fallback={<PageLoader />}>
               <HotfixPage />
@@ -165,6 +169,46 @@ export default function App() {
           element={
             <Suspense fallback={<PageLoader />}>
               <UsersPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProjectsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/projects/:id"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ProjectDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CalendarPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <HistoryPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/permissions"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PermissionsPage />
             </Suspense>
           }
         />

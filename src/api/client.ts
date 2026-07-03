@@ -65,6 +65,14 @@ export const api = {
   createTimeEntry: (data: any) => fetchJSON<any>('/time-entries', { method: 'POST', body: JSON.stringify(data) }),
   deleteTimeEntry: (id: string) => fetchJSON<any>(`/time-entries/${id}`, { method: 'DELETE' }),
 
+  // Projects
+  getProjects: (scope?: string) => fetchJSON<any[]>(`/projects${scope ? `?scope=${scope}` : ''}`),
+  getProject: (id: string) => fetchJSON<any>(`/projects/${id}`),
+  createProject: (data: any) => fetchJSON<any>('/projects', { method: 'POST', body: JSON.stringify(data) }),
+  updateProject: (id: string, data: any) => fetchJSON<any>(`/projects/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteProject: (id: string) => fetchJSON<any>(`/projects/${id}`, { method: 'DELETE' }),
+  publishProjectStage: (id: string, data: any) => fetchJSON<any>(`/projects/${id}/stages`, { method: 'POST', body: JSON.stringify(data) }),
+
   // GitHub
   connectGitHub: (githubToken: string) => fetchJSON<any>('/github/connect', { method: 'POST', body: JSON.stringify({ githubToken }) }),
   getGitHubRepos: () => fetchJSON<any>('/github/repos'),

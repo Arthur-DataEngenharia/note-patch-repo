@@ -20,6 +20,10 @@ model User {
   hotfixes      Hotfix[]    @relation("HotfixReporter")
   documents     Document[]
   auditLogs     AuditLog[]
+  projectsCreated Project[] @relation("ProjectCreatedBy")
+  projectsProcesso Project[] @relation("ProjectProcesso")
+  projectsDev    Project[] @relation("ProjectDev")
+  projectsQA     Project[] @relation("ProjectQA")
 }
 
 model Classification {
@@ -104,6 +108,7 @@ model Document {
   visibility       String
   versions         String   // JSON array
   patchId          String?
+  projectId        String?
   classificationId String?
   uploadedById     String
   createdAt        DateTime @default(now())
@@ -111,6 +116,7 @@ model Document {
 
   uploadedBy User       @relation(fields: [uploadedById], references: [id])
   patch      NotePatch? @relation(fields: [patchId], references: [id])
+  project    Project?    @relation(fields: [projectId], references: [id])
 }
 
 model AuditLog {
@@ -137,6 +143,45 @@ model TimeEntry {
   date        DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  title         String
+  type          String   // 'hotfix_emergencial' | 'patch_note'
+  description   String
+  status        String   // 'draft' | 'em_processo' | 'desenvolvimento' | 'qa' | 'hotfix' | 'publicado' | 'concluido'
+  currentStage  String?  // 'processo' | 'dev' | 'qa' | 'hotfix' | null
+  targetDate    DateTime
+  createdById   String
+  createdByName String
+  processoId    String?
+  devId         String?
+  qaId          String?
+  isPublic      Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  stages        ProjectStage[]
+  documents     Document[]
+
+  createdBy     User     @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  processo      User?    @relation("ProjectProcesso", fields: [processoId], references: [id])
+  dev           User?    @relation("ProjectDev", fields: [devId], references: [id])
+  qa            User?    @relation("ProjectQA", fields: [qaId], references: [id])
+}
+
+model ProjectStage {
+  id          String   @id @default(cuid())
+  projectId   String
+  stage       String   // 'processo' | 'desenvolvimento' | 'qa' | 'hotfix' | 'publicado'
+  userId      String
+  userName    String
+  description String
+  publishedAt DateTime @default(now())
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Notification {

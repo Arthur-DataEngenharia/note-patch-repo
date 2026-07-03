@@ -77,6 +77,16 @@ export type AuditLog = Prisma.AuditLogModel
  */
 export type TimeEntry = Prisma.TimeEntryModel
 /**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model ProjectStage
+ * 
+ */
+export type ProjectStage = Prisma.ProjectStageModel
+/**
  * Model Notification
  * 
  */

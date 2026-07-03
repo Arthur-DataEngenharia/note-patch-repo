@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { toast } from 'sonner';
-import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User, TimeEntry } from '@/types';
+import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User, TimeEntry, Project, ProjectStage } from '@/types';
 import { api } from '@/api/client';
 
 function toDate(v: any) { return v ? new Date(v) : null; }
@@ -16,6 +16,16 @@ function parseDocDates(d: any): DocumentItem {
 function parseAuditDates(a: any): AuditLog {
   return { ...a, timestamp: toDate(a.timestamp) };
 }
+function parseProjectDates(p: any): Project {
+  return {
+    ...p,
+    targetDate: toDate(p.targetDate),
+    createdAt: toDate(p.createdAt),
+    updatedAt: toDate(p.updatedAt),
+    stages: (p.stages || []).map((s: any) => ({ ...s, publishedAt: toDate(s.publishedAt) })),
+    documents: (p.documents || []).map(parseDocDates),
+  };
+}
 
 interface AppState {
   patches: NotePatch[];
@@ -26,6 +36,7 @@ interface AppState {
   auditLogs: AuditLog[];
   users: User[];
   timeEntries: TimeEntry[];
+  projects: Project[];
   currentUser: User;
   sidebarCollapsed: boolean;
   commandPaletteOpen: boolean;
@@ -46,6 +57,12 @@ interface AppState {
   addTimeEntry: (entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   deleteTimeEntry: (id: string) => Promise<void>;
   getTimeEntriesForEntity: (entityType: string, entityId: string) => TimeEntry[];
+  addProject: (project: Omit<Project, 'id' | 'createdAt' | 'updatedAt' | 'stages' | 'documents' | 'isPublic' | 'status' | 'currentStage'>) => Promise<void>;
+  updateProject: (id: string, data: Partial<Project>) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
+  publishProjectStage: (projectId: string, stage: ProjectStage['stage'], description: string) => Promise<void>;
+  getProjectsForUser: () => Project[];
+  getProjectById: (id: string) => Project | undefined;
   toggleSidebar: () => void;
   setCommandPaletteOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
@@ -61,7 +78,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   auditLogs: [],
   users: [],
   timeEntries: [],
-  currentUser: { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'admin' },
+  projects: [],
+  currentUser: { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'gerente' },
   sidebarCollapsed: false,
   commandPaletteOpen: false,
   mobileMenuOpen: false,
@@ -69,7 +87,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   init: async () => {
     try {
-      const [patches, hotfixes, documents, notifications, classifications, auditLogs, users, timeEntries] = await Promise.all([
+      const [patches, hotfixes, documents, notifications, classifications, auditLogs, users, timeEntries, projects] = await Promise.all([
         api.getPatches(),
         api.getHotfixes(),
         api.getDocuments(),
@@ -78,6 +96,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         api.getAuditLogs(),
         api.getUsers(),
         api.getTimeEntries(),
+        api.getProjects(),
       ]);
       set({
         patches: (patches as any[]).map(parsePatchDates),
@@ -88,6 +107,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         auditLogs: (auditLogs as any[]).map(parseAuditDates),
         users: users as User[],
         timeEntries: (timeEntries as any[]).map((t: any) => ({ ...t, date: toDate(t.date), createdAt: toDate(t.createdAt), updatedAt: toDate(t.updatedAt) })),
+        projects: (projects as any[]).map(parseProjectDates),
         currentUser: (users as User[])[0] || get().currentUser,
         loading: false,
       });
@@ -172,6 +192,70 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   getTimeEntriesForEntity: (entityType, entityId) => {
     return get().timeEntries.filter((t) => t.entityType === entityType && t.entityId === entityId);
+  },
+
+  addProject: async (project) => {
+    const newProject = { ...project, id: `pr${Date.now()}`, status: 'draft' as const, currentStage: null, isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] };
+    set((s) => ({ projects: [newProject, ...s.projects] }));
+    try {
+      const saved = await api.createProject(project);
+      set((s) => ({
+        projects: s.projects.map((p) => (p.id === newProject.id ? parseProjectDates(saved) : p)),
+      }));
+      toast.success('Projeto criado');
+    } catch (e: any) {
+      toast.error('Erro ao criar projeto: ' + e.message);
+    }
+  },
+
+  updateProject: async (id, data) => {
+    set((s) => ({ projects: s.projects.map((p) => (p.id === id ? { ...p, ...data, updatedAt: new Date() } : p)) }));
+    try {
+      await api.updateProject(id, data);
+      toast.success('Projeto atualizado');
+    } catch (e: any) {
+      toast.error('Erro ao atualizar projeto: ' + e.message);
+    }
+  },
+
+  deleteProject: async (id) => {
+    set((s) => ({ projects: s.projects.filter((p) => p.id !== id) }));
+    try {
+      await api.deleteProject(id);
+      toast.success('Projeto removido');
+    } catch (e: any) {
+      toast.error('Erro ao remover projeto: ' + e.message);
+    }
+  },
+
+  publishProjectStage: async (projectId, stage, description) => {
+    const user = get().currentUser;
+    const newStage: ProjectStage = { id: `ps${Date.now()}`, projectId, stage, userId: user.id, userName: user.name, description, publishedAt: new Date() };
+    set((s) => ({
+      projects: s.projects.map((p) => (p.id === projectId ? { ...p, stages: [newStage, ...p.stages] } : p)),
+    }));
+    try {
+      const saved = await api.publishProjectStage(projectId, { stage, description });
+      const updatedProject = await api.getProject(projectId);
+      set((s) => ({
+        projects: s.projects.map((p) => (p.id === projectId ? parseProjectDates(updatedProject) : p)),
+      }));
+      toast.success('Etapa publicada');
+    } catch (e: any) {
+      toast.error('Erro ao publicar etapa: ' + e.message);
+    }
+  },
+
+  getProjectsForUser: () => {
+    const user = get().currentUser;
+    const isManager = user.role === 'gerente' || user.role === 'supervisor' || user.role === 'admin';
+    return get().projects.filter((p) =>
+      isManager || p.isPublic || p.createdById === user.id || p.processoId === user.id || p.devId === user.id || p.qaId === user.id
+    );
+  },
+
+  getProjectById: (id) => {
+    return get().projects.find((p) => p.id === id);
   },
 
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),

@@ -44,6 +44,7 @@ export type DocumentMinAggregateOutputType = {
   visibility: string | null
   versions: string | null
   patchId: string | null
+  projectId: string | null
   classificationId: string | null
   uploadedById: string | null
   createdAt: Date | null
@@ -60,6 +61,7 @@ export type DocumentMaxAggregateOutputType = {
   visibility: string | null
   versions: string | null
   patchId: string | null
+  projectId: string | null
   classificationId: string | null
   uploadedById: string | null
   createdAt: Date | null
@@ -76,6 +78,7 @@ export type DocumentCountAggregateOutputType = {
   visibility: number
   versions: number
   patchId: number
+  projectId: number
   classificationId: number
   uploadedById: number
   createdAt: number
@@ -102,6 +105,7 @@ export type DocumentMinAggregateInputType = {
   visibility?: true
   versions?: true
   patchId?: true
+  projectId?: true
   classificationId?: true
   uploadedById?: true
   createdAt?: true
@@ -118,6 +122,7 @@ export type DocumentMaxAggregateInputType = {
   visibility?: true
   versions?: true
   patchId?: true
+  projectId?: true
   classificationId?: true
   uploadedById?: true
   createdAt?: true
@@ -134,6 +139,7 @@ export type DocumentCountAggregateInputType = {
   visibility?: true
   versions?: true
   patchId?: true
+  projectId?: true
   classificationId?: true
   uploadedById?: true
   createdAt?: true
@@ -237,6 +243,7 @@ export type DocumentGroupByOutputType = {
   visibility: string
   versions: string
   patchId: string | null
+  projectId: string | null
   classificationId: string | null
   uploadedById: string
   createdAt: Date
@@ -276,12 +283,14 @@ export type DocumentWhereInput = {
   visibility?: Prisma.StringFilter<"Document"> | string
   versions?: Prisma.StringFilter<"Document"> | string
   patchId?: Prisma.StringNullableFilter<"Document"> | string | null
+  projectId?: Prisma.StringNullableFilter<"Document"> | string | null
   classificationId?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patch?: Prisma.XOR<Prisma.NotePatchNullableScalarRelationFilter, Prisma.NotePatchWhereInput> | null
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }
 
 export type DocumentOrderByWithRelationInput = {
@@ -294,12 +303,14 @@ export type DocumentOrderByWithRelationInput = {
   visibility?: Prisma.SortOrder
   versions?: Prisma.SortOrder
   patchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   classificationId?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   uploadedBy?: Prisma.UserOrderByWithRelationInput
   patch?: Prisma.NotePatchOrderByWithRelationInput
+  project?: Prisma.ProjectOrderByWithRelationInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -315,12 +326,14 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   visibility?: Prisma.StringFilter<"Document"> | string
   versions?: Prisma.StringFilter<"Document"> | string
   patchId?: Prisma.StringNullableFilter<"Document"> | string | null
+  projectId?: Prisma.StringNullableFilter<"Document"> | string | null
   classificationId?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   uploadedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   patch?: Prisma.XOR<Prisma.NotePatchNullableScalarRelationFilter, Prisma.NotePatchWhereInput> | null
+  project?: Prisma.XOR<Prisma.ProjectNullableScalarRelationFilter, Prisma.ProjectWhereInput> | null
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
@@ -333,6 +346,7 @@ export type DocumentOrderByWithAggregationInput = {
   visibility?: Prisma.SortOrder
   versions?: Prisma.SortOrder
   patchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   classificationId?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -357,6 +371,7 @@ export type DocumentScalarWhereWithAggregatesInput = {
   visibility?: Prisma.StringWithAggregatesFilter<"Document"> | string
   versions?: Prisma.StringWithAggregatesFilter<"Document"> | string
   patchId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
+  projectId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   classificationId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   uploadedById?: Prisma.StringWithAggregatesFilter<"Document"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
@@ -377,6 +392,7 @@ export type DocumentCreateInput = {
   updatedAt?: Date | string
   uploadedBy: Prisma.UserCreateNestedOneWithoutDocumentsInput
   patch?: Prisma.NotePatchCreateNestedOneWithoutDocumentsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutDocumentsInput
 }
 
 export type DocumentUncheckedCreateInput = {
@@ -389,6 +405,7 @@ export type DocumentUncheckedCreateInput = {
   visibility: string
   versions: string
   patchId?: string | null
+  projectId?: string | null
   classificationId?: string | null
   uploadedById: string
   createdAt?: Date | string
@@ -409,6 +426,7 @@ export type DocumentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
   patch?: Prisma.NotePatchUpdateOneWithoutDocumentsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
@@ -421,6 +439,7 @@ export type DocumentUncheckedUpdateInput = {
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -437,6 +456,7 @@ export type DocumentCreateManyInput = {
   visibility: string
   versions: string
   patchId?: string | null
+  projectId?: string | null
   classificationId?: string | null
   uploadedById: string
   createdAt?: Date | string
@@ -467,6 +487,7 @@ export type DocumentUncheckedUpdateManyInput = {
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,6 +514,7 @@ export type DocumentCountOrderByAggregateInput = {
   visibility?: Prisma.SortOrder
   versions?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   classificationId?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -513,6 +535,7 @@ export type DocumentMaxOrderByAggregateInput = {
   visibility?: Prisma.SortOrder
   versions?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   classificationId?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -529,6 +552,7 @@ export type DocumentMinOrderByAggregateInput = {
   visibility?: Prisma.SortOrder
   versions?: Prisma.SortOrder
   patchId?: Prisma.SortOrder
+  projectId?: Prisma.SortOrder
   classificationId?: Prisma.SortOrder
   uploadedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -623,6 +647,48 @@ export type DocumentUncheckedUpdateManyWithoutPatchNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
+export type DocumentCreateNestedManyWithoutProjectInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput> | Prisma.DocumentCreateWithoutProjectInput[] | Prisma.DocumentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutProjectInput | Prisma.DocumentCreateOrConnectWithoutProjectInput[]
+  createMany?: Prisma.DocumentCreateManyProjectInputEnvelope
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+}
+
+export type DocumentUncheckedCreateNestedManyWithoutProjectInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput> | Prisma.DocumentCreateWithoutProjectInput[] | Prisma.DocumentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutProjectInput | Prisma.DocumentCreateOrConnectWithoutProjectInput[]
+  createMany?: Prisma.DocumentCreateManyProjectInputEnvelope
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+}
+
+export type DocumentUpdateManyWithoutProjectNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput> | Prisma.DocumentCreateWithoutProjectInput[] | Prisma.DocumentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutProjectInput | Prisma.DocumentCreateOrConnectWithoutProjectInput[]
+  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutProjectInput | Prisma.DocumentUpsertWithWhereUniqueWithoutProjectInput[]
+  createMany?: Prisma.DocumentCreateManyProjectInputEnvelope
+  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutProjectInput | Prisma.DocumentUpdateWithWhereUniqueWithoutProjectInput[]
+  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutProjectInput | Prisma.DocumentUpdateManyWithWhereWithoutProjectInput[]
+  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+}
+
+export type DocumentUncheckedUpdateManyWithoutProjectNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput> | Prisma.DocumentCreateWithoutProjectInput[] | Prisma.DocumentUncheckedCreateWithoutProjectInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutProjectInput | Prisma.DocumentCreateOrConnectWithoutProjectInput[]
+  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutProjectInput | Prisma.DocumentUpsertWithWhereUniqueWithoutProjectInput[]
+  createMany?: Prisma.DocumentCreateManyProjectInputEnvelope
+  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutProjectInput | Prisma.DocumentUpdateWithWhereUniqueWithoutProjectInput[]
+  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutProjectInput | Prisma.DocumentUpdateManyWithWhereWithoutProjectInput[]
+  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+}
+
 export type DocumentCreateWithoutUploadedByInput = {
   id: string
   title: string
@@ -636,6 +702,7 @@ export type DocumentCreateWithoutUploadedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   patch?: Prisma.NotePatchCreateNestedOneWithoutDocumentsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutDocumentsInput
 }
 
 export type DocumentUncheckedCreateWithoutUploadedByInput = {
@@ -648,6 +715,7 @@ export type DocumentUncheckedCreateWithoutUploadedByInput = {
   visibility: string
   versions: string
   patchId?: string | null
+  projectId?: string | null
   classificationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -691,6 +759,7 @@ export type DocumentScalarWhereInput = {
   visibility?: Prisma.StringFilter<"Document"> | string
   versions?: Prisma.StringFilter<"Document"> | string
   patchId?: Prisma.StringNullableFilter<"Document"> | string | null
+  projectId?: Prisma.StringNullableFilter<"Document"> | string | null
   classificationId?: Prisma.StringNullableFilter<"Document"> | string | null
   uploadedById?: Prisma.StringFilter<"Document"> | string
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
@@ -710,6 +779,7 @@ export type DocumentCreateWithoutPatchInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   uploadedBy: Prisma.UserCreateNestedOneWithoutDocumentsInput
+  project?: Prisma.ProjectCreateNestedOneWithoutDocumentsInput
 }
 
 export type DocumentUncheckedCreateWithoutPatchInput = {
@@ -721,6 +791,7 @@ export type DocumentUncheckedCreateWithoutPatchInput = {
   tags: string
   visibility: string
   versions: string
+  projectId?: string | null
   classificationId?: string | null
   uploadedById: string
   createdAt?: Date | string
@@ -752,6 +823,63 @@ export type DocumentUpdateManyWithWhereWithoutPatchInput = {
   data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutPatchInput>
 }
 
+export type DocumentCreateWithoutProjectInput = {
+  id: string
+  title: string
+  type: string
+  fileUrl: string
+  fileSize: number
+  tags: string
+  visibility: string
+  versions: string
+  classificationId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  uploadedBy: Prisma.UserCreateNestedOneWithoutDocumentsInput
+  patch?: Prisma.NotePatchCreateNestedOneWithoutDocumentsInput
+}
+
+export type DocumentUncheckedCreateWithoutProjectInput = {
+  id: string
+  title: string
+  type: string
+  fileUrl: string
+  fileSize: number
+  tags: string
+  visibility: string
+  versions: string
+  patchId?: string | null
+  classificationId?: string | null
+  uploadedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DocumentCreateOrConnectWithoutProjectInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput>
+}
+
+export type DocumentCreateManyProjectInputEnvelope = {
+  data: Prisma.DocumentCreateManyProjectInput | Prisma.DocumentCreateManyProjectInput[]
+}
+
+export type DocumentUpsertWithWhereUniqueWithoutProjectInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentUpdateWithoutProjectInput, Prisma.DocumentUncheckedUpdateWithoutProjectInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutProjectInput, Prisma.DocumentUncheckedCreateWithoutProjectInput>
+}
+
+export type DocumentUpdateWithWhereUniqueWithoutProjectInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentUpdateWithoutProjectInput, Prisma.DocumentUncheckedUpdateWithoutProjectInput>
+}
+
+export type DocumentUpdateManyWithWhereWithoutProjectInput = {
+  where: Prisma.DocumentScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutProjectInput>
+}
+
 export type DocumentCreateManyUploadedByInput = {
   id: string
   title: string
@@ -762,6 +890,7 @@ export type DocumentCreateManyUploadedByInput = {
   visibility: string
   versions: string
   patchId?: string | null
+  projectId?: string | null
   classificationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -780,6 +909,7 @@ export type DocumentUpdateWithoutUploadedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patch?: Prisma.NotePatchUpdateOneWithoutDocumentsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutUploadedByInput = {
@@ -792,6 +922,7 @@ export type DocumentUncheckedUpdateWithoutUploadedByInput = {
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -807,6 +938,7 @@ export type DocumentUncheckedUpdateManyWithoutUploadedByInput = {
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
   patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -821,6 +953,7 @@ export type DocumentCreateManyPatchInput = {
   tags: string
   visibility: string
   versions: string
+  projectId?: string | null
   classificationId?: string | null
   uploadedById: string
   createdAt?: Date | string
@@ -840,6 +973,7 @@ export type DocumentUpdateWithoutPatchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   uploadedBy?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
+  project?: Prisma.ProjectUpdateOneWithoutDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutPatchInput = {
@@ -851,6 +985,7 @@ export type DocumentUncheckedUpdateWithoutPatchInput = {
   tags?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -866,6 +1001,71 @@ export type DocumentUncheckedUpdateManyWithoutPatchInput = {
   tags?: Prisma.StringFieldUpdateOperationsInput | string
   visibility?: Prisma.StringFieldUpdateOperationsInput | string
   versions?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentCreateManyProjectInput = {
+  id: string
+  title: string
+  type: string
+  fileUrl: string
+  fileSize: number
+  tags: string
+  visibility: string
+  versions: string
+  patchId?: string | null
+  classificationId?: string | null
+  uploadedById: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DocumentUpdateWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  versions?: Prisma.StringFieldUpdateOperationsInput | string
+  classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uploadedBy?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
+  patch?: Prisma.NotePatchUpdateOneWithoutDocumentsNestedInput
+}
+
+export type DocumentUncheckedUpdateWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  versions?: Prisma.StringFieldUpdateOperationsInput | string
+  patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentUncheckedUpdateManyWithoutProjectInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fileUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  versions?: Prisma.StringFieldUpdateOperationsInput | string
+  patchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   classificationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadedById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -884,12 +1084,14 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   visibility?: boolean
   versions?: boolean
   patchId?: boolean
+  projectId?: boolean
   classificationId?: boolean
   uploadedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -902,12 +1104,14 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   visibility?: boolean
   versions?: boolean
   patchId?: boolean
+  projectId?: boolean
   classificationId?: boolean
   uploadedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -920,12 +1124,14 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   visibility?: boolean
   versions?: boolean
   patchId?: boolean
+  projectId?: boolean
   classificationId?: boolean
   uploadedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
@@ -938,24 +1144,28 @@ export type DocumentSelectScalar = {
   visibility?: boolean
   versions?: boolean
   patchId?: boolean
+  projectId?: boolean
   classificationId?: boolean
   uploadedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "fileUrl" | "fileSize" | "tags" | "visibility" | "versions" | "patchId" | "classificationId" | "uploadedById" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "fileUrl" | "fileSize" | "tags" | "visibility" | "versions" | "patchId" | "projectId" | "classificationId" | "uploadedById" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }
 export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }
 export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   uploadedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   patch?: boolean | Prisma.Document$patchArgs<ExtArgs>
+  project?: boolean | Prisma.Document$projectArgs<ExtArgs>
 }
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -963,6 +1173,7 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     uploadedBy: Prisma.$UserPayload<ExtArgs>
     patch: Prisma.$NotePatchPayload<ExtArgs> | null
+    project: Prisma.$ProjectPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -974,6 +1185,7 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     visibility: string
     versions: string
     patchId: string | null
+    projectId: string | null
     classificationId: string | null
     uploadedById: string
     createdAt: Date
@@ -1374,6 +1586,7 @@ export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   uploadedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   patch<T extends Prisma.Document$patchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$patchArgs<ExtArgs>>): Prisma.Prisma__NotePatchClient<runtime.Types.Result.GetResult<Prisma.$NotePatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  project<T extends Prisma.Document$projectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$projectArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1412,6 +1625,7 @@ export interface DocumentFieldRefs {
   readonly visibility: Prisma.FieldRef<"Document", 'String'>
   readonly versions: Prisma.FieldRef<"Document", 'String'>
   readonly patchId: Prisma.FieldRef<"Document", 'String'>
+  readonly projectId: Prisma.FieldRef<"Document", 'String'>
   readonly classificationId: Prisma.FieldRef<"Document", 'String'>
   readonly uploadedById: Prisma.FieldRef<"Document", 'String'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
@@ -1831,6 +2045,25 @@ export type Document$patchArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.NotePatchInclude<ExtArgs> | null
   where?: Prisma.NotePatchWhereInput
+}
+
+/**
+ * Document.project
+ */
+export type Document$projectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
 }
 
 /**

@@ -391,6 +391,8 @@ export const ModelName = {
   Document: 'Document',
   AuditLog: 'AuditLog',
   TimeEntry: 'TimeEntry',
+  Project: 'Project',
+  ProjectStage: 'ProjectStage',
   Notification: 'Notification'
 } as const
 
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "classification" | "notePatch" | "hotfix" | "document" | "auditLog" | "timeEntry" | "notification"
+    modelProps: "user" | "classification" | "notePatch" | "hotfix" | "document" | "auditLog" | "timeEntry" | "project" | "projectStage" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -929,6 +931,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Project: {
+      payload: Prisma.$ProjectPayload<ExtArgs>
+      fields: Prisma.ProjectFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProjectFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProjectFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        findFirst: {
+          args: Prisma.ProjectFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProjectFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        findMany: {
+          args: Prisma.ProjectFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[]
+        }
+        create: {
+          args: Prisma.ProjectCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        createMany: {
+          args: Prisma.ProjectCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProjectCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[]
+        }
+        delete: {
+          args: Prisma.ProjectDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        update: {
+          args: Prisma.ProjectUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProjectDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProjectUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProjectUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProjectUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectPayload>
+        }
+        aggregate: {
+          args: Prisma.ProjectAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProject>
+        }
+        groupBy: {
+          args: Prisma.ProjectGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProjectCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProjectStage: {
+      payload: Prisma.$ProjectStagePayload<ExtArgs>
+      fields: Prisma.ProjectStageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProjectStageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProjectStageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        findFirst: {
+          args: Prisma.ProjectStageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProjectStageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        findMany: {
+          args: Prisma.ProjectStageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>[]
+        }
+        create: {
+          args: Prisma.ProjectStageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        createMany: {
+          args: Prisma.ProjectStageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProjectStageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>[]
+        }
+        delete: {
+          args: Prisma.ProjectStageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        update: {
+          args: Prisma.ProjectStageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProjectStageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProjectStageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProjectStageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProjectStageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProjectStagePayload>
+        }
+        aggregate: {
+          args: Prisma.ProjectStageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProjectStage>
+        }
+        groupBy: {
+          args: Prisma.ProjectStageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectStageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProjectStageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProjectStageCountAggregateOutputType> | number
+        }
+      }
+    }
     Notification: {
       payload: Prisma.$NotificationPayload<ExtArgs>
       fields: Prisma.NotificationFieldRefs
@@ -1131,6 +1281,7 @@ export const DocumentScalarFieldEnum = {
   visibility: 'visibility',
   versions: 'versions',
   patchId: 'patchId',
+  projectId: 'projectId',
   classificationId: 'classificationId',
   uploadedById: 'uploadedById',
   createdAt: 'createdAt',
@@ -1168,6 +1319,40 @@ export const TimeEntryScalarFieldEnum = {
 } as const
 
 export type TimeEntryScalarFieldEnum = (typeof TimeEntryScalarFieldEnum)[keyof typeof TimeEntryScalarFieldEnum]
+
+
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  type: 'type',
+  description: 'description',
+  status: 'status',
+  currentStage: 'currentStage',
+  targetDate: 'targetDate',
+  createdById: 'createdById',
+  createdByName: 'createdByName',
+  processoId: 'processoId',
+  devId: 'devId',
+  qaId: 'qaId',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+export const ProjectStageScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  stage: 'stage',
+  userId: 'userId',
+  userName: 'userName',
+  description: 'description',
+  publishedAt: 'publishedAt'
+} as const
+
+export type ProjectStageScalarFieldEnum = (typeof ProjectStageScalarFieldEnum)[keyof typeof ProjectStageScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -1356,6 +1541,8 @@ export type GlobalOmitConfig = {
   document?: Prisma.DocumentOmit
   auditLog?: Prisma.AuditLogOmit
   timeEntry?: Prisma.TimeEntryOmit
+  project?: Prisma.ProjectOmit
+  projectStage?: Prisma.ProjectStageOmit
   notification?: Prisma.NotificationOmit
 }
 

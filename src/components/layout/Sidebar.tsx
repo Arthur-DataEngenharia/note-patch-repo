@@ -15,6 +15,10 @@ import {
   X,
   LogOut,
   Users,
+  Briefcase,
+  Calendar,
+  Archive,
+  Shield,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
@@ -22,21 +26,25 @@ import { cn, getInitials } from '@/lib/utils';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/projects', label: 'Projetos', icon: Briefcase },
+  { to: '/calendar', label: 'Calendario', icon: Calendar },
   { to: '/patches', label: 'Patches', icon: ClipboardList },
   { to: '/timeline', label: 'Timeline', icon: Clock },
   {
     to: '/history',
-    label: 'Histórico',
+    label: 'Historico',
     icon: FolderOpen,
     children: [
-      { to: '/history/hotfix', label: 'Hotfix', icon: Flame, badge: true },
+      { to: '/hotfixes', label: 'Hotfix', icon: Flame, badge: true },
       { to: '/history/audit', label: 'Auditoria', icon: ScrollText },
     ],
   },
   { to: '/documents', label: 'Documentos', icon: Files },
-  { to: '/classifications', label: 'Classificações', icon: Tags },
+  { to: '/classifications', label: 'Classificacoes', icon: Tags },
   { to: '/github', label: 'GitHub', icon: Github },
   { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
+  { to: '/history', label: 'Arquivo', icon: Archive, managerOnly: true },
+  { to: '/permissions', label: 'Permissoes', icon: Shield, managerOnly: true },
   { to: '/settings', label: 'Configuracoes', icon: Settings },
 ];
 
@@ -45,8 +53,14 @@ export function Sidebar() {
   const { logout, user: authUser } = useAuthStore();
   const location = useLocation();
   const activeHotfixes = hotfixes.filter((h) => !['closed', 'validated'].includes(h.status)).length;
-  const isAdmin = (authUser?.role || currentUser.role) === 'admin';
-  const visibleNav = NAV_ITEMS.filter((item: any) => !item.adminOnly || isAdmin);
+  const role = (authUser?.role || currentUser.role);
+  const isAdmin = role === 'admin';
+  const isManager = role === 'gerente' || role === 'supervisor' || role === 'admin';
+  const visibleNav = NAV_ITEMS.filter((item: any) => {
+    if (item.adminOnly && !isAdmin) return false;
+    if (item.managerOnly && !isManager) return false;
+    return true;
+  });
 
   return (
     <>

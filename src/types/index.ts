@@ -109,7 +109,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'editor' | 'reviewer' | 'viewer';
+  role: 'gerente' | 'supervisor' | 'desenvolvedor' | 'processo' | 'qa' | 'viewer' | 'admin';
   avatarUrl?: string;
   githubUsername?: string;
 }
@@ -146,6 +146,36 @@ export interface TimeEntry {
   date: Date;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  type: 'hotfix_emergencial' | 'patch_note';
+  description: string;
+  status: 'draft' | 'em_processo' | 'desenvolvimento' | 'qa' | 'hotfix' | 'publicado' | 'concluido';
+  currentStage: string | null;
+  targetDate: Date;
+  createdById: string;
+  createdByName: string;
+  processoId?: string;
+  devId?: string;
+  qaId?: string;
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  stages: ProjectStage[];
+  documents: DocumentItem[];
+}
+
+export interface ProjectStage {
+  id: string;
+  projectId: string;
+  stage: 'processo' | 'desenvolvimento' | 'qa' | 'hotfix' | 'publicado' | 'concluido';
+  userId: string;
+  userName: string;
+  description: string;
+  publishedAt: Date;
 }
 
 export type PageStatus = 'draft' | 'in_review' | 'approved' | 'published' | 'archived';

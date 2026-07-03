@@ -58,6 +58,8 @@ export const ModelName = {
   Document: 'Document',
   AuditLog: 'AuditLog',
   TimeEntry: 'TimeEntry',
+  Project: 'Project',
+  ProjectStage: 'ProjectStage',
   Notification: 'Notification'
 } as const
 
@@ -166,6 +168,7 @@ export const DocumentScalarFieldEnum = {
   visibility: 'visibility',
   versions: 'versions',
   patchId: 'patchId',
+  projectId: 'projectId',
   classificationId: 'classificationId',
   uploadedById: 'uploadedById',
   createdAt: 'createdAt',
@@ -203,6 +206,40 @@ export const TimeEntryScalarFieldEnum = {
 } as const
 
 export type TimeEntryScalarFieldEnum = (typeof TimeEntryScalarFieldEnum)[keyof typeof TimeEntryScalarFieldEnum]
+
+
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  type: 'type',
+  description: 'description',
+  status: 'status',
+  currentStage: 'currentStage',
+  targetDate: 'targetDate',
+  createdById: 'createdById',
+  createdByName: 'createdByName',
+  processoId: 'processoId',
+  devId: 'devId',
+  qaId: 'qaId',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+export const ProjectStageScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  stage: 'stage',
+  userId: 'userId',
+  userName: 'userName',
+  description: 'description',
+  publishedAt: 'publishedAt'
+} as const
+
+export type ProjectStageScalarFieldEnum = (typeof ProjectStageScalarFieldEnum)[keyof typeof ProjectStageScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

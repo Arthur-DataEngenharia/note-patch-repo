@@ -202,6 +202,10 @@ export type UserWhereInput = {
   hotfixes?: Prisma.HotfixListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  projectsCreated?: Prisma.ProjectListRelationFilter
+  projectsProcesso?: Prisma.ProjectListRelationFilter
+  projectsDev?: Prisma.ProjectListRelationFilter
+  projectsQA?: Prisma.ProjectListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -216,6 +220,10 @@ export type UserOrderByWithRelationInput = {
   hotfixes?: Prisma.HotfixOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  projectsCreated?: Prisma.ProjectOrderByRelationAggregateInput
+  projectsProcesso?: Prisma.ProjectOrderByRelationAggregateInput
+  projectsDev?: Prisma.ProjectOrderByRelationAggregateInput
+  projectsQA?: Prisma.ProjectOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -233,6 +241,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   hotfixes?: Prisma.HotfixListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  projectsCreated?: Prisma.ProjectListRelationFilter
+  projectsProcesso?: Prisma.ProjectListRelationFilter
+  projectsDev?: Prisma.ProjectListRelationFilter
+  projectsQA?: Prisma.ProjectListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,6 +285,10 @@ export type UserCreateInput = {
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -287,6 +303,10 @@ export type UserUncheckedCreateInput = {
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
 }
 
 export type UserUpdateInput = {
@@ -301,6 +321,10 @@ export type UserUpdateInput = {
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -315,6 +339,10 @@ export type UserUncheckedUpdateInput = {
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -382,6 +410,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -446,6 +479,68 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutProjectsCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsCreatedInput, Prisma.UserUncheckedCreateWithoutProjectsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutProjectsProcessoInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsProcessoInput, Prisma.UserUncheckedCreateWithoutProjectsProcessoInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsProcessoInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutProjectsDevInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsDevInput, Prisma.UserUncheckedCreateWithoutProjectsDevInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsDevInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutProjectsQAInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsQAInput, Prisma.UserUncheckedCreateWithoutProjectsQAInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsQAInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProjectsCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsCreatedInput, Prisma.UserUncheckedCreateWithoutProjectsCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsCreatedInput
+  upsert?: Prisma.UserUpsertWithoutProjectsCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsCreatedInput, Prisma.UserUpdateWithoutProjectsCreatedInput>, Prisma.UserUncheckedUpdateWithoutProjectsCreatedInput>
+}
+
+export type UserUpdateOneWithoutProjectsProcessoNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsProcessoInput, Prisma.UserUncheckedCreateWithoutProjectsProcessoInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsProcessoInput
+  upsert?: Prisma.UserUpsertWithoutProjectsProcessoInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsProcessoInput, Prisma.UserUpdateWithoutProjectsProcessoInput>, Prisma.UserUncheckedUpdateWithoutProjectsProcessoInput>
+}
+
+export type UserUpdateOneWithoutProjectsDevNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsDevInput, Prisma.UserUncheckedCreateWithoutProjectsDevInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsDevInput
+  upsert?: Prisma.UserUpsertWithoutProjectsDevInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsDevInput, Prisma.UserUpdateWithoutProjectsDevInput>, Prisma.UserUncheckedUpdateWithoutProjectsDevInput>
+}
+
+export type UserUpdateOneWithoutProjectsQANestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsQAInput, Prisma.UserUncheckedCreateWithoutProjectsQAInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsQAInput
+  upsert?: Prisma.UserUpsertWithoutProjectsQAInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsQAInput, Prisma.UserUpdateWithoutProjectsQAInput>, Prisma.UserUncheckedUpdateWithoutProjectsQAInput>
+}
+
 export type UserCreateWithoutPatchesInput = {
   id: string
   name: string
@@ -457,6 +552,10 @@ export type UserCreateWithoutPatchesInput = {
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
 }
 
 export type UserUncheckedCreateWithoutPatchesInput = {
@@ -470,6 +569,10 @@ export type UserUncheckedCreateWithoutPatchesInput = {
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
 }
 
 export type UserCreateOrConnectWithoutPatchesInput = {
@@ -499,6 +602,10 @@ export type UserUpdateWithoutPatchesInput = {
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPatchesInput = {
@@ -512,6 +619,10 @@ export type UserUncheckedUpdateWithoutPatchesInput = {
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
 }
 
 export type UserCreateWithoutHotfixesInput = {
@@ -525,6 +636,10 @@ export type UserCreateWithoutHotfixesInput = {
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
 }
 
 export type UserUncheckedCreateWithoutHotfixesInput = {
@@ -538,6 +653,10 @@ export type UserUncheckedCreateWithoutHotfixesInput = {
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
 }
 
 export type UserCreateOrConnectWithoutHotfixesInput = {
@@ -567,6 +686,10 @@ export type UserUpdateWithoutHotfixesInput = {
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
 }
 
 export type UserUncheckedUpdateWithoutHotfixesInput = {
@@ -580,6 +703,10 @@ export type UserUncheckedUpdateWithoutHotfixesInput = {
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
 }
 
 export type UserCreateWithoutDocumentsInput = {
@@ -593,6 +720,10 @@ export type UserCreateWithoutDocumentsInput = {
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
 }
 
 export type UserUncheckedCreateWithoutDocumentsInput = {
@@ -606,6 +737,10 @@ export type UserUncheckedCreateWithoutDocumentsInput = {
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
 }
 
 export type UserCreateOrConnectWithoutDocumentsInput = {
@@ -635,6 +770,10 @@ export type UserUpdateWithoutDocumentsInput = {
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDocumentsInput = {
@@ -648,6 +787,10 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -661,6 +804,10 @@ export type UserCreateWithoutAuditLogsInput = {
   patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -674,6 +821,10 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
   hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -703,6 +854,10 @@ export type UserUpdateWithoutAuditLogsInput = {
   patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -716,6 +871,346 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
   hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
+}
+
+export type UserCreateWithoutProjectsCreatedInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
+}
+
+export type UserUncheckedCreateWithoutProjectsCreatedInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
+}
+
+export type UserCreateOrConnectWithoutProjectsCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsCreatedInput, Prisma.UserUncheckedCreateWithoutProjectsCreatedInput>
+}
+
+export type UserCreateWithoutProjectsProcessoInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
+}
+
+export type UserUncheckedCreateWithoutProjectsProcessoInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
+}
+
+export type UserCreateOrConnectWithoutProjectsProcessoInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsProcessoInput, Prisma.UserUncheckedCreateWithoutProjectsProcessoInput>
+}
+
+export type UserCreateWithoutProjectsDevInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsQA?: Prisma.ProjectCreateNestedManyWithoutQaInput
+}
+
+export type UserUncheckedCreateWithoutProjectsDevInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsQA?: Prisma.ProjectUncheckedCreateNestedManyWithoutQaInput
+}
+
+export type UserCreateOrConnectWithoutProjectsDevInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsDevInput, Prisma.UserUncheckedCreateWithoutProjectsDevInput>
+}
+
+export type UserCreateWithoutProjectsQAInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectCreateNestedManyWithoutDevInput
+}
+
+export type UserUncheckedCreateWithoutProjectsQAInput = {
+  id: string
+  name: string
+  email: string
+  role: string
+  avatarUrl?: string | null
+  passwordHash?: string | null
+  githubToken?: string | null
+  patches?: Prisma.NotePatchUncheckedCreateNestedManyWithoutAuthorInput
+  hotfixes?: Prisma.HotfixUncheckedCreateNestedManyWithoutReporterInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  projectsCreated?: Prisma.ProjectUncheckedCreateNestedManyWithoutCreatedByInput
+  projectsProcesso?: Prisma.ProjectUncheckedCreateNestedManyWithoutProcessoInput
+  projectsDev?: Prisma.ProjectUncheckedCreateNestedManyWithoutDevInput
+}
+
+export type UserCreateOrConnectWithoutProjectsQAInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsQAInput, Prisma.UserUncheckedCreateWithoutProjectsQAInput>
+}
+
+export type UserUpsertWithoutProjectsCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsCreatedInput, Prisma.UserUncheckedUpdateWithoutProjectsCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsCreatedInput, Prisma.UserUncheckedCreateWithoutProjectsCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsCreatedInput, Prisma.UserUncheckedUpdateWithoutProjectsCreatedInput>
+}
+
+export type UserUpdateWithoutProjectsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
+}
+
+export type UserUpsertWithoutProjectsProcessoInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsProcessoInput, Prisma.UserUncheckedUpdateWithoutProjectsProcessoInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsProcessoInput, Prisma.UserUncheckedCreateWithoutProjectsProcessoInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsProcessoInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsProcessoInput, Prisma.UserUncheckedUpdateWithoutProjectsProcessoInput>
+}
+
+export type UserUpdateWithoutProjectsProcessoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsProcessoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
+}
+
+export type UserUpsertWithoutProjectsDevInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsDevInput, Prisma.UserUncheckedUpdateWithoutProjectsDevInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsDevInput, Prisma.UserUncheckedCreateWithoutProjectsDevInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsDevInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsDevInput, Prisma.UserUncheckedUpdateWithoutProjectsDevInput>
+}
+
+export type UserUpdateWithoutProjectsDevInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsQA?: Prisma.ProjectUpdateManyWithoutQaNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsDevInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsQA?: Prisma.ProjectUncheckedUpdateManyWithoutQaNestedInput
+}
+
+export type UserUpsertWithoutProjectsQAInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsQAInput, Prisma.UserUncheckedUpdateWithoutProjectsQAInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsQAInput, Prisma.UserUncheckedCreateWithoutProjectsQAInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsQAInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsQAInput, Prisma.UserUncheckedUpdateWithoutProjectsQAInput>
+}
+
+export type UserUpdateWithoutProjectsQAInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUpdateManyWithoutDevNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsQAInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patches?: Prisma.NotePatchUncheckedUpdateManyWithoutAuthorNestedInput
+  hotfixes?: Prisma.HotfixUncheckedUpdateManyWithoutReporterNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  projectsCreated?: Prisma.ProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+  projectsProcesso?: Prisma.ProjectUncheckedUpdateManyWithoutProcessoNestedInput
+  projectsDev?: Prisma.ProjectUncheckedUpdateManyWithoutDevNestedInput
 }
 
 
@@ -728,6 +1223,10 @@ export type UserCountOutputType = {
   hotfixes: number
   documents: number
   auditLogs: number
+  projectsCreated: number
+  projectsProcesso: number
+  projectsDev: number
+  projectsQA: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -735,6 +1234,10 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   hotfixes?: boolean | UserCountOutputTypeCountHotfixesArgs
   documents?: boolean | UserCountOutputTypeCountDocumentsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+  projectsCreated?: boolean | UserCountOutputTypeCountProjectsCreatedArgs
+  projectsProcesso?: boolean | UserCountOutputTypeCountProjectsProcessoArgs
+  projectsDev?: boolean | UserCountOutputTypeCountProjectsDevArgs
+  projectsQA?: boolean | UserCountOutputTypeCountProjectsQAArgs
 }
 
 /**
@@ -775,6 +1278,34 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsProcessoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsDevArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsQAArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -788,6 +1319,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   hotfixes?: boolean | Prisma.User$hotfixesArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  projectsCreated?: boolean | Prisma.User$projectsCreatedArgs<ExtArgs>
+  projectsProcesso?: boolean | Prisma.User$projectsProcessoArgs<ExtArgs>
+  projectsDev?: boolean | Prisma.User$projectsDevArgs<ExtArgs>
+  projectsQA?: boolean | Prisma.User$projectsQAArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -827,6 +1362,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   hotfixes?: boolean | Prisma.User$hotfixesArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  projectsCreated?: boolean | Prisma.User$projectsCreatedArgs<ExtArgs>
+  projectsProcesso?: boolean | Prisma.User$projectsProcessoArgs<ExtArgs>
+  projectsDev?: boolean | Prisma.User$projectsDevArgs<ExtArgs>
+  projectsQA?: boolean | Prisma.User$projectsQAArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -839,6 +1378,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     hotfixes: Prisma.$HotfixPayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    projectsCreated: Prisma.$ProjectPayload<ExtArgs>[]
+    projectsProcesso: Prisma.$ProjectPayload<ExtArgs>[]
+    projectsDev: Prisma.$ProjectPayload<ExtArgs>[]
+    projectsQA: Prisma.$ProjectPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1246,6 +1789,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   hotfixes<T extends Prisma.User$hotfixesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$hotfixesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HotfixPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.User$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projectsCreated<T extends Prisma.User$projectsCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projectsProcesso<T extends Prisma.User$projectsProcessoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsProcessoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projectsDev<T extends Prisma.User$projectsDevArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsDevArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projectsQA<T extends Prisma.User$projectsQAArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsQAArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1766,6 +2313,102 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.projectsCreated
+ */
+export type User$projectsCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
+ * User.projectsProcesso
+ */
+export type User$projectsProcessoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
+ * User.projectsDev
+ */
+export type User$projectsDevArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
+ * User.projectsQA
+ */
+export type User$projectsQAArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
 }
 
 /**

@@ -561,6 +561,189 @@ app.delete('/api/time-entries/:id', requireAuth, async (req, res) => {
   }
 });
 
+// ─── Projects ───
+const WORKFLOW_STAGES = ['draft', 'em_processo', 'desenvolvimento', 'qa', 'hotfix', 'publicado', 'concluido'];
+const STAGE_TO_ROLE: Record<string, string> = {
+  em_processo: 'processo',
+  desenvolvimento: 'desenvolvedor',
+  qa: 'qa',
+  hotfix: 'desenvolvedor',
+};
+
+app.get('/api/projects', requireAuth, async (req, res) => {
+  const user = (req as any).user;
+  const { scope } = req.query;
+  try {
+    let where: any = {};
+    if (scope === 'my') {
+      // Projects where user is involved
+      where = {
+        OR: [
+          { createdById: user.id },
+          { processoId: user.id },
+          { devId: user.id },
+          { qaId: user.id },
+        ],
+      };
+    } else if (scope !== 'all') {
+      // Default: visible projects (public OR user-involved)
+      where = {
+        OR: [
+          { isPublic: true },
+          { createdById: user.id },
+          { processoId: user.id },
+          { devId: user.id },
+          { qaId: user.id },
+        ],
+      };
+    }
+    const projects = await prisma.project.findMany({
+      where,
+      include: { stages: { orderBy: { publishedAt: 'desc' } }, documents: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(projects);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/projects/:id', requireAuth, async (req, res) => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id: req.params.id },
+      include: { stages: { orderBy: { publishedAt: 'desc' } }, documents: true },
+    });
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+    res.json(project);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/projects', requireAuth, async (req, res) => {
+  const user = (req as any).user;
+  const { title, type, description, targetDate, processoId, devId, qaId } = req.body;
+  if (!title || !type || !targetDate) {
+    return res.status(400).json({ error: 'Missing required fields: title, type, targetDate' });
+  }
+  try {
+    const project = await prisma.project.create({
+      data: {
+        title,
+        type,
+        description: description || '',
+        status: 'draft',
+        targetDate: new Date(targetDate),
+        createdById: user.id,
+        createdByName: user.email || user.id,
+        processoId: processoId || null,
+        devId: devId || null,
+        qaId: qaId || null,
+        isPublic: false,
+      },
+      include: { stages: true, documents: true },
+    });
+    res.status(201).json(project);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/projects/:id', requireAuth, async (req, res) => {
+  const { title, description, targetDate, processoId, devId, qaId, status, currentStage, isPublic } = req.body;
+  try {
+    const data: any = {};
+    if (title !== undefined) data.title = title;
+    if (description !== undefined) data.description = description;
+    if (targetDate !== undefined) data.targetDate = new Date(targetDate);
+    if (processoId !== undefined) data.processoId = processoId || null;
+    if (devId !== undefined) data.devId = devId || null;
+    if (qaId !== undefined) data.qaId = qaId || null;
+    if (status !== undefined) data.status = status;
+    if (currentStage !== undefined) data.currentStage = currentStage;
+    if (isPublic !== undefined) data.isPublic = isPublic;
+
+    const project = await prisma.project.update({
+      where: { id: req.params.id },
+      data,
+      include: { stages: true, documents: true },
+    });
+    res.json(project);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/projects/:id', requireAuth, async (req, res) => {
+  try {
+    await prisma.project.delete({ where: { id: req.params.id } });
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── Project Stages (Workflow) ───
+app.post('/api/projects/:id/stages', requireAuth, async (req, res) => {
+  const user = (req as any).user;
+  const { stage, description } = req.body;
+  if (!stage || !description) {
+    return res.status(400).json({ error: 'Missing required fields: stage, description' });
+  }
+  try {
+    const project = await prisma.project.findUnique({ where: { id: req.params.id } });
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+
+    // Determine next status based on stage
+    const nextStatusMap: Record<string, string> = {
+      processo: 'em_processo',
+      desenvolvimento: 'desenvolvimento',
+      qa: 'qa',
+      hotfix: 'hotfix',
+      publicado: 'publicado',
+      concluido: 'concluido',
+    };
+
+    const newStatus = nextStatusMap[stage] || project.status;
+    const nextStageMap: Record<string, string | null> = {
+      processo: 'desenvolvimento',
+      desenvolvimento: 'qa',
+      qa: 'hotfix',
+      hotfix: null,
+      publicado: null,
+      concluido: null,
+    };
+    const nextCurrentStage = nextStageMap[stage] || null;
+    const isPublic = stage === 'publicado' ? true : project.isPublic;
+
+    const [createdStage] = await prisma.$transaction([
+      prisma.projectStage.create({
+        data: {
+          projectId: req.params.id,
+          stage,
+          userId: user.id,
+          userName: user.email || user.id,
+          description,
+        },
+      }),
+      prisma.project.update({
+        where: { id: req.params.id },
+        data: {
+          status: newStatus,
+          currentStage: nextCurrentStage,
+          isPublic,
+          ...(stage === 'publicado' ? { currentStage: null } : {}),
+        },
+      }),
+    ]);
+
+    res.status(201).json(createdStage);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Health ───
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
