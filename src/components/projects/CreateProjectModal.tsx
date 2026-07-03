@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { X, Plus, Calendar, FileText, User, Briefcase, ChevronDown, AlertCircle } from 'lucide-react';
+import { X, Plus, FileText, User, Briefcase, ChevronDown, AlertCircle } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
-import { cn, formatDate } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { DatePicker } from '@/components/shared/DatePicker';
 
 interface Props {
   onClose: () => void;
@@ -50,16 +51,6 @@ export function CreateProjectModal({ onClose }: Props) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
-          <style>{`
-            input[type="date"]::-webkit-calendar-picker-indicator {
-              filter: invert(1);
-              opacity: 0.6;
-              cursor: pointer;
-            }
-            input[type="date"]::-webkit-calendar-picker-indicator:hover {
-              opacity: 1;
-            }
-          `}</style>
           <div>
             <label className="text-[10px] text-white-dim uppercase mb-1.5 block">Tipo</label>
             <div className="flex gap-2">
@@ -105,17 +96,11 @@ export function CreateProjectModal({ onClose }: Props) {
 
           <div>
             <label className="text-[10px] text-white-dim uppercase mb-1.5 block">Data Prevista</label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white-dim" />
-              <input
-                type="date"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                required
-                className="input-base w-full text-sm pl-10"
-                style={{ colorScheme: 'dark' }}
-              />
-            </div>
+            <DatePicker
+              value={targetDate}
+              onChange={setTargetDate}
+              required
+            />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
