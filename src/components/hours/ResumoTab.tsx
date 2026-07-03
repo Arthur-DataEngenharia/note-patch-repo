@@ -55,26 +55,26 @@ export default function ResumoTab({ entries, users, projects, patches, hotfixes,
         <SummaryCard icon={Percent} label="Taxa de Utilização" value={`${utilizationRate.toFixed(1)}%`} sub={`Meta: ${expectedHours.toFixed(0)}h (CLT)`} color={utilizationRate >= 100 ? 'green' : utilizationRate >= 70 ? 'yellow' : 'red'} />
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatPill icon={BarChart3} label="Média por dia útil" value={`${avgPerDay.toFixed(1)}h`} hint="Total ÷ dias úteis" />
-        <StatPill icon={TrendingUp} label="Média por usuário" value={`${avgPerUser.toFixed(1)}h`} hint="Total ÷ usuários ativos" />
-        <StatPill icon={Briefcase} label="Entidades com horas" value={`${byProject.length}`} hint="Projetos, patches e hotfixes" />
+        <StatPill icon={BarChart3} label="Média por dia útil" value={`${avgPerDay.toFixed(1)}h`} hint="Total ÷ dias úteis" color="red" />
+        <StatPill icon={TrendingUp} label="Média por usuário" value={`${avgPerUser.toFixed(1)}h`} hint="Total ÷ usuários ativos" color="green" />
+        <StatPill icon={Briefcase} label="Entidades com horas" value={`${byProject.length}`} hint="Projetos, patches e hotfixes" color="blue" />
       </div>
       <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Horas por Usuário" subtitle="% em relação à carga CLT esperada">
+        <ChartCard title="Horas por Usuário" subtitle="% em relação à carga CLT esperada" icon={BarChart3}>
           {byUser.length === 0 ? <EmptyChart /> : (
             <BarChartWrapper data={byUser.map((u: any) => ({ name: u.name.split(' ')[0], horas: Number(u.hours.toFixed(1)) }))} />
           )}
         </ChartCard>
-        <ChartCard title="Distribuição por Tipo" subtitle="Patches, Hotfixes e Projetos">
+        <ChartCard title="Distribuição por Tipo" subtitle="Patches, Hotfixes e Projetos" icon={Briefcase}>
           {byType.length === 0 ? <EmptyChart /> : <PieChartWrapper data={byType} />}
         </ChartCard>
       </div>
-      <div className="mt-5 glass-card p-5">
-        <h3 className="text-sm font-semibold mb-1">Top Entidades com Mais Horas</h3>
-        <p className="text-[10px] text-white-dim mb-4">Projetos, Patches e Hotfixes</p>
-        {byProject.length === 0 ? <EmptyChart /> : (
-          <BarChartWrapper data={byProject.map((p: any) => ({ name: p.name.length > 18 ? p.name.slice(0, 18) + '...' : p.name, horas: Number(p.hours.toFixed(1)) }))} color="#3b82f6" />
-        )}
+      <div className="mt-5">
+        <ChartCard title="Top Entidades com Mais Horas" subtitle="Projetos, Patches e Hotfixes" icon={TrendingUp}>
+          {byProject.length === 0 ? <EmptyChart /> : (
+            <BarChartWrapper data={byProject.map((p: any) => ({ name: p.name.length > 18 ? p.name.slice(0, 18) + '...' : p.name, horas: Number(p.hours.toFixed(1)) }))} color="#3b82f6" />
+          )}
+        </ChartCard>
       </div>
     </>
   );

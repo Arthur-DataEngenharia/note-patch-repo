@@ -18,6 +18,7 @@ import UsuariosTab from '@/components/hours/UsuariosTab';
 import ProjetosTab from '@/components/hours/ProjetosTab';
 import TotaisTab from '@/components/hours/TotaisTab';
 import UserDetailView from '@/components/hours/UserDetailView';
+import { MonthPicker } from '@/components/shared/MonthPicker';
 
 function countWorkingDays(start: Date, end: Date): number {
   let count = 0;
@@ -92,7 +93,7 @@ export default function HoursDashboardPage() {
         title="Dashboard de Horas"
         subtitle="Métricas de produtividade e apontamento de horas"
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {isManager && (
               <button
                 onClick={generateDemoTimeEntries}
@@ -103,33 +104,46 @@ export default function HoursDashboardPage() {
                 Dados de Exemplo
               </button>
             )}
-            <Filter className="w-3.5 h-3.5 text-white-dim" />
-            <select
-              value={periodMode}
-              onChange={(e) => setPeriodMode(e.target.value as any)}
-              className="input-base text-xs py-1.5 px-3 appearance-none cursor-pointer"
-              style={{ colorScheme: 'dark' }}
-            >
-              <option value="current_month">Mês atual</option>
-              <option value="last_month">Mês anterior</option>
-              <option value="last_3months">Últimos 3 meses</option>
-              <option value="year">Ano inteiro</option>
-              <option value="custom">Selecionar mês...</option>
-            </select>
+
+            {/* Period pills */}
+            <div className="flex items-center bg-black-surface-2 rounded-lg p-0.5 border border-black-border">
+              {[
+                { key: 'current_month', label: 'Mês atual' },
+                { key: 'last_month', label: 'Anterior' },
+                { key: 'last_3months', label: '3 meses' },
+                { key: 'year', label: 'Ano' },
+                { key: 'custom', label: 'Custom' },
+              ].map((p) => (
+                <button
+                  key={p.key}
+                  onClick={() => setPeriodMode(p.key as any)}
+                  className={cn(
+                    'text-[11px] px-2.5 py-1 rounded-md font-medium transition-colors',
+                    periodMode === p.key
+                      ? 'bg-red text-white shadow-sm'
+                      : 'text-white-dim hover:text-white'
+                  )}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
             {periodMode === 'custom' && (
-              <input type="month" value={customMonth} onChange={(e) => setCustomMonth(e.target.value)}
-                className="input-base text-xs py-1.5 px-3" style={{ colorScheme: 'dark' }} />
+              <div className="w-44">
+                <MonthPicker value={customMonth} onChange={setCustomMonth} />
+              </div>
             )}
           </div>
         }
       />
 
-      <div className="mt-4 flex items-center gap-2">
-        <span className="text-[10px] text-white-dim uppercase">Período:</span>
-        <span className="text-xs font-medium bg-red/10 text-red px-2 py-0.5 rounded-full border border-red/20 capitalize">
+      <div className="mt-4 flex items-center gap-3">
+        <span className="text-[10px] text-white-dim uppercase tracking-wider">Período</span>
+        <span className="text-xs font-semibold bg-red/10 text-red px-3 py-1 rounded-full border border-red/20 capitalize">
           {periodLabel}
         </span>
-        <span className="text-[10px] text-white-dim">{workingDays} dias úteis • {expectedHours}h esperadas (CLT)</span>
+        <span className="text-[10px] text-white-dim">{workingDays} dias úteis • {expectedHours}h esperadas</span>
       </div>
 
       <div className="mt-4 flex items-center gap-1 border-b border-black-border">
