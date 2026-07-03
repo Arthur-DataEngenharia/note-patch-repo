@@ -91,7 +91,7 @@ export default function HoursDashboardPage() {
       <PageHeader
         title="Dashboard de Horas"
         subtitle="Métricas de produtividade e apontamento de horas"
-        action={
+        actions={
           <div className="flex items-center gap-2">
             {isManager && (
               <button
