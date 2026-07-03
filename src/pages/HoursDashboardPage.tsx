@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Lock, Filter, BarChart3, User, Briefcase, Layers,
+  Lock, Filter, BarChart3, User, Briefcase, Layers, Wand2,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -9,7 +9,7 @@ import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { cn } from '@/lib/utils';
 import {
   format, startOfMonth, endOfMonth, isWeekend, parseISO,
-  startOfYear, endOfYear,
+  startOfYear, endOfYear, subMonths,
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { getHolidays } from '@/components/hours/holidays';
@@ -32,27 +32,40 @@ function countWorkingDays(start: Date, end: Date): number {
 const CLT_HOURS_PER_DAY = 8;
 
 export default function HoursDashboardPage() {
-  const { timeEntries, users, projects, patches, hotfixes, currentUser } = useAppStore();
+  const { timeEntries, users, projects, patches, hotfixes, currentUser, generateDemoTimeEntries } = useAppStore();
   const isManager = currentUser.role === 'gerente' || currentUser.role === 'supervisor' || currentUser.role === 'admin';
 
   const [tab, setTab] = useState<'resumo' | 'usuarios' | 'projetos' | 'totais'>('resumo');
-  const [periodType, setPeriodType] = useState<'month' | 'year'>('month');
+  const [periodMode, setPeriodMode] = useState<'current_month' | 'last_month' | 'last_3months' | 'year' | 'custom'>('current_month');
   const [customMonth, setCustomMonth] = useState(() => format(new Date(), 'yyyy-MM'));
 
   const now = new Date();
   const selectedMonth = parseISO(customMonth + '-01');
 
   const periodLabel = useMemo(() => {
-    if (periodType === 'month') return format(selectedMonth, "MMMM 'de' yyyy", { locale: ptBR });
+    if (periodMode === 'current_month') return format(now, "MMMM 'de' yyyy", { locale: ptBR });
+    if (periodMode === 'last_month') return format(subMonths(now, 1), "MMMM 'de' yyyy", { locale: ptBR });
+    if (periodMode === 'last_3months') return `Últimos 3 meses`;
+    if (periodMode === 'custom') return format(selectedMonth, "MMMM 'de' yyyy", { locale: ptBR });
     return format(now, 'yyyy');
-  }, [periodType, selectedMonth, now]);
+  }, [periodMode, selectedMonth, now]);
 
   const { start, end } = useMemo(() => {
-    if (periodType === 'month') {
+    if (periodMode === 'current_month') {
+      return { start: startOfMonth(now), end: endOfMonth(now) };
+    }
+    if (periodMode === 'last_month') {
+      const last = subMonths(now, 1);
+      return { start: startOfMonth(last), end: endOfMonth(last) };
+    }
+    if (periodMode === 'last_3months') {
+      return { start: startOfMonth(subMonths(now, 2)), end: endOfMonth(now) };
+    }
+    if (periodMode === 'custom') {
       return { start: startOfMonth(selectedMonth), end: endOfMonth(selectedMonth) };
     }
     return { start: startOfYear(now), end: endOfYear(now) };
-  }, [periodType, selectedMonth, now]);
+  }, [periodMode, selectedMonth, now]);
 
   const filteredEntries = useMemo(() => timeEntries.filter((t) => t.date >= start && t.date <= end), [timeEntries, start, end]);
   const workingDays = countWorkingDays(start, end);
@@ -80,17 +93,30 @@ export default function HoursDashboardPage() {
         subtitle="Métricas de produtividade e apontamento de horas"
         action={
           <div className="flex items-center gap-2">
+            {isManager && (
+              <button
+                onClick={generateDemoTimeEntries}
+                className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1.5"
+                title="Gerar dados de exemplo para testar o dashboard"
+              >
+                <Wand2 className="w-3.5 h-3.5" />
+                Dados de Exemplo
+              </button>
+            )}
             <Filter className="w-3.5 h-3.5 text-white-dim" />
             <select
-              value={periodType}
-              onChange={(e) => setPeriodType(e.target.value as any)}
+              value={periodMode}
+              onChange={(e) => setPeriodMode(e.target.value as any)}
               className="input-base text-xs py-1.5 px-3 appearance-none cursor-pointer"
               style={{ colorScheme: 'dark' }}
             >
-              <option value="month">Mês</option>
+              <option value="current_month">Mês atual</option>
+              <option value="last_month">Mês anterior</option>
+              <option value="last_3months">Últimos 3 meses</option>
               <option value="year">Ano inteiro</option>
+              <option value="custom">Selecionar mês...</option>
             </select>
-            {periodType === 'month' && (
+            {periodMode === 'custom' && (
               <input type="month" value={customMonth} onChange={(e) => setCustomMonth(e.target.value)}
                 className="input-base text-xs py-1.5 px-3" style={{ colorScheme: 'dark' }} />
             )}

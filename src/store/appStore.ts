@@ -68,6 +68,7 @@ interface AppState {
   setCommandPaletteOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
   setCurrentUser: (user: User) => void;
+  generateDemoTimeEntries: () => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -276,4 +277,57 @@ export const useAppStore = create<AppState>((set, get) => ({
   setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
   setMobileMenuOpen: (open) => set({ mobileMenuOpen: open }),
   setCurrentUser: (user) => set({ currentUser: user }),
+
+  generateDemoTimeEntries: () => {
+    const state = get();
+    const users = state.users.length > 0 ? state.users : [state.currentUser];
+    const entities = [
+      ...state.projects.map((p) => ({ id: p.id, name: p.title, type: 'project' as const })),
+      ...state.patches.slice(0, 5).map((p) => ({ id: p.id, name: p.title, type: 'patch' as const })),
+      ...state.hotfixes.slice(0, 5).map((h) => ({ id: h.id, name: h.title, type: 'hotfix' as const })),
+    ];
+    if (entities.length === 0) {
+      toast.error('Nenhum projeto, patch ou hotfix encontrado para gerar dados');
+      return;
+    }
+
+    const demoEntries: TimeEntry[] = [];
+    const now = new Date();
+    // Generate entries for last 3 months
+    for (let m = 0; m < 3; m++) {
+      const monthStart = new Date(now.getFullYear(), now.getMonth() - m, 1);
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() - m + 1, 0);
+      const daysInMonth = monthEnd.getDate();
+
+      for (const u of users) {
+        // Each user works ~15-20 days per month
+        const workDays = 15 + Math.floor(Math.random() * 6);
+        for (let d = 0; d < workDays; d++) {
+          const day = 1 + Math.floor(Math.random() * daysInMonth);
+          const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
+          if (date.getDay() === 0 || date.getDay() === 6) continue; // Skip weekends
+
+          const entity = entities[Math.floor(Math.random() * entities.length)];
+          const hours = [1, 2, 3, 4, 5, 6, 8][Math.floor(Math.random() * 7)];
+          const descriptions = ['Desenvolvimento', 'Revisão', 'Testes QA', 'Análise de processo', 'Correção', 'Deploy', 'Reunião', 'Documentação'];
+
+          demoEntries.push({
+            id: `demo-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+            userId: u.id,
+            userName: u.name,
+            entityType: entity.type,
+            entityId: entity.id,
+            hours,
+            description: descriptions[Math.floor(Math.random() * descriptions.length)],
+            date,
+            createdAt: date,
+            updatedAt: date,
+          });
+        }
+      }
+    }
+
+    set((s) => ({ timeEntries: [...demoEntries, ...s.timeEntries] }));
+    toast.success(`${demoEntries.length} apontamentos de exemplo gerados`);
+  },
 }));
