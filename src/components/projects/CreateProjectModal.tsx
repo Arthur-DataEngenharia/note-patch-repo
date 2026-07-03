@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Plus, Calendar, FileText, User, Briefcase } from 'lucide-react';
+import { X, Plus, Calendar, FileText, User, Briefcase, ChevronDown, AlertCircle } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { cn, formatDate } from '@/lib/utils';
 
@@ -108,33 +108,35 @@ export function CreateProjectModal({ onClose }: Props) {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="text-[10px] text-white-dim uppercase mb-1.5 block">Processo</label>
-              <select value={processoId} onChange={(e) => setProcessoId(e.target.value)} className="input-base w-full text-sm">
-                <option value="">Selecionar...</option>
-                {processoUsers.map((u) => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-[10px] text-white-dim uppercase mb-1.5 block">Dev</label>
-              <select value={devId} onChange={(e) => setDevId(e.target.value)} className="input-base w-full text-sm">
-                <option value="">Selecionar...</option>
-                {devUsers.map((u) => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-[10px] text-white-dim uppercase mb-1.5 block">QA</label>
-              <select value={qaId} onChange={(e) => setQaId(e.target.value)} className="input-base w-full text-sm">
-                <option value="">Selecionar...</option>
-                {qaUsers.map((u) => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
-            </div>
+            {[ 
+              { label: 'Processo', id: processoId, setId: setProcessoId, list: processoUsers },
+              { label: 'Dev', id: devId, setId: setDevId, list: devUsers },
+              { label: 'QA', id: qaId, setId: setQaId, list: qaUsers },
+            ].map((field) => (
+              <div key={field.label}>
+                <label className="text-[10px] text-white-dim uppercase mb-1.5 block">{field.label}</label>
+                <div className="relative">
+                  <select
+                    value={field.id}
+                    onChange={(e) => field.setId(e.target.value)}
+                    className="input-base w-full text-sm appearance-none pr-8 cursor-pointer"
+                    style={{ backgroundColor: '#1a1a1a' }}
+                  >
+                    <option value="">Selecionar...</option>
+                    {field.list.map((u) => (
+                      <option key={u.id} value={u.id} style={{ backgroundColor: '#1a1a1a', color: '#fff' }}>{u.name}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white-dim pointer-events-none" />
+                </div>
+                {field.list.length === 0 && (
+                  <div className="flex items-center gap-1 mt-1.5">
+                    <AlertCircle className="w-3 h-3 text-amber-500" />
+                    <span className="text-[10px] text-amber-500">Nenhum {field.label.toLowerCase()} cadastrado</span>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
           <div className="pt-2 flex gap-2">

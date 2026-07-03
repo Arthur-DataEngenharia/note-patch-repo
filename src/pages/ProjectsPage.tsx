@@ -144,8 +144,29 @@ export default function ProjectsPage() {
         }
       />
 
-      <div className="mt-6 overflow-x-auto pb-2">
-        <div className="flex gap-3 min-w-max">
+      <div className="mt-6 overflow-x-auto pb-3 px-1" style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#333 transparent',
+      }}>
+        <style>{`
+          .kanban-scroll::-webkit-scrollbar {
+            height: 6px;
+          }
+          .kanban-scroll::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .kanban-scroll::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 999px;
+          }
+          .kanban-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+          .kanban-scroll::-webkit-scrollbar-corner {
+            background: transparent;
+          }
+        `}</style>
+        <div className="kanban-scroll flex gap-4 min-w-max">
           {columns.map((col) => (
             <div key={col.key} className="w-64 flex-shrink-0">
               <div className="flex items-center gap-2 mb-3 px-1">
