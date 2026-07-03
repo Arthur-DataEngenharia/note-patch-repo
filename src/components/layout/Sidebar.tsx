@@ -20,6 +20,7 @@ import {
   Archive,
   Shield,
   BarChart3,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
@@ -42,10 +43,18 @@ const NAV_ITEMS = [
   { to: '/documents', label: 'Documentos', icon: Files },
   { to: '/classifications', label: 'Classificacoes', icon: Tags },
   { to: '/github', label: 'GitHub', icon: Github },
-  { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
-  { to: '/archive', label: 'Arquivo', icon: Archive, managerOnly: true },
-  { to: '/permissions', label: 'Permissoes', icon: Shield, managerOnly: true },
-  { to: '/hours-dashboard', label: 'Horas', icon: BarChart3, managerOnly: true },
+  {
+    to: '/management',
+    label: 'Gerenciamento',
+    icon: SlidersHorizontal,
+    managerOnly: true,
+    children: [
+      { to: '/archive', label: 'Arquivo', icon: Archive, managerOnly: true },
+      { to: '/permissions', label: 'Permissoes', icon: Shield, managerOnly: true },
+      { to: '/hours-dashboard', label: 'Horas', icon: BarChart3, managerOnly: true },
+      { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
+    ],
+  },
   { to: '/settings', label: 'Configuracoes', icon: Settings },
 ];
 
@@ -128,28 +137,34 @@ export function Sidebar() {
 
               {item.children && isParentActive && !sidebarCollapsed && (
                 <div className="ml-5 mt-1 space-y-0.5 border-l border-black-border pl-3">
-                  {item.children.map((child) => (
-                    <NavLink
-                      key={child.to}
-                      to={child.to}
-                      className={({ isActive }) =>
-                        cn(
-                          'flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200',
-                          isActive
-                            ? 'text-red bg-red-soft'
-                            : 'text-white-muted hover:text-white hover:bg-hover'
-                        )
-                      }
-                    >
-                      <child.icon className="w-4 h-4 shrink-0" />
-                      <span>{child.label}</span>
-                      {child.badge && activeHotfixes > 0 && (
-                        <span className="ml-auto bg-red text-[#FFFFFF] text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse-red">
-                          {activeHotfixes}
-                        </span>
-                      )}
-                    </NavLink>
-                  ))}
+                  {item.children
+                    .filter((child: any) => {
+                      if (child.adminOnly && !isAdmin) return false;
+                      if (child.managerOnly && !isManager) return false;
+                      return true;
+                    })
+                    .map((child: any) => (
+                      <NavLink
+                        key={child.to}
+                        to={child.to}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200',
+                            isActive
+                              ? 'text-red bg-red-soft'
+                              : 'text-white-muted hover:text-white hover:bg-hover'
+                          )
+                        }
+                      >
+                        <child.icon className="w-4 h-4 shrink-0" />
+                        <span>{child.label}</span>
+                        {child.badge && activeHotfixes > 0 && (
+                          <span className="ml-auto bg-red text-[#FFFFFF] text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse-red">
+                            {activeHotfixes}
+                          </span>
+                        )}
+                      </NavLink>
+                    ))}
                 </div>
               )}
             </div>

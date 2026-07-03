@@ -200,6 +200,7 @@ export default function App() {
             </Suspense>
           }
         />
+        <Route path="/management" element={<Navigate to="/archive" replace />} />
         <Route
           path="/archive"
           element={
