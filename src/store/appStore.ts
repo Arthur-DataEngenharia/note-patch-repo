@@ -288,11 +288,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     // Generate demo users if none exist
     if (users.length === 0) {
       const demoUsers: User[] = [
-        { id: 'demo-u1', name: 'João Santos', email: 'joao@empresa.com', role: 'desenvolvedor' },
-        { id: 'demo-u2', name: 'Maria Silva', email: 'maria@empresa.com', role: 'processo' },
-        { id: 'demo-u3', name: 'Ana Costa', email: 'ana@empresa.com', role: 'qa' },
-        { id: 'demo-u4', name: 'Carlos Lima', email: 'carlos@empresa.com', role: 'desenvolvedor' },
-        { id: 'demo-u5', name: 'Fernanda Oliveira', email: 'fernanda@empresa.com', role: 'supervisor' },
+        { id: 'demo-u1', name: 'João Santos', email: 'joao@empresa.com', role: 'desenvolvedor', isDemo: true },
+        { id: 'demo-u2', name: 'Maria Silva', email: 'maria@empresa.com', role: 'processo', isDemo: true },
+        { id: 'demo-u3', name: 'Ana Costa', email: 'ana@empresa.com', role: 'qa', isDemo: true },
+        { id: 'demo-u4', name: 'Carlos Lima', email: 'carlos@empresa.com', role: 'desenvolvedor', isDemo: true },
+        { id: 'demo-u5', name: 'Fernanda Oliveira', email: 'fernanda@empresa.com', role: 'supervisor', isDemo: true },
       ];
       users = demoUsers;
       set((s) => ({ users: [...s.users, ...demoUsers] }));
@@ -302,11 +302,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     // Generate demo projects if none exist
     if (projects.length === 0) {
       const demoProjects: Project[] = [
-        { id: 'demo-p1', title: 'Atualização Sistema ERP', type: 'patch_note', description: 'Migração de versão do ERP corporativo', status: 'publicado', currentStage: 'publicado', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
-        { id: 'demo-p2', title: 'Hotfix Login Mobile', type: 'hotfix_emergencial', description: 'Correção urgente de autenticação no app', status: 'concluido', currentStage: 'concluido', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
-        { id: 'demo-p3', title: 'Nova API de Pagamentos', type: 'patch_note', description: 'Integração com gateway de pagamentos', status: 'qa', currentStage: 'qa', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
-        { id: 'demo-p4', title: 'Refatoração Módulo Fiscal', type: 'patch_note', description: 'Reestruturação do módulo de notas fiscais', status: 'desenvolvimento', currentStage: 'desenvolvimento', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
-        { id: 'demo-p5', title: 'Correção Relatório Mensal', type: 'hotfix_emergencial', description: 'Ajuste nos totais do relatório gerencial', status: 'em_processo', currentStage: 'em_processo', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [] },
+        { id: 'demo-p1', title: 'Atualização Sistema ERP', type: 'patch_note', description: 'Migração de versão do ERP corporativo', status: 'publicado', currentStage: 'publicado', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [], isDemo: true },
+        { id: 'demo-p2', title: 'Hotfix Login Mobile', type: 'hotfix_emergencial', description: 'Correção urgente de autenticação no app', status: 'concluido', currentStage: 'concluido', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: true, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [], isDemo: true },
+        { id: 'demo-p3', title: 'Nova API de Pagamentos', type: 'patch_note', description: 'Integração com gateway de pagamentos', status: 'qa', currentStage: 'qa', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [], isDemo: true },
+        { id: 'demo-p4', title: 'Refatoração Módulo Fiscal', type: 'patch_note', description: 'Reestruturação do módulo de notas fiscais', status: 'desenvolvimento', currentStage: 'desenvolvimento', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [], isDemo: true },
+        { id: 'demo-p5', title: 'Correção Relatório Mensal', type: 'hotfix_emergencial', description: 'Ajuste nos totais do relatório gerencial', status: 'em_processo', currentStage: 'em_processo', targetDate: new Date(), createdById: 'demo-u5', createdByName: 'Fernanda Oliveira', isPublic: false, createdAt: new Date(), updatedAt: new Date(), stages: [], documents: [], isDemo: true },
       ];
       projects = demoProjects;
       set((s) => ({ projects: [...s.projects, ...demoProjects] }));

@@ -25,6 +25,7 @@ export interface NotePatch {
   updatedAt: Date;
   isHotfix?: boolean;
   favorite?: boolean;
+  isDemo?: boolean;
 }
 
 export interface GithubFile {
@@ -67,6 +68,7 @@ export interface Hotfix {
   resolutionTimeMinutes?: number;
   postMortemNeeded: boolean;
   postMortemDone: boolean;
+  isDemo?: boolean;
 }
 
 export interface DocumentItem {
@@ -112,6 +114,7 @@ export interface User {
   role: 'gerente' | 'supervisor' | 'desenvolvedor' | 'processo' | 'qa' | 'viewer' | 'admin';
   avatarUrl?: string;
   githubUsername?: string;
+  isDemo?: boolean;
 }
 
 export interface AuditLog {
@@ -146,6 +149,7 @@ export interface TimeEntry {
   date: Date;
   createdAt: Date;
   updatedAt: Date;
+  isDemo?: boolean;
 }
 
 export interface Project {
@@ -166,6 +170,7 @@ export interface Project {
   updatedAt: Date;
   stages: ProjectStage[];
   documents: DocumentItem[];
+  isDemo?: boolean;
 }
 
 export interface ProjectStage {
