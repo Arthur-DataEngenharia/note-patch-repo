@@ -205,6 +205,14 @@ export default function App() {
           }
         />
         <Route
+          path="/archive"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <HistoryPage />
+            </Suspense>
+          }
+        />
+        <Route
           path="/permissions"
           element={
             <Suspense fallback={<PageLoader />}>

@@ -43,7 +43,7 @@ const NAV_ITEMS = [
   { to: '/classifications', label: 'Classificacoes', icon: Tags },
   { to: '/github', label: 'GitHub', icon: Github },
   { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
-  { to: '/history', label: 'Arquivo', icon: Archive, managerOnly: true },
+  { to: '/archive', label: 'Arquivo', icon: Archive, managerOnly: true },
   { to: '/permissions', label: 'Permissoes', icon: Shield, managerOnly: true },
   { to: '/settings', label: 'Configuracoes', icon: Settings },
 ];
