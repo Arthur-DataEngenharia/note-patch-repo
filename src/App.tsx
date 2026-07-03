@@ -20,7 +20,6 @@ const UsersPage = lazy(() => import('@/pages/UsersPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
-const CalendarPage = lazy(() => import('@/pages/CalendarPage'));
 const HistoryPage = lazy(() => import('@/pages/HistoryPage'));
 const PermissionsPage = lazy(() => import('@/pages/PermissionsPage'));
 
@@ -190,11 +189,7 @@ export default function App() {
         />
         <Route
           path="/calendar"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <CalendarPage />
-            </Suspense>
-          }
+          element={<Navigate to="/projects" replace />}
         />
         <Route
           path="/history"

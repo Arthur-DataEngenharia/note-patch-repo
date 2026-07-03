@@ -27,7 +27,6 @@ import { cn, getInitials } from '@/lib/utils';
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/projects', label: 'Projetos', icon: Briefcase },
-  { to: '/calendar', label: 'Calendario', icon: Calendar },
   { to: '/patches', label: 'Patches', icon: ClipboardList },
   { to: '/timeline', label: 'Timeline', icon: Clock },
   {
