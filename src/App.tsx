@@ -22,6 +22,7 @@ const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
 const HistoryPage = lazy(() => import('@/pages/HistoryPage'));
 const PermissionsPage = lazy(() => import('@/pages/PermissionsPage'));
+const HoursDashboardPage = lazy(() => import('@/pages/HoursDashboardPage'));
 
 function PageLoader() {
   return (
@@ -212,6 +213,14 @@ export default function App() {
           element={
             <Suspense fallback={<PageLoader />}>
               <PermissionsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/hours-dashboard"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <HoursDashboardPage />
             </Suspense>
           }
         />

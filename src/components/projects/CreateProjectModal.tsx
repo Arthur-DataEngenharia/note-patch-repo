@@ -1,8 +1,84 @@
-import { useState } from 'react';
-import { X, Plus, FileText, User, Briefcase, ChevronDown, AlertCircle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { X, Plus, FileText, User, Briefcase, ChevronDown, AlertCircle, Check } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { cn } from '@/lib/utils';
 import { DatePicker } from '@/components/shared/DatePicker';
+
+interface UserSelectProps {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  options: { id: string; name: string }[];
+}
+
+function UserSelect({ label, value, onChange, options }: UserSelectProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = options.find((o) => o.id === value);
+
+  useEffect(() => {
+    if (!open) return;
+    const handle = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handle);
+    return () => document.removeEventListener('mousedown', handle);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          'input-base w-full text-sm pr-8 text-left flex items-center gap-2 transition-colors',
+          selected ? 'text-white' : 'text-white-dim'
+        )}
+      >
+        {selected ? (
+          <span className="truncate">{selected.name}</span>
+        ) : (
+          <span>Selecionar...</span>
+        )}
+        <ChevronDown
+          className={cn(
+            'absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white-dim transition-transform',
+            open && 'rotate-180'
+          )}
+        />
+      </button>
+      {open && (
+        <div className="absolute z-50 mt-1 w-full glass-card border border-black-border shadow-2xl rounded-lg overflow-hidden animate-scale-in max-h-52 overflow-y-auto">
+          <button
+            type="button"
+            onClick={() => { onChange(''); setOpen(false); }}
+            className={cn(
+              'w-full text-left px-3 py-2 text-xs transition-colors flex items-center justify-between',
+              !value ? 'bg-red-soft text-red' : 'text-white-dim hover:bg-black-surface-2'
+            )}
+          >
+            Selecionar...
+            {!value && <Check className="w-3 h-3" />}
+          </button>
+          {options.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => { onChange(o.id); setOpen(false); }}
+              className={cn(
+                'w-full text-left px-3 py-2 text-xs transition-colors flex items-center justify-between',
+                value === o.id ? 'bg-red-soft text-red' : 'text-white hover:bg-black-surface-2'
+              )}
+            >
+              <span className="truncate">{o.name}</span>
+              {value === o.id && <Check className="w-3 h-3 shrink-0" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface Props {
   onClose: () => void;
@@ -104,27 +180,19 @@ export function CreateProjectModal({ onClose }: Props) {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            {[ 
+            {[
               { label: 'Processo', id: processoId, setId: setProcessoId, list: processoUsers },
               { label: 'Dev', id: devId, setId: setDevId, list: devUsers },
               { label: 'QA', id: qaId, setId: setQaId, list: qaUsers },
             ].map((field) => (
               <div key={field.label}>
                 <label className="text-[10px] text-white-dim uppercase mb-1.5 block">{field.label}</label>
-                <div className="relative">
-                  <select
-                    value={field.id}
-                    onChange={(e) => field.setId(e.target.value)}
-                    className="input-base w-full text-sm appearance-none pr-8 cursor-pointer"
-                    style={{ backgroundColor: '#1a1a1a' }}
-                  >
-                    <option value="">Selecionar...</option>
-                    {field.list.map((u) => (
-                      <option key={u.id} value={u.id} style={{ backgroundColor: '#1a1a1a', color: '#fff' }}>{u.name}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white-dim pointer-events-none" />
-                </div>
+                <UserSelect
+                  label={field.label}
+                  value={field.id}
+                  onChange={field.setId}
+                  options={field.list.map((u) => ({ id: u.id, name: u.name }))}
+                />
                 {field.list.length === 0 && (
                   <div className="flex items-center gap-1 mt-1.5">
                     <AlertCircle className="w-3 h-3 text-amber-500" />

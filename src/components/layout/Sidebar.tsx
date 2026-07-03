@@ -19,6 +19,7 @@ import {
   Calendar,
   Archive,
   Shield,
+  BarChart3,
 } from 'lucide-react';
 import { useAppStore } from '@/store/appStore';
 import { useAuthStore } from '@/store/authStore';
@@ -44,6 +45,7 @@ const NAV_ITEMS = [
   { to: '/users', label: 'Usuarios', icon: Users, adminOnly: true },
   { to: '/archive', label: 'Arquivo', icon: Archive, managerOnly: true },
   { to: '/permissions', label: 'Permissoes', icon: Shield, managerOnly: true },
+  { to: '/hours-dashboard', label: 'Horas', icon: BarChart3, managerOnly: true },
   { to: '/settings', label: 'Configuracoes', icon: Settings },
 ];
 
