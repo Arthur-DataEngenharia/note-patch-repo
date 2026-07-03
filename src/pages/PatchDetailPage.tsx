@@ -29,6 +29,7 @@ import { StatusPill } from '@/components/shared/StatusPill';
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
 import { Tooltip } from '@/components/shared/Tooltip';
 import { Breadcrumb } from '@/components/shared/Breadcrumb';
+import { TimeSheetPanel } from '@/components/shared/TimeSheetPanel';
 import { formatDate, formatDateTime, cn } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
 import { exportPatchToPdf, exportPatchToMarkdown } from '@/lib/export';
@@ -341,6 +342,9 @@ export default function PatchDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Time Sheet */}
+          <TimeSheetPanel entityType="patch" entityId={patch.id} />
         </div>
       </div>
     </div>

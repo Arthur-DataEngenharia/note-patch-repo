@@ -514,6 +514,53 @@ app.get('/api/github/repos/:owner/:repo/commits', async (req, res) => {
   }
 });
 
+// ─── Time Entries ───
+app.get('/api/time-entries', requireAuth, async (req, res) => {
+  const { entityType, entityId } = req.query;
+  const where: any = {};
+  if (entityType) where.entityType = String(entityType);
+  if (entityId) where.entityId = String(entityId);
+  try {
+    const entries = await prisma.timeEntry.findMany({ where, orderBy: { date: 'desc' } });
+    res.json(entries);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/time-entries', requireAuth, async (req, res) => {
+  const user = (req as any).user;
+  const { entityType, entityId, hours, description, date } = req.body;
+  if (!entityType || !entityId || hours === undefined) {
+    return res.status(400).json({ error: 'Missing required fields: entityType, entityId, hours' });
+  }
+  try {
+    const entry = await prisma.timeEntry.create({
+      data: {
+        userId: user.id,
+        userName: user.email || user.id,
+        entityType,
+        entityId,
+        hours: Number(hours),
+        description,
+        date: date ? new Date(date) : new Date(),
+      },
+    });
+    res.status(201).json(entry);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/time-entries/:id', requireAuth, async (req, res) => {
+  try {
+    await prisma.timeEntry.delete({ where: { id: req.params.id } });
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Health ───
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 

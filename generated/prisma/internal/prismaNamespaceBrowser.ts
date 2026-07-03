@@ -57,6 +57,7 @@ export const ModelName = {
   Hotfix: 'Hotfix',
   Document: 'Document',
   AuditLog: 'AuditLog',
+  TimeEntry: 'TimeEntry',
   Notification: 'Notification'
 } as const
 
@@ -186,6 +187,22 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const TimeEntryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  userName: 'userName',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  hours: 'hours',
+  description: 'description',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TimeEntryScalarFieldEnum = (typeof TimeEntryScalarFieldEnum)[keyof typeof TimeEntryScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

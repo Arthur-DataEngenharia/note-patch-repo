@@ -57,6 +57,14 @@ export const api = {
   // Users
   getUsers: () => fetchJSON<any[]>('/users'),
 
+  // Time Entries
+  getTimeEntries: (params?: { entityType?: string; entityId?: string }) => {
+    const qs = params ? `?${new URLSearchParams(params as any).toString()}` : '';
+    return fetchJSON<any[]>(`/time-entries${qs}`);
+  },
+  createTimeEntry: (data: any) => fetchJSON<any>('/time-entries', { method: 'POST', body: JSON.stringify(data) }),
+  deleteTimeEntry: (id: string) => fetchJSON<any>(`/time-entries/${id}`, { method: 'DELETE' }),
+
   // GitHub
   connectGitHub: (githubToken: string) => fetchJSON<any>('/github/connect', { method: 'POST', body: JSON.stringify({ githubToken }) }),
   getGitHubRepos: () => fetchJSON<any>('/github/repos'),

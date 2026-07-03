@@ -126,6 +126,19 @@ model AuditLog {
   user User @relation(fields: [userId], references: [id])
 }
 
+model TimeEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  userName    String
+  entityType  String   // 'patch' | 'hotfix' | 'project'
+  entityId    String   // patchId, hotfixId, or classificationId
+  hours       Float
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Notification {
   id        String   @id @default(cuid())
   type      String

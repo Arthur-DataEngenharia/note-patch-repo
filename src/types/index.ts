@@ -135,4 +135,17 @@ export interface Notification {
   link?: string;
 }
 
+export interface TimeEntry {
+  id: string;
+  userId: string;
+  userName: string;
+  entityType: 'patch' | 'hotfix' | 'project';
+  entityId: string;
+  hours: number;
+  description?: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type PageStatus = 'draft' | 'in_review' | 'approved' | 'published' | 'archived';

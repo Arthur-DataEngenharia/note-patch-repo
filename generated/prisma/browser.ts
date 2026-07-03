@@ -48,6 +48,11 @@ export type Document = Prisma.DocumentModel
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
+ * Model TimeEntry
+ * 
+ */
+export type TimeEntry = Prisma.TimeEntryModel
+/**
  * Model Notification
  * 
  */

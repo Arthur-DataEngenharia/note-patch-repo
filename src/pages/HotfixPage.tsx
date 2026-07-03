@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { SkeletonList } from '@/components/shared/Skeleton';
 import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { Tooltip } from '@/components/shared/Tooltip';
+import { TimeSheetPanel } from '@/components/shared/TimeSheetPanel';
 import { HOTFIX_WORKFLOW_STEPS, HOTFIX_STATUS_CONFIG } from '@/lib/constants';
 import { cn, formatRelative, formatDuration, getResolutionMinutes } from '@/lib/utils';
 import { getUser } from '@/lib/mockData';
@@ -218,6 +219,11 @@ export default function HotfixPage() {
                       </button>
                     )}
                   </div>
+                </div>
+
+                {/* Time Sheet */}
+                <div className="mt-4 pt-4 border-t border-black-border">
+                  <TimeSheetPanel entityType="hotfix" entityId={h.id} />
                 </div>
               </div>
             );

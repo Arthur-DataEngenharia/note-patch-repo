@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { toast } from 'sonner';
-import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User } from '@/types';
+import type { NotePatch, Hotfix, DocumentItem, Notification, Classification, AuditLog, User, TimeEntry } from '@/types';
 import { api } from '@/api/client';
 
 function toDate(v: any) { return v ? new Date(v) : null; }
@@ -25,6 +25,7 @@ interface AppState {
   classifications: Classification[];
   auditLogs: AuditLog[];
   users: User[];
+  timeEntries: TimeEntry[];
   currentUser: User;
   sidebarCollapsed: boolean;
   commandPaletteOpen: boolean;
@@ -42,6 +43,9 @@ interface AppState {
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
   addAuditLog: (log: Omit<AuditLog, 'id' | 'timestamp'>) => void;
+  addTimeEntry: (entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  deleteTimeEntry: (id: string) => Promise<void>;
+  getTimeEntriesForEntity: (entityType: string, entityId: string) => TimeEntry[];
   toggleSidebar: () => void;
   setCommandPaletteOpen: (open: boolean) => void;
   setMobileMenuOpen: (open: boolean) => void;
@@ -56,6 +60,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   classifications: [],
   auditLogs: [],
   users: [],
+  timeEntries: [],
   currentUser: { id: 'u1', name: 'Arthur Rodrigues', email: 'arthur@empresa.com', role: 'admin' },
   sidebarCollapsed: false,
   commandPaletteOpen: false,
@@ -64,7 +69,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   init: async () => {
     try {
-      const [patches, hotfixes, documents, notifications, classifications, auditLogs, users] = await Promise.all([
+      const [patches, hotfixes, documents, notifications, classifications, auditLogs, users, timeEntries] = await Promise.all([
         api.getPatches(),
         api.getHotfixes(),
         api.getDocuments(),
@@ -72,6 +77,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         api.getClassifications(),
         api.getAuditLogs(),
         api.getUsers(),
+        api.getTimeEntries(),
       ]);
       set({
         patches: (patches as any[]).map(parsePatchDates),
@@ -81,6 +87,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         classifications: classifications as Classification[],
         auditLogs: (auditLogs as any[]).map(parseAuditDates),
         users: users as User[],
+        timeEntries: (timeEntries as any[]).map((t: any) => ({ ...t, date: toDate(t.date), createdAt: toDate(t.createdAt), updatedAt: toDate(t.updatedAt) })),
         currentUser: (users as User[])[0] || get().currentUser,
         loading: false,
       });
@@ -137,6 +144,34 @@ export const useAppStore = create<AppState>((set, get) => ({
     const fullLog = { ...log, id: `a${Date.now()}`, timestamp: new Date() };
     set((s) => ({ auditLogs: [fullLog, ...s.auditLogs] }));
     api.createAuditLog(log).catch(() => {});
+  },
+
+  addTimeEntry: async (entry) => {
+    const newEntry = { ...entry, id: `t${Date.now()}`, createdAt: new Date(), updatedAt: new Date() };
+    set((s) => ({ timeEntries: [newEntry, ...s.timeEntries] }));
+    try {
+      const saved = await api.createTimeEntry(entry);
+      set((s) => ({
+        timeEntries: s.timeEntries.map((t) => (t.id === newEntry.id ? { ...saved, date: toDate(saved.date), createdAt: toDate(saved.createdAt), updatedAt: toDate(saved.updatedAt) } : t)),
+      }));
+      toast.success('Horas apontadas');
+    } catch (e: any) {
+      toast.error('Erro ao apontar horas: ' + e.message);
+    }
+  },
+
+  deleteTimeEntry: async (id) => {
+    set((s) => ({ timeEntries: s.timeEntries.filter((t) => t.id !== id) }));
+    try {
+      await api.deleteTimeEntry(id);
+      toast.success('Horas removidas');
+    } catch (e: any) {
+      toast.error('Erro ao remover horas: ' + e.message);
+    }
+  },
+
+  getTimeEntriesForEntity: (entityType, entityId) => {
+    return get().timeEntries.filter((t) => t.entityType === entityType && t.entityId === entityId);
   },
 
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
